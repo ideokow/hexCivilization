@@ -1,0 +1,172 @@
+package controller.game;
+
+import model.game.building.Building;
+import model.game.building.BuildingType;
+import model.game.building.PopulationBuilding;
+import model.game.building.PopulationType;
+import model.game.building.ProductionBuilding;
+import model.game.building.ProductionType;
+import model.game.building.TownHall;
+import model.game.hex.Hex;
+import model.game.hex.HexCoordinate;
+import model.game.hex.HexGrid;
+import model.game.hex.Resource;
+import model.game.hex.TerrainType;
+import model.game.player.Player;
+import model.game.unit.Builder;
+import model.game.unit.Unit;
+
+import java.util.EnumMap;
+import java.util.Map;
+import java.util.Objects;
+
+public class ConstructionSystem {
+
+    private final HexGrid grid;
+
+    public ConstructionSystem(HexGrid grid) {
+        this.grid = Objects.requireNonNull(grid, "grid");
+    }
+
+    public BuildResult canBuild(Player player, Unit unit, BuildingType type, HexCoordinate coordinate) {
+        if (player == null || type == null || coordinate == null) {
+            return BuildResult.UNIT_NOT_ON_MAP;
+        }
+        if (!(unit instanceof Builder)) {
+            return BuildResult.NOT_A_BUILDER;
+        }
+
+        Hex hex = grid.get(coordinate);
+        if (hex == null || unit.getPosition() == null || !unit.getPosition().equals(hex)) {
+            return BuildResult.BUILDER_NOT_ON_HEX;
+        }
+        if (!grid.isDiscovered(coordinate)) {
+            return BuildResult.HEX_NOT_DISCOVERED;
+        }
+        if (!player.ownsTerritory(coordinate)) {
+            return BuildResult.OUTSIDE_TERRITORY;
+        }
+        if (hex.getBuilding() != null) {
+            return BuildResult.HEX_HAS_BUILDING;
+        }
+
+        BuildResult placementResult = checkPlacement(hex, type);
+        if (placementResult != BuildResult.SUCCESS) {
+            return placementResult;
+        }
+        if (!player.canAfford(getConstructionCost(type))) {
+            return BuildResult.NOT_ENOUGH_RESOURCES;
+        }
+        if (unit.getCurrentAP() < getBuildApCost(type)) {
+            return BuildResult.NOT_ENOUGH_AP;
+        }
+
+        return BuildResult.SUCCESS;
+    }
+
+    public BuildResult build(Player player, Unit unit, BuildingType type, HexCoordinate coordinate) {
+        BuildResult result = canBuild(player, unit, type, coordinate);
+        if (result != BuildResult.SUCCESS) {
+            return result;
+        }
+
+        Builder builder = (Builder) unit;
+        Hex hex = grid.get(coordinate);
+
+        player.spendResources(getConstructionCost(type));
+        builder.spendAP(getBuildApCost(type));
+        hex.setBuilding(createBuilding(player, type));
+        builder.consumeCharge();
+
+        if (!builder.hasCharges()) {
+            hex.removeUnit(builder);
+            player.removeUnit(builder);
+        }
+
+        return BuildResult.SUCCESS;
+    }
+
+    private BuildResult checkPlacement(Hex hex, BuildingType type) {
+        TerrainType requiredTerrain = getRequiredTerrain(type);
+        if (requiredTerrain != null && hex.getTerrain() != requiredTerrain) {
+            return BuildResult.WRONG_TERRAIN;
+        }
+
+        Resource requiredResource = getRequiredResource(type);
+        if (requiredResource != null && !hex.isAvailable(requiredResource)) {
+            return BuildResult.MISSING_HEX_RESOURCE;
+        }
+
+        if (PopulationType.fromBuildingType(type) != null && !hex.getAvailableResources().isEmpty()) {
+            return BuildResult.HEX_HAS_RESOURCE;
+        }
+
+        return BuildResult.SUCCESS;
+    }
+
+    private TerrainType getRequiredTerrain(BuildingType type) {
+        ProductionType productionType = ProductionType.fromBuildingType(type);
+        if (productionType == null) {
+            return null;
+        }
+        return productionType.getRequiredTerrain();
+    }
+
+    private Resource getRequiredResource(BuildingType type) {
+        ProductionType productionType = ProductionType.fromBuildingType(type);
+        if (productionType == null) {
+            return null;
+        }
+        return productionType.getRequiredResource();
+    }
+
+    private int getBuildApCost(BuildingType type) {
+        ProductionType productionType = ProductionType.fromBuildingType(type);
+        if (productionType != null) {
+            return productionType.getBuildApCost();
+        }
+
+        PopulationType populationType = PopulationType.fromBuildingType(type);
+        if (populationType != null) {
+            return populationType.getBuildApCost();
+        }
+
+        return 0;
+    }
+
+    private Map<Resource, Integer> getConstructionCost(BuildingType type) {
+        ProductionType productionType = ProductionType.fromBuildingType(type);
+        if (productionType != null) {
+            return productionType.getConstructionCost();
+        }
+
+        PopulationType populationType = PopulationType.fromBuildingType(type);
+        if (populationType != null) {
+            return populationType.getConstructionCost();
+        }
+
+        return new EnumMap<>(Resource.class);
+    }
+
+    private Building createBuilding(Player owner, BuildingType type) {
+        switch (type) {
+            case TOWN_HALL:
+                return new TownHall(owner);
+            case LUMBER_MILL:
+                return new ProductionBuilding(owner, ProductionType.LUMBER_MILL);
+            case STONE_MINE:
+                return new ProductionBuilding(owner, ProductionType.STONE_MINE);
+            case IRON_MINE:
+                return new ProductionBuilding(owner, ProductionType.IRON_MINE);
+            case FARM:
+                return new ProductionBuilding(owner, ProductionType.FARM);
+            case STABLE:
+                return new ProductionBuilding(owner, ProductionType.STABLE);
+            case VILLAGE:
+            case TOWN:
+                return new PopulationBuilding(owner, type);
+            default:
+                throw new IllegalArgumentException("Unsupported building type: " + type);
+        }
+    }
+}

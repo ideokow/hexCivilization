@@ -61,6 +61,13 @@ public class HexCoordinate {
         if (!(o instanceof HexCoordinate)) return false;
         return q == ((HexCoordinate) o).q && r == ((HexCoordinate) o).r;
     }
+
+    @Override
+    public int hashCode() {
+        int result = q;
+        result = 31 * result + r;
+        return result;
+    }
 }
 
 // check here:

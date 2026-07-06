@@ -11,6 +11,6 @@ public class Explorer extends Unit {
 
     @Override
     public UnitType getType() {
-        return null;
+        return UnitType.EXPLORER;
     }
 }

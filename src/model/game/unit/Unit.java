@@ -26,6 +26,10 @@ public abstract class Unit {
         return unitID;
     }
 
+    public Player getOwner() {
+        return owner;
+    }
+
     public abstract UnitType getType();
 
     public void resetAP() {
@@ -34,6 +38,14 @@ public abstract class Unit {
 
     public int getCurrentAP() {
         return currentAP;
+    }
+
+    public boolean spendAP(int amount) {
+        if (amount < 0 || currentAP < amount) {
+            return false;
+        }
+        currentAP -= amount;
+        return true;
     }
 
     public Hex getPosition() {

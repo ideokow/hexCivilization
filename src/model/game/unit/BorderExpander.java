@@ -11,6 +11,6 @@ public class BorderExpander extends Unit {
 
     @Override
     public UnitType getType() {
-        return null;
+        return UnitType.BORDER_EXPANDER;
     }
 }
