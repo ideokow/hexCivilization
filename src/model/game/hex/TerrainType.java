@@ -7,6 +7,7 @@ public enum TerrainType {
 
     TOWN_HALL(0),
     PLAINS(1),
+    GRASSLAND(1),
     FOREST(2),
     MOUNTAIN(4);
 

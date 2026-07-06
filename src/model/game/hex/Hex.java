@@ -3,9 +3,7 @@ package model.game.hex;
 import model.game.building.Building;
 import model.game.unit.Unit;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /*
 Hexes main model
@@ -14,14 +12,14 @@ public class Hex {
 
     private final HexCoordinate coordinate;
     private final TerrainType terrain;
-    private final HexResource resource;
+    private final Set<Resource> availableResources;
 
     private Building building;
     private final List<Unit> units;
 
-    public Hex(HexCoordinate coordination, TerrainType terrainType, HexResource resourceType) {
+    public Hex(HexCoordinate coordination, TerrainType terrainType, Set<Resource> availableResources) {
         this.coordinate = coordination;
-        resource = resourceType;
+        this.availableResources = new HashSet<>(availableResources);
         terrain = terrainType;
         units = new ArrayList<>();
     }
@@ -36,8 +34,12 @@ public class Hex {
         return terrain;
     }
 
-    public HexResource getResource() {
-        return resource;
+    public boolean isAvailable(Resource resource) {
+        return availableResources.contains(resource);
+    }
+
+    public Set<Resource> getAvailableResources() {
+        return new HashSet<>(availableResources);
     }
 
     // building
