@@ -20,7 +20,7 @@ public class MovementSystem {
             return MoveResult.UNIT_NOT_ON_MAP;
         }
 
-        Hex from = unit.getPosition();
+        Hex from = grid.get(unit.getPosition());
         Hex to = grid.get(targetCoordinate);
 
         if (from == null || to == null || !grid.contains(from.getCoordinate()) || !from.getUnits().contains(unit)) {
@@ -48,13 +48,13 @@ public class MovementSystem {
             return result;
         }
 
-        Hex from = unit.getPosition();
+        Hex from = grid.get(unit.getPosition());
         Hex to = grid.get(targetCoordinate);
 
         unit.spendAP(to.getTerrain().getMovementCost());
         from.removeUnit(unit);
         to.addUnit(unit);
-        unit.setPosition(to);
+        unit.setPosition(to.getCoordinate());
         grid.discoverAround(to.getCoordinate(), unit.getType().getVisibilityRadius());
 
         return MoveResult.SUCCESS;

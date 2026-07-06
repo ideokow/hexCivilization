@@ -1,14 +1,14 @@
 package model.game.unit;
 
-import model.game.hex.Hex;
+import model.game.hex.HexCoordinate;
 import model.game.player.Player;
 
 public class Builder extends Unit {
 
     private int charges;
 
-    public Builder(String unitID, Player owner, Hex position) {
-        super(unitID, owner, position);
+    public Builder(Player owner, HexCoordinate position) {
+        super(owner, position);
         charges = 3;
     }
 

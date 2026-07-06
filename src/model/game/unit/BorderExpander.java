@@ -1,12 +1,12 @@
 package model.game.unit;
 
-import model.game.hex.Hex;
+import model.game.hex.HexCoordinate;
 import model.game.player.Player;
 
 public class BorderExpander extends Unit {
 
-    public BorderExpander(String unitID, Player owner, Hex position) {
-        super(unitID, owner, position);
+    public BorderExpander(Player owner, HexCoordinate position) {
+        super(owner, position);
     }
 
     @Override

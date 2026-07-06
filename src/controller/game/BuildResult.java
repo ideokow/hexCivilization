@@ -13,5 +13,6 @@ public enum BuildResult {
     NOT_ENOUGH_RESOURCES,
     NOT_ENOUGH_AP,
     TECH_NOT_UNLOCKED,    // Stone/Iron Mine tech
+    CANT_BUILD_TOWN_HALL,
     UNIT_NOT_ON_MAP
 }

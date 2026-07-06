@@ -1,5 +1,6 @@
 package model.game.building;
 
+import model.game.hex.HexCoordinate;
 import model.game.player.Player;
 import model.game.unit.Unit;
 import model.game.unit.Worker;
@@ -17,12 +18,8 @@ public class ProductionBuilding extends Building {
     private final ProductionType productionType;
     private final List<Worker> stationedWorkers;
 
-    public ProductionBuilding(ProductionType type) {
-        this(null, type);
-    }
-
-    public ProductionBuilding(Player owner, ProductionType type) {
-        super(Objects.requireNonNull(type, "type").getBuildingType(), owner);
+    public ProductionBuilding(Player owner, ProductionType type, HexCoordinate position) {
+        super(Objects.requireNonNull(type, "type").getBuildingType(), owner, position);
         this.productionType = type;
         this.stationedWorkers = new ArrayList<>();
     }

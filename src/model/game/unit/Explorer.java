@@ -1,12 +1,12 @@
 package model.game.unit;
 
-import model.game.hex.Hex;
+import model.game.hex.HexCoordinate;
 import model.game.player.Player;
 
 public class Explorer extends Unit {
 
-    public Explorer(String unitID, Player owner, Hex position) {
-        super(unitID, owner, position);
+    public Explorer(Player owner, HexCoordinate position) {
+        super(owner, position);
     }
 
     @Override

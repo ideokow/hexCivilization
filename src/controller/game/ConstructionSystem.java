@@ -6,7 +6,6 @@ import model.game.building.PopulationBuilding;
 import model.game.building.PopulationType;
 import model.game.building.ProductionBuilding;
 import model.game.building.ProductionType;
-import model.game.building.TownHall;
 import model.game.hex.Hex;
 import model.game.hex.HexCoordinate;
 import model.game.hex.HexGrid;
@@ -32,12 +31,15 @@ public class ConstructionSystem {
         if (player == null || type == null || coordinate == null) {
             return BuildResult.UNIT_NOT_ON_MAP;
         }
+        if (type == BuildingType.TOWN_HALL) {
+            return BuildResult.CANT_BUILD_TOWN_HALL;
+        }
         if (!(unit instanceof Builder)) {
             return BuildResult.NOT_A_BUILDER;
         }
 
         Hex hex = grid.get(coordinate);
-        if (hex == null || unit.getPosition() == null || !unit.getPosition().equals(hex)) {
+        if (unit.getPosition() == null || !unit.getPosition().equals(hex)) {
             return BuildResult.BUILDER_NOT_ON_HEX;
         }
         if (!grid.isDiscovered(coordinate)) {
@@ -75,7 +77,7 @@ public class ConstructionSystem {
 
         player.spendResources(getConstructionCost(type));
         builder.spendAP(getBuildApCost(type));
-        hex.setBuilding(createBuilding(player, type));
+        hex.setBuilding(createBuilding(player, type, coordinate));
         builder.consumeCharge();
 
         if (!builder.hasCharges()) {
@@ -148,25 +150,15 @@ public class ConstructionSystem {
         return new EnumMap<>(Resource.class);
     }
 
-    private Building createBuilding(Player owner, BuildingType type) {
-        switch (type) {
-            case TOWN_HALL:
-                return new TownHall(owner);
-            case LUMBER_MILL:
-                return new ProductionBuilding(owner, ProductionType.LUMBER_MILL);
-            case STONE_MINE:
-                return new ProductionBuilding(owner, ProductionType.STONE_MINE);
-            case IRON_MINE:
-                return new ProductionBuilding(owner, ProductionType.IRON_MINE);
-            case FARM:
-                return new ProductionBuilding(owner, ProductionType.FARM);
-            case STABLE:
-                return new ProductionBuilding(owner, ProductionType.STABLE);
-            case VILLAGE:
-            case TOWN:
-                return new PopulationBuilding(owner, type);
-            default:
-                throw new IllegalArgumentException("Unsupported building type: " + type);
-        }
+    private Building createBuilding(Player owner, BuildingType type, HexCoordinate coordinate) {
+        return switch (type) {
+            case LUMBER_MILL -> new ProductionBuilding(owner, ProductionType.LUMBER_MILL, coordinate);
+            case STONE_MINE -> new ProductionBuilding(owner, ProductionType.STONE_MINE, coordinate);
+            case IRON_MINE -> new ProductionBuilding(owner, ProductionType.IRON_MINE, coordinate);
+            case FARM -> new ProductionBuilding(owner, ProductionType.FARM, coordinate);
+            case STABLE -> new ProductionBuilding(owner, ProductionType.STABLE, coordinate);
+            case VILLAGE, TOWN -> new PopulationBuilding(owner, type, coordinate);
+            default -> throw new IllegalArgumentException("Unsupported building type: " + type);
+        };
     }
 }

@@ -1,5 +1,6 @@
 package model.game.building;
 
+import model.game.hex.HexCoordinate;
 import model.game.player.Player;
 
 import java.util.Objects;
@@ -13,11 +14,17 @@ public abstract class Building {
     private final Player owner;
     private BuildingState state;
     private int unpaidUpkeepTurns;
+    private final HexCoordinate position;
 
-    protected Building(BuildingType type, Player owner) {
+    protected Building(BuildingType type, Player owner, HexCoordinate position) {
         this.type = Objects.requireNonNull(type, "type");
         this.owner = owner;
         this.state = BuildingState.ACTIVE;
+        this.position = position;
+    }
+
+    public HexCoordinate getPosition() {
+        return position;
     }
 
     public BuildingType getType() {

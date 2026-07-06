@@ -1,6 +1,7 @@
 package model.game.unit;
 
 import model.game.hex.Hex;
+import model.game.hex.HexCoordinate;
 import model.game.player.Player;
 
 import java.util.Objects;
@@ -10,16 +11,20 @@ Units main model
  */
 public abstract class Unit {
 
+    private static int unitsN = 0;
+
     private final String unitID;
     private final Player owner;
     private int currentAP;
-    private Hex position;
+    private HexCoordinate position;
 
-    public Unit(String unitID, Player owner, Hex position) {
-        // check if unitID is not null
-        this.unitID = Objects.requireNonNull(unitID, "unitID");
+    public Unit(Player owner, HexCoordinate position) {
+
+        this.unitID = "unit-id-" + unitsN;
         this.owner = owner;
         this.position = position;
+
+        unitsN++;
     }
 
     public String getUnitID() {
@@ -48,11 +53,11 @@ public abstract class Unit {
         return true;
     }
 
-    public Hex getPosition() {
+    public HexCoordinate getPosition() {
         return position;
     }
 
-    public void setPosition(Hex position) {
+    public void setPosition(HexCoordinate position) {
         this.position = position;
     }
 
