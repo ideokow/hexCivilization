@@ -1,4 +1,7 @@
-package model.game;
+package model.game.unit;
+
+import model.game.hex.Hex;
+import model.game.player.Player;
 
 public class Builder extends Unit {
 

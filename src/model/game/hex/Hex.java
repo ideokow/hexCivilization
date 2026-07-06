@@ -1,4 +1,7 @@
-package model.game;
+package model.game.hex;
+
+import model.game.building.Building;
+import model.game.unit.Unit;
 
 import java.util.ArrayList;
 import java.util.List;

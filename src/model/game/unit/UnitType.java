@@ -1,4 +1,4 @@
-package model.game;
+package model.game.unit;
 
 public enum UnitType {
     EXPLORER(8, 3),

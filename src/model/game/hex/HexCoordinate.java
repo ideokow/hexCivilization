@@ -1,4 +1,4 @@
-package model.game;
+package model.game.hex;
 
 import java.util.ArrayList;
 import java.util.List;

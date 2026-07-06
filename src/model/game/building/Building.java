@@ -1,4 +1,4 @@
-package model.game;
+package model.game.building;
 
 /*
 Buildings main model

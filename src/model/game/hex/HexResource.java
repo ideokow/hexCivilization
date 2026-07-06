@@ -1,4 +1,4 @@
-package model.game;
+package model.game.hex;
 
 /*
 resources which are available in hex

@@ -1,4 +1,4 @@
-package model.game;
+package model.game.hex;
 
 /*
 terrain types and their movement costs
