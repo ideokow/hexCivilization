@@ -21,7 +21,8 @@ public class TownHall extends Building {
     private int resourceCap;
     private final int baseResourceCap = 100;
 
-    private int unitCap = 10;
+    private int unitCap;
+    private final int baseUnitCap = 10;
     private int unitNumber = 0;
 
     public TownHall(HexGrid grid, Player owner) {
@@ -38,6 +39,7 @@ public class TownHall extends Building {
         units = new ArrayList<>();
 
         resourceCap = baseResourceCap;
+        unitCap = baseUnitCap;
     }
 
     // --- unit cap ---
@@ -46,8 +48,9 @@ public class TownHall extends Building {
         return unitCap;
     }
 
-    public void setUnitCap(int unitCap) {
-        this.unitCap = unitCap;
+    public void setUnitCap(int townsNumber, int villageNumber) {
+        unitCap = (int) (((double) baseUnitCap) * (((double) townsNumber * 1) + ((double) villageNumber * 0.5)));
+        if (unitCap < unitNumber) unitCap = unitNumber;
     }
 
     // --- upgrades ---

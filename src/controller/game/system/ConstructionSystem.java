@@ -7,6 +7,7 @@ import model.game.hex.HexGrid;
 import model.game.hex.Resource;
 import model.game.hex.TerrainType;
 import model.game.player.Player;
+import model.game.registry.BuildingRegistry;
 import model.game.registry.UnitRegistry;
 import model.game.unit.Builder;
 import model.game.unit.Unit;
@@ -97,9 +98,11 @@ public class ConstructionSystem {
         Builder builder = (Builder) unit;
         Hex hex = grid.get(coordinate);
 
+        Building building = createBuilding(player, type, coordinate);
+
         townHall.spendResources(getConstructionCost(type));
         builder.spendAP(getBuildApCost(type));
-        hex.setBuilding(createBuilding(player, type, coordinate));
+        hex.setBuilding(building);
         builder.consumeCharge();
 
         if (!builder.hasCharges()) {
@@ -108,6 +111,10 @@ public class ConstructionSystem {
             townHall.decreaseUnitNumber();
         }
 
+        BuildingRegistry.getInstance().addBuilding(building);
+        if (type == BuildingType.VILLAGE || type == BuildingType.TOWN) {
+            BuildingRegistry.getInstance().refreshUnitCap(townHall);
+        }
         return BuildResult.SUCCESS;
     }
 

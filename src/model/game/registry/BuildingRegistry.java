@@ -1,6 +1,7 @@
 package model.game.registry;
 
 import model.game.building.Building;
+import model.game.building.BuildingType;
 import model.game.building.ProductionBuilding;
 import model.game.building.TownHall;
 import model.game.hex.HexGrid;
@@ -100,5 +101,18 @@ public class BuildingRegistry {
         }
 
         return allGeneratedResources;
+    }
+
+    public void refreshUnitCap(TownHall townHall) {
+
+        int towns = 0;
+        int villages = 0;
+
+        for (Building building : buildingMap.values()) {
+            if (building.getType() == BuildingType.TOWN) towns++;
+            else if (building.getType() == BuildingType.VILLAGE) villages++;
+        }
+
+        townHall.setUnitCap(towns, villages);
     }
 }

@@ -49,6 +49,7 @@ public class GameEngine {
         // initialize town hall
         townHall = new TownHall(hexGrid, player);
         hexGrid.get(zero).setBuilding(townHall);
+        BuildingRegistry.getInstance().addBuilding(townHall);
 
         // initial units
         townHall.generateUnit(UnitType.BUILDER);
