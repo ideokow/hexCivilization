@@ -32,4 +32,8 @@ public class UnitRegistry {
             unit.resetAP();
         }
     }
+
+    public void removeUnit(Unit unit) {
+        unitMap.remove(unit.getUnitID());
+    }
 }

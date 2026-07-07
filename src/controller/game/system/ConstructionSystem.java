@@ -7,6 +7,7 @@ import model.game.hex.HexGrid;
 import model.game.hex.Resource;
 import model.game.hex.TerrainType;
 import model.game.player.Player;
+import model.game.registry.UnitRegistry;
 import model.game.unit.Builder;
 import model.game.unit.Unit;
 
@@ -59,6 +60,9 @@ public class ConstructionSystem {
         if (unit.getCurrentAP() < getBuildApCost(type)) {
             return BuildResult.NOT_ENOUGH_AP;
         }
+        if (!((Builder) unit).hasCharges()) {
+            return BuildResult.NOT_ENOUGH_CHARGE;
+        }
 
         return BuildResult.SUCCESS;
     }
@@ -78,6 +82,7 @@ public class ConstructionSystem {
         builder.consumeCharge();
 
         if (!builder.hasCharges()) {
+            UnitRegistry.getInstance().removeUnit(builder);
             hex.removeUnit(builder);
             townHall.decreaseUnitNumber();
         }
