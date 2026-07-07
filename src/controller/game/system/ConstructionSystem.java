@@ -36,6 +36,11 @@ public class ConstructionSystem {
             return BuildResult.NOT_A_BUILDER;
         }
 
+        // upgrade tech
+        if (!upgradeCheck(type)) {
+            return BuildResult.UPGRADE_REQUIRED;
+        }
+
         Hex hex = grid.get(coordinate);
         if (unit.getPosition() == null || !unit.getPosition().equals(hex.getCoordinate())) {
             return BuildResult.BUILDER_NOT_ON_HEX;
@@ -65,6 +70,22 @@ public class ConstructionSystem {
         }
 
         return BuildResult.SUCCESS;
+    }
+
+    private boolean upgradeCheck(BuildingType buildingType) {
+        if (buildingType == BuildingType.STONE_MINE && !townHall.isStoneUpgrade()) {
+            return false;
+        }
+        if (buildingType == BuildingType.IRON_MINE && !townHall.isIronUpgrade()) {
+            return false;
+        }
+        if (buildingType == BuildingType.TOWN && !townHall.isTownUpgrade()) {
+            return false;
+        }
+        if (buildingType == BuildingType.VILLAGE && !townHall.isTownUpgrade()) {
+            return false;
+        }
+        return true;
     }
 
     public BuildResult build(Player player, Unit unit, BuildingType type, HexCoordinate coordinate) {

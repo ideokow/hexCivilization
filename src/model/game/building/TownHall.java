@@ -18,6 +18,9 @@ public class TownHall extends Building {
     private final Map<Resource, Integer> resourceStorage;
     private final List<Unit> units;
 
+    private int resourceCap;
+    private final int baseResourceCap = 100;
+
     private int unitCap = 10;
     private int unitNumber = 0;
 
@@ -33,6 +36,8 @@ public class TownHall extends Building {
         resourceStorage.put(Resource.WOOD, 0);
 
         units = new ArrayList<>();
+
+        resourceCap = baseResourceCap;
     }
 
     // --- unit cap ---
@@ -47,7 +52,7 @@ public class TownHall extends Building {
 
     // --- upgrades ---
 
-    private int resourceStorageUpgrade = 0;
+    private int resourceStorageUpgrade = 1;
     private boolean stoneUpgrade = false;
     private boolean ironUpgrade  = false;
     private boolean toolsUpgrade = false;
@@ -58,10 +63,16 @@ public class TownHall extends Building {
     }
 
     public void setIronUpgrade(boolean ironUpgrade) {
+        if (!stoneUpgrade) {
+            throw new IllegalStateException("false upgrade order");
+        }
         this.ironUpgrade = ironUpgrade;
     }
 
     public void setToolsUpgrade(boolean toolsUpgrade) {
+        if (!stoneUpgrade || !ironUpgrade) {
+            throw new IllegalStateException("false upgrade order");
+        }
         this.toolsUpgrade = toolsUpgrade;
     }
 
@@ -70,8 +81,9 @@ public class TownHall extends Building {
     }
 
     public void upgradeResourceStorage() {
-        if (resourceStorageUpgrade < 2) {
+        if (resourceStorageUpgrade < 3) {
             resourceStorageUpgrade++;
+            resourceCap = baseResourceCap * resourceStorageUpgrade;
         }
     }
 
@@ -121,18 +133,30 @@ public class TownHall extends Building {
 
     public void addStoneToStorage(int amount) {
         resourceStorage.put(Resource.STONE, resourceStorage.get(Resource.STONE) + amount);
+        if (resourceStorage.get(Resource.STONE) > resourceCap) {
+            resourceStorage.put(Resource.STONE, resourceCap);
+        }
     }
 
     public void addIronToStorage(int amount) {
         resourceStorage.put(Resource.IRON, resourceStorage.get(Resource.IRON) + amount);
+        if (resourceStorage.get(Resource.IRON) > resourceCap) {
+            resourceStorage.put(Resource.IRON, resourceCap);
+        }
     }
 
     public void addFoodToStorage(int amount) {
         resourceStorage.put(Resource.FOOD, resourceStorage.get(Resource.FOOD) + amount);
+        if (resourceStorage.get(Resource.FOOD) > resourceCap) {
+            resourceStorage.put(Resource.FOOD, resourceCap);
+        }
     }
 
     public void addWoodToStorage(int amount) {
         resourceStorage.put(Resource.WOOD, resourceStorage.get(Resource.WOOD) + amount);
+        if (resourceStorage.get(Resource.WOOD) > resourceCap) {
+            resourceStorage.put(Resource.WOOD, resourceCap);
+        }
     }
 
     // --- storage deduct ---
