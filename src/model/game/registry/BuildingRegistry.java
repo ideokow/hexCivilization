@@ -84,7 +84,7 @@ public class BuildingRegistry {
                 Resource resource = ((ProductionBuilding) building).getProductionBuildingType().getProduceResource();
                 int baseRate = ((ProductionBuilding) building).getProductionBuildingType().getProductionRate();
                 int workerN = ((ProductionBuilding) building).getUnits().size();
-                double techCoefficient = townHall.isToolsUpgrade() ? 1.5 : 1.0;
+                double techCoefficient = townHall.getUpgrades().isToolsUpgrade() ? 1.5 : 1.0;
 
                 // apply in town hall
                 Map<Resource, Integer> generatedResource = new HashMap<>();

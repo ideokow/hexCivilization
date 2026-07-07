@@ -74,16 +74,16 @@ public class ConstructionSystem {
     }
 
     private boolean upgradeCheck(BuildingType buildingType) {
-        if (buildingType == BuildingType.STONE_MINE && !townHall.isStoneUpgrade()) {
+        if (buildingType == BuildingType.STONE_MINE && !townHall.getUpgrades().isStoneUpgrade()) {
             return false;
         }
-        if (buildingType == BuildingType.IRON_MINE && !townHall.isIronUpgrade()) {
+        if (buildingType == BuildingType.IRON_MINE && !townHall.getUpgrades().isIronUpgrade()) {
             return false;
         }
-        if (buildingType == BuildingType.TOWN && !townHall.isTownUpgrade()) {
+        if (buildingType == BuildingType.TOWN && !townHall.getUpgrades().isTownUpgrade()) {
             return false;
         }
-        if (buildingType == BuildingType.VILLAGE && !townHall.isTownUpgrade()) {
+        if (buildingType == BuildingType.VILLAGE && !townHall.getUpgrades().isTownUpgrade()) {
             return false;
         }
         return true;
