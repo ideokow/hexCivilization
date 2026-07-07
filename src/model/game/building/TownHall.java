@@ -16,7 +16,6 @@ public class TownHall extends Building {
     private final HexGrid grid;
 
     private final Map<Resource, Integer> resourceStorage;
-    private final List<Unit> units;
 
     private final TownHallUpgradeData upgrades;
 
@@ -34,11 +33,9 @@ public class TownHall extends Building {
 
         resourceStorage = new HashMap<>();
         resourceStorage.put(Resource.STONE, 0);
-        resourceStorage.put(Resource.IRON, 0);
-        resourceStorage.put(Resource.FOOD, 0);
-        resourceStorage.put(Resource.WOOD, 0);
-
-        units = new ArrayList<>();
+        resourceStorage.put(Resource.IRON,  0);
+        resourceStorage.put(Resource.FOOD, 10);
+        resourceStorage.put(Resource.WOOD, 10);
 
         resourceCap = baseResourceCap;
         unitCap = baseUnitCap;
@@ -69,7 +66,7 @@ public class TownHall extends Building {
     }
 
     public void setUnitCap(int townsNumber, int villageNumber) {
-        unitCap = (int) (((double) baseUnitCap) * (((double) townsNumber * 1) + ((double) villageNumber * 0.5)));
+        unitCap = (int) (((double) baseUnitCap) * (((double) townsNumber * 1) + ((double) villageNumber * 0.5) + 1.0));
         if (unitCap < unitNumber) unitCap = unitNumber;
     }
 
@@ -154,8 +151,8 @@ public class TownHall extends Building {
     // Safeguard resource generator
 
     public void safeGuardGenerator() {
-        addStoneToStorage(SAFE_GUARD_VALUE);
-        addIronToStorage (SAFE_GUARD_VALUE);
+        addWoodToStorage(SAFE_GUARD_VALUE);
+        addFoodToStorage(SAFE_GUARD_VALUE);
     }
 
     // --- storage execution ---
@@ -197,69 +194,44 @@ public class TownHall extends Building {
         return true;
     }
 
-    public boolean addResources(Map<Resource, Integer> cost) {
-        if (!canAfford(cost)) {
-            return false;
+    public boolean addResources(Map<Resource, Integer> resources) {
+        if (resources.containsKey(Resource.STONE)) {
+            addStoneToStorage(resources.get(Resource.STONE));
         }
-        if (cost.containsKey(Resource.STONE)) {
-            addStoneToStorage(cost.get(Resource.STONE));
+        if (resources.containsKey(Resource.IRON)) {
+            addIronToStorage(resources.get(Resource.IRON));
         }
-        if (cost.containsKey(Resource.IRON)) {
-            addIronToStorage(cost.get(Resource.IRON));
+        if (resources.containsKey(Resource.FOOD)) {
+            addFoodToStorage(resources.get(Resource.FOOD));
         }
-        if (cost.containsKey(Resource.FOOD)) {
-            addFoodToStorage(cost.get(Resource.FOOD));
-        }
-        if (cost.containsKey(Resource.WOOD)) {
-            addWoodToStorage(cost.get(Resource.WOOD));
+        if (resources.containsKey(Resource.WOOD)) {
+            addWoodToStorage(resources.get(Resource.WOOD));
         }
         return true;
     }
 
-    // --- unit list ---
-
-    public List<Unit> getUnits() {
-        return new ArrayList<>(units);
-    }
-
-    /*
-    add units means add in town hall building, thus this does not impact unitNumber
-     */
-    public boolean addUnit(Unit unit) {
-        Objects.requireNonNull(unit, "worker");
-        if (isRuined() || units.contains(unit)) {
-            return false;
-        }
-        return units.add(unit);
-    }
-
-    /*
-    remove units means remove from town hall building, thus this does not impact unitNumber
-     */
-    public boolean removeUnit(Unit unit) {
-        return units.remove(unit);
-    }
+    // --- unit generation ---
 
     public boolean generateUnit(UnitType unitType) {
 
         if (unitNumber >= unitCap) return false;
 
-        Unit unit = null;
+        Unit unit;
 
         // make unit
         if (unitType == UnitType.WORKER) {
             unit = new Worker(getOwner(), getPosition());
-            units.add(unit);
-        } else if (unitType == UnitType.BUILDER) {
+        }
+        else if (unitType == UnitType.BUILDER) {
             unit = new Builder(getOwner(), getPosition());
-            units.add(unit);
-        } else if (unitType == UnitType.EXPLORER) {
+        }
+        else if (unitType == UnitType.EXPLORER) {
             unit = new Explorer(getOwner(), getPosition());
-            units.add(unit);
-        } else if (unitType == UnitType.BORDER_EXPANDER) {
+        }
+        else if (unitType == UnitType.BORDER_EXPANDER) {
             unit = new BorderExpander(getOwner(), getPosition());
-            units.add(unit);
-        } else {
+        }
+        else {
             throw new IllegalArgumentException("undefined type : " + unitType);
         }
 

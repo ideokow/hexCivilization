@@ -61,6 +61,10 @@ public abstract class Building {
         }
     }
 
+    public void resetUnpaidUpkeepTurns() {
+        unpaidUpkeepTurns = 0;
+    }
+
     public boolean isRuined() {
         return state == BuildingState.RUINED;
     }

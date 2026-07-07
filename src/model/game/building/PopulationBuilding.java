@@ -40,6 +40,7 @@ public class PopulationBuilding extends Building {
 
         if (townHall.canAfford(cost)) {
             townHall.spendResources(cost);
+            resetUnpaidUpkeepTurns();
             return true;
         } else {
             increaseUnpaidUpkeepTurns();

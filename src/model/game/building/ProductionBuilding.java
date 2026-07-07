@@ -3,7 +3,6 @@ package model.game.building;
 import model.game.hex.HexCoordinate;
 import model.game.hex.Resource;
 import model.game.player.Player;
-import model.game.unit.Unit;
 import model.game.unit.Worker;
 
 import java.util.ArrayList;
@@ -83,6 +82,7 @@ public class ProductionBuilding extends Building {
 
         if (townHall.canAfford(cost)) {
             townHall.spendResources(cost);
+            resetUnpaidUpkeepTurns();
             return true;
         } else {
             increaseUnpaidUpkeepTurns();

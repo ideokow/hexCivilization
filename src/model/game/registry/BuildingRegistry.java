@@ -88,7 +88,7 @@ public class BuildingRegistry {
 
                 // apply in town hall
                 Map<Resource, Integer> generatedResource = new HashMap<>();
-                generatedResource.put(resource, baseRate * workerN);
+                generatedResource.put(resource, ((int)(((double) (baseRate * workerN)) * techCoefficient)));
                 townHall.addResources(generatedResource);
 
                 // add to statistics
