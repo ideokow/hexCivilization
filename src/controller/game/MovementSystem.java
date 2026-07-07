@@ -4,6 +4,7 @@ import model.game.hex.Hex;
 import model.game.hex.HexCoordinate;
 import model.game.hex.HexGrid;
 import model.game.unit.Unit;
+import model.game.unit.Worker;
 
 import java.util.Objects;
 
@@ -37,6 +38,9 @@ public class MovementSystem {
         }
         if (unit.getCurrentAP() < to.getTerrain().getMovementCost()) {
             return MoveResult.NOT_ENOUGH_AP;
+        }
+        if (unit instanceof Worker && ((Worker) unit).isInBuilding()) {
+            return MoveResult.UNIT_IS_IN_BUILDING;
         }
 
         return MoveResult.SUCCESS;

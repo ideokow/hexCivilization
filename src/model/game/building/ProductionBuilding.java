@@ -40,15 +40,28 @@ public class ProductionBuilding extends Building {
         return new ArrayList<>(stationedWorkers);
     }
 
-    public boolean stationWorker(Worker worker) {
+    public StationResult stationWorker(Worker worker) {
+
+        if (stationedWorkers.size() >= getProductionType().getWorkerCapacity()) {
+            return StationResult.CAPACITY_REACHED;
+        }
+
         Objects.requireNonNull(worker, "worker");
         if (!isActive() || stationedWorkers.contains(worker)) {
-            return false;
+            return StationResult.WORKER_IS_IN_ALREADY;
         }
-        return stationedWorkers.add(worker);
+        stationedWorkers.add(worker);
+        worker.setInBuilding(true);
+        return StationResult.SUCCESS;
     }
 
     public boolean removeWorker(Worker worker) {
-        return stationedWorkers.remove(worker);
+        if (stationedWorkers.contains(worker)) {
+            stationedWorkers.remove(worker);
+            worker.setInBuilding(false);
+            return true;
+        } else {
+            return false;
+        }
     }
 }

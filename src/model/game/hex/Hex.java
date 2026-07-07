@@ -68,7 +68,6 @@ public class Hex {
 
     // overrides
 
-
     @Override
     public int hashCode() {
         return coordinate.hashCode();

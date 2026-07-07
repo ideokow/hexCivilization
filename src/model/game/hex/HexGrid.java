@@ -72,4 +72,8 @@ public class HexGrid {
             discovered.add(hex.getCoordinate());
         }
     }
+
+    public Set<HexCoordinate> getDiscovered() {
+        return new HashSet<>(discovered);
+    }
 }

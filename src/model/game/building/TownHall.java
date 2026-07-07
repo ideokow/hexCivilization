@@ -1,6 +1,7 @@
 package model.game.building;
 
 import model.game.hex.HexCoordinate;
+import model.game.hex.HexGrid;
 import model.game.player.Player;
 import model.game.hex.Resource;
 import model.game.unit.*;
@@ -11,26 +12,26 @@ public class TownHall extends Building {
 
     public static final int SAFE_GUARD_VALUE = 1;
 
+    private final HexGrid grid;
+
     private final Map<Resource, Integer> resourceStorage;
     private final List<Unit> units;
 
     private int unitCap = 10;
-    private int unitNumber;
+    private int unitNumber = 0;
 
-    public TownHall(Player owner, List<Unit> initialUnits) {
+    public TownHall(HexGrid grid, Player owner) {
 
         super(BuildingType.TOWN_HALL, owner, new HexCoordinate(0, 0));
+        this.grid = grid;
 
         resourceStorage = new HashMap<>();
         resourceStorage.put(Resource.STONE, 0);
-        resourceStorage.put(Resource.IRON , 0);
-        resourceStorage.put(Resource.FOOD , 0);
-        resourceStorage.put(Resource.WOOD , 0);
+        resourceStorage.put(Resource.IRON, 0);
+        resourceStorage.put(Resource.FOOD, 0);
+        resourceStorage.put(Resource.WOOD, 0);
 
-        units = new ArrayList<>(initialUnits);
-        unitNumber = initialUnits.size();
-
-        if (unitNumber > unitCap) throw new IllegalArgumentException("too many initial units");
+        units = new ArrayList<>();
     }
 
     // --- unit cap ---
@@ -133,6 +134,32 @@ public class TownHall extends Building {
         resourceStorage.put(Resource.WOOD, resourceStorage.get(Resource.WOOD) + amount);
     }
 
+    // --- storage deduct ---
+
+    public void deductStoneStorage(int amount) {
+        if (amount <= getStoneStorage()) {
+            resourceStorage.put(Resource.STONE, getStoneStorage() - amount);
+        }
+    }
+
+    public void deductIronStorage(int amount) {
+        if (amount <= getIronStorage()) {
+            resourceStorage.put(Resource.IRON, getIronStorage() - amount);
+        }
+    }
+
+    public void deductFoodStorage(int amount) {
+        if (amount <= getFoodStorage()) {
+            resourceStorage.put(Resource.FOOD, getFoodStorage() - amount);
+        }
+    }
+
+    public void deductWoodStorage(int amount) {
+        if (amount <= getWoodStorage()) {
+            resourceStorage.put(Resource.WOOD, getWoodStorage() - amount);
+        }
+    }
+
     // Safeguard resource generator
 
     public void safeGuardGenerator() {
@@ -142,12 +169,54 @@ public class TownHall extends Building {
         addWoodToStorage (SAFE_GUARD_VALUE);
     }
 
+    // --- storage execution ---
+
+    public boolean canAfford(Map<Resource, Integer> cost) {
+
+        if (cost.containsKey(Resource.STONE) && getStoneStorage() < cost.get(Resource.STONE)) {
+            return false;
+        }
+        if (cost.containsKey(Resource.IRON) && getIronStorage() < cost.get(Resource.IRON)) {
+            return false;
+        }
+        if (cost.containsKey(Resource.FOOD) && getFoodStorage() < cost.get(Resource.FOOD)) {
+            return false;
+        }
+        if (cost.containsKey(Resource.WOOD) && getWoodStorage() < cost.get(Resource.WOOD)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public boolean spendResources(Map<Resource, Integer> cost) {
+        if (!canAfford(cost)) {
+            return false;
+        }
+        if (cost.containsKey(Resource.STONE)) {
+            deductStoneStorage(cost.get(Resource.STONE));
+        }
+        if (cost.containsKey(Resource.IRON)) {
+            deductIronStorage(cost.get(Resource.IRON));
+        }
+        if (cost.containsKey(Resource.FOOD)) {
+            deductFoodStorage(cost.get(Resource.FOOD));
+        }
+        if (cost.containsKey(Resource.WOOD)) {
+            deductWoodStorage(cost.get(Resource.WOOD));
+        }
+        return true;
+    }
+
     // --- unit list ---
 
     public List<Unit> getUnits() {
         return new ArrayList<>(units);
     }
 
+    /*
+    add units means add in town hall building, thus this does not impact unitNumber
+     */
     public boolean addUnit(Unit unit) {
         Objects.requireNonNull(unit, "worker");
         if (!isActive() || units.contains(unit)) {
@@ -156,6 +225,9 @@ public class TownHall extends Building {
         return units.add(unit);
     }
 
+    /*
+    remove units means remove from town hall building, thus this does not impact unitNumber
+     */
     public boolean removeUnit(Unit unit) {
         return units.remove(unit);
     }
@@ -164,20 +236,37 @@ public class TownHall extends Building {
 
         if (unitNumber >= unitCap) return false;
 
+        Unit unit = null;
+
+        // make unit
         if (unitType == UnitType.WORKER) {
-            units.add(new Worker(getOwner(), getPosition()));
+            unit = new Worker(getOwner(), getPosition());
+            units.add(unit);
         } else if (unitType == UnitType.BUILDER) {
-            units.add(new Builder(getOwner(), getPosition()));
+            unit = new Builder(getOwner(), getPosition());
+            units.add(unit);
         } else if (unitType == UnitType.EXPLORER) {
-            units.add(new Explorer(getOwner(), getPosition()));
+            unit = new Explorer(getOwner(), getPosition());
+            units.add(unit);
         } else if (unitType == UnitType.BORDER_EXPANDER) {
-            units.add(new BorderExpander(getOwner(), getPosition()));
+            unit = new BorderExpander(getOwner(), getPosition());
+            units.add(unit);
         } else {
             throw new IllegalArgumentException("undefined type : " + unitType);
         }
 
+        // full ap
+        unit.resetAP();
+
+        // place unit on hex
+        grid.get(new HexCoordinate(0, 0)).addUnit(unit);
         unitNumber++;
+
         return true;
+    }
+
+    public void decreaseUnitNumber() {
+        unitNumber--;
     }
 
     @Override

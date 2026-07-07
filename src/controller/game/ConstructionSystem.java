@@ -1,11 +1,6 @@
 package controller.game;
 
-import model.game.building.Building;
-import model.game.building.BuildingType;
-import model.game.building.PopulationBuilding;
-import model.game.building.PopulationType;
-import model.game.building.ProductionBuilding;
-import model.game.building.ProductionType;
+import model.game.building.*;
 import model.game.hex.Hex;
 import model.game.hex.HexCoordinate;
 import model.game.hex.HexGrid;
@@ -22,9 +17,11 @@ import java.util.Objects;
 public class ConstructionSystem {
 
     private final HexGrid grid;
+    private final TownHall townHall;
 
-    public ConstructionSystem(HexGrid grid) {
-        this.grid = Objects.requireNonNull(grid, "grid");
+    public ConstructionSystem(HexGrid grid, TownHall townHall) {
+        this.grid = Objects.requireNonNull(grid, "grid is null!");
+        this.townHall = Objects.requireNonNull(townHall, "town hall is null");
     }
 
     public BuildResult canBuild(Player player, Unit unit, BuildingType type, HexCoordinate coordinate) {
@@ -39,7 +36,7 @@ public class ConstructionSystem {
         }
 
         Hex hex = grid.get(coordinate);
-        if (unit.getPosition() == null || !unit.getPosition().equals(hex)) {
+        if (unit.getPosition() == null || !unit.getPosition().equals(hex.getCoordinate())) {
             return BuildResult.BUILDER_NOT_ON_HEX;
         }
         if (!grid.isDiscovered(coordinate)) {
@@ -56,7 +53,7 @@ public class ConstructionSystem {
         if (placementResult != BuildResult.SUCCESS) {
             return placementResult;
         }
-        if (!player.canAfford(getConstructionCost(type))) {
+        if (!townHall.canAfford(getConstructionCost(type))) {
             return BuildResult.NOT_ENOUGH_RESOURCES;
         }
         if (unit.getCurrentAP() < getBuildApCost(type)) {
@@ -75,14 +72,14 @@ public class ConstructionSystem {
         Builder builder = (Builder) unit;
         Hex hex = grid.get(coordinate);
 
-        player.spendResources(getConstructionCost(type));
+        townHall.spendResources(getConstructionCost(type));
         builder.spendAP(getBuildApCost(type));
         hex.setBuilding(createBuilding(player, type, coordinate));
         builder.consumeCharge();
 
         if (!builder.hasCharges()) {
             hex.removeUnit(builder);
-            player.removeUnit(builder);
+            townHall.decreaseUnitNumber();
         }
 
         return BuildResult.SUCCESS;
