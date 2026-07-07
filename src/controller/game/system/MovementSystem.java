@@ -3,7 +3,9 @@ package controller.game.system;
 import model.game.hex.Hex;
 import model.game.hex.HexCoordinate;
 import model.game.hex.HexGrid;
+import model.game.unit.Explorer;
 import model.game.unit.Unit;
+import model.game.unit.UnitType;
 import model.game.unit.Worker;
 
 import java.util.Objects;
@@ -57,6 +59,11 @@ public class MovementSystem {
         to.addUnit(unit);
         unit.setPosition(to.getCoordinate());
         grid.discoverAround(to.getCoordinate(), unit.getType().getVisibilityRadius());
+
+        // explorer trigger
+        if (unit.getType() == UnitType.EXPLORER) {
+            ((Explorer) unit).exploreMap(grid);
+        }
 
         return MoveResult.SUCCESS;
     }
