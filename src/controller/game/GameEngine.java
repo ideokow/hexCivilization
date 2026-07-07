@@ -6,6 +6,7 @@ import controller.game.system.RoutingSystem;
 import model.game.building.TownHall;
 import model.game.hex.HexCoordinate;
 import model.game.hex.HexGrid;
+import model.game.hex.Resource;
 import model.game.player.Player;
 import model.game.registry.BuildingRegistry;
 import model.game.registry.UnitRegistry;
@@ -81,7 +82,9 @@ public class GameEngine {
         // renew AP
         UnitRegistry.getInstance().renewUnitAPs();
 
-        // TODO: generate resource
+        // generate resources
+        Map<Resource, Integer> generatedResources = BuildingRegistry.getInstance().generateResources(townHall);
+        // TODO: #UI resource added message
 
         // pay upkeep
         boolean upkeepStatus = BuildingRegistry.getInstance().payUpKeeps(townHall, hexGrid);
@@ -90,6 +93,6 @@ public class GameEngine {
         // move in-way units
         routingSystem.moveUnits(inQueueRoutes);
 
-        // TODO: user listener
+        // TODO: #UI user listener
     }
 }

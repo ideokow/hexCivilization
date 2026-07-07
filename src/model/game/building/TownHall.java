@@ -209,6 +209,25 @@ public class TownHall extends Building {
         return true;
     }
 
+    public boolean addResources(Map<Resource, Integer> cost) {
+        if (!canAfford(cost)) {
+            return false;
+        }
+        if (cost.containsKey(Resource.STONE)) {
+            addStoneToStorage(cost.get(Resource.STONE));
+        }
+        if (cost.containsKey(Resource.IRON)) {
+            addIronToStorage(cost.get(Resource.IRON));
+        }
+        if (cost.containsKey(Resource.FOOD)) {
+            addFoodToStorage(cost.get(Resource.FOOD));
+        }
+        if (cost.containsKey(Resource.WOOD)) {
+            addWoodToStorage(cost.get(Resource.WOOD));
+        }
+        return true;
+    }
+
     // --- unit list ---
 
     public List<Unit> getUnits() {

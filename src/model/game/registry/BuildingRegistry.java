@@ -4,6 +4,7 @@ import model.game.building.Building;
 import model.game.building.ProductionBuilding;
 import model.game.building.TownHall;
 import model.game.hex.HexGrid;
+import model.game.hex.Resource;
 import model.game.unit.Worker;
 
 import java.util.ArrayList;
@@ -66,5 +67,33 @@ public class BuildingRegistry {
         }
 
         return flag;
+    }
+
+    public Map<Resource, Integer> generateResources(TownHall townHall) {
+
+        Map<Resource, Integer> allGeneratedResources = new HashMap<>();
+        allGeneratedResources.put(Resource.STONE, 0);
+        allGeneratedResources.put(Resource.IRON, 0);
+        allGeneratedResources.put(Resource.FOOD, 0);
+        allGeneratedResources.put(Resource.WOOD, 0);
+
+        for (Building building : buildingMap.values()) {
+            if (!building.isRuined() && (building instanceof ProductionBuilding)) {
+                // production data
+                Resource resource = ((ProductionBuilding) building).getProductionBuildingType().getProduceResource();
+                int baseRate = ((ProductionBuilding) building).getProductionBuildingType().getProductionRate();
+                int workerN = ((ProductionBuilding) building).getUnits().size();
+
+                // apply in town hall
+                Map<Resource, Integer> generatedResource = new HashMap<>();
+                generatedResource.put(resource, baseRate * workerN);
+                townHall.addResources(generatedResource);
+
+                // add to statistics
+                allGeneratedResources.put(resource, allGeneratedResources.get(resource) + (baseRate * workerN));
+            }
+        }
+
+        return allGeneratedResources;
     }
 }
