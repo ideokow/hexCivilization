@@ -4,10 +4,12 @@ import model.game.building.TownHall;
 import model.game.hex.HexCoordinate;
 import model.game.hex.HexGrid;
 import model.game.player.Player;
+import model.game.route.Route;
 import model.game.unit.*;
 
 import java.io.IOException;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class GameEngine {
 
@@ -22,6 +24,11 @@ public class GameEngine {
 
     private HexGrid hexGrid;
     private final TownHall townHall;
+
+    private final ConstructionSystem constructionSystem;
+    private final RoutingSystem routingSystem;
+
+    private final Map<Route, Unit> inQueueRoutes;
 
     private GameEngine() {
 
@@ -43,6 +50,13 @@ public class GameEngine {
         townHall.generateUnit(UnitType.WORKER);
         townHall.generateUnit(UnitType.WORKER);
         townHall.generateUnit(UnitType.EXPLORER);
+
+        // essential systems
+        constructionSystem = new ConstructionSystem(hexGrid, townHall);
+        MovementSystem movementSystem = new MovementSystem(hexGrid);
+        routingSystem = new RoutingSystem(movementSystem);
+
+        inQueueRoutes = new HashMap<>();
     }
 
     private void loadMap() {
@@ -61,6 +75,10 @@ public class GameEngine {
         // TODO: renew AP
         // TODO: generate resource
         // TODO: pay upkeep
+
+        // move in-way units
+        routingSystem.moveUnits(inQueueRoutes);
+
         // TODO: user listener
     }
 }

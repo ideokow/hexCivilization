@@ -33,9 +33,6 @@ public class MovementSystem {
         if (!grid.isDiscovered(targetCoordinate)) {
             return MoveResult.HEX_NOT_DISCOVERED;
         }
-        if (!to.getUnits().isEmpty()) {
-            return MoveResult.HEX_OCCUPIED;
-        }
         if (unit.getCurrentAP() < to.getTerrain().getMovementCost()) {
             return MoveResult.NOT_ENOUGH_AP;
         }
