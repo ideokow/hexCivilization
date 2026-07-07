@@ -1,4 +1,4 @@
-package controller.game;
+package controller.game.system;
 
 import model.game.route.Route;
 import model.game.unit.Unit;
