@@ -78,7 +78,7 @@ public class BuildingRegistry {
         allGeneratedResources.put(Resource.WOOD, 0);
 
         for (Building building : buildingMap.values()) {
-            if (!building.isRuined() && (building instanceof ProductionBuilding)) {
+            if (!building.isRuined() && building instanceof ProductionBuilding) {
                 // production data
                 Resource resource = ((ProductionBuilding) building).getProductionBuildingType().getProduceResource();
                 int baseRate = ((ProductionBuilding) building).getProductionBuildingType().getProductionRate();
@@ -91,6 +91,10 @@ public class BuildingRegistry {
 
                 // add to statistics
                 allGeneratedResources.put(resource, allGeneratedResources.get(resource) + (baseRate * workerN));
+            }
+            else if (!building.isRuined() && building instanceof TownHall) {
+                // safeguard
+                ((TownHall) building).safeGuardGenerator();
             }
         }
 

@@ -166,8 +166,6 @@ public class TownHall extends Building {
     public void safeGuardGenerator() {
         addStoneToStorage(SAFE_GUARD_VALUE);
         addIronToStorage (SAFE_GUARD_VALUE);
-        addFoodToStorage (SAFE_GUARD_VALUE);
-        addWoodToStorage (SAFE_GUARD_VALUE);
     }
 
     // --- storage execution ---
