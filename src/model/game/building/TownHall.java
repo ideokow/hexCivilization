@@ -4,6 +4,7 @@ import model.game.hex.HexCoordinate;
 import model.game.hex.HexGrid;
 import model.game.player.Player;
 import model.game.hex.Resource;
+import model.game.registry.UnitRegistry;
 import model.game.unit.*;
 
 import java.util.*;
@@ -257,6 +258,9 @@ public class TownHall extends Building {
 
         // full ap
         unit.resetAP();
+
+        // add to registry
+        UnitRegistry.getInstance().addUnit(unit);
 
         // place unit on hex
         grid.get(new HexCoordinate(0, 0)).addUnit(unit);

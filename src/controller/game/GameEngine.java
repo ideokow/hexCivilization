@@ -7,6 +7,7 @@ import model.game.building.TownHall;
 import model.game.hex.HexCoordinate;
 import model.game.hex.HexGrid;
 import model.game.player.Player;
+import model.game.registry.UnitRegistry;
 import model.game.route.Route;
 import model.game.unit.*;
 
@@ -75,7 +76,10 @@ public class GameEngine {
     }
 
     public void executeTurn() {
-        // TODO: renew AP
+
+        // renew AP
+        UnitRegistry.getInstance().renewUnitAPs();
+
         // TODO: generate resource
         // TODO: pay upkeep
 
