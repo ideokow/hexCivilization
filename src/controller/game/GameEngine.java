@@ -7,6 +7,7 @@ import model.game.building.TownHall;
 import model.game.hex.HexCoordinate;
 import model.game.hex.HexGrid;
 import model.game.player.Player;
+import model.game.registry.BuildingRegistry;
 import model.game.registry.UnitRegistry;
 import model.game.route.Route;
 import model.game.unit.*;
@@ -81,7 +82,10 @@ public class GameEngine {
         UnitRegistry.getInstance().renewUnitAPs();
 
         // TODO: generate resource
-        // TODO: pay upkeep
+
+        // pay upkeep
+        boolean upkeepStatus = BuildingRegistry.getInstance().payUpKeeps(townHall, hexGrid);
+        // TODO: #UI show upkeep paying status
 
         // move in-way units
         routingSystem.moveUnits(inQueueRoutes);

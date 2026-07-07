@@ -14,7 +14,7 @@ public class Hex {
     private final TerrainType terrain;
     private final Set<Resource> availableResources;
 
-    private Building building;
+    private Building building = null;
     private final List<Unit> units;
 
     public Hex(HexCoordinate coordination, TerrainType terrainType, Set<Resource> availableResources) {

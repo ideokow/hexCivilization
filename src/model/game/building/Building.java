@@ -10,6 +10,9 @@ Buildings main model
  */
 public abstract class Building {
 
+    private static int buildingN = 0;
+
+    private final String buildingID;
     private final BuildingType type;
     private final Player owner;
     private BuildingState state;
@@ -17,10 +20,18 @@ public abstract class Building {
     private final HexCoordinate position;
 
     protected Building(BuildingType type, Player owner, HexCoordinate position) {
+
+        buildingID = "building-id-" + buildingN;
+        buildingN++;
+
         this.type = Objects.requireNonNull(type, "type");
         this.owner = owner;
         this.state = BuildingState.ACTIVE;
         this.position = position;
+    }
+
+    public String getBuildingID() {
+        return buildingID;
     }
 
     public HexCoordinate getPosition() {
@@ -35,32 +46,30 @@ public abstract class Building {
         return owner;
     }
 
-    public BuildingState getState() {
-        return state;
-    }
+    // --- upkeep system ---
 
-    public boolean isActive() {
-        return state == BuildingState.ACTIVE;
-    }
+    public abstract boolean payUpkeep(TownHall townHall);
 
     public int getUnpaidUpkeepTurns() {
         return unpaidUpkeepTurns;
     }
 
-    public void registerPaidUpkeep() {
-        unpaidUpkeepTurns = 0;
-    }
-
-    public void registerUnpaidUpkeep() {
+    public void increaseUnpaidUpkeepTurns() {
         unpaidUpkeepTurns++;
+        if (unpaidUpkeepTurns == 3) {
+            state = BuildingState.RUINED;
+        }
     }
 
-    public void ruin() {
-        state = BuildingState.RUINED;
+    public boolean isRuined() {
+        return state == BuildingState.RUINED;
     }
 
-    public void repair() {
-        state = BuildingState.ACTIVE;
-        unpaidUpkeepTurns = 0;
+    // ---------
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Building)) return false;
+        return ((Building) obj).getBuildingID().equals(buildingID);
     }
 }

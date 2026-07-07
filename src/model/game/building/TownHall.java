@@ -220,7 +220,7 @@ public class TownHall extends Building {
      */
     public boolean addUnit(Unit unit) {
         Objects.requireNonNull(unit, "worker");
-        if (!isActive() || units.contains(unit)) {
+        if (isRuined() || units.contains(unit)) {
             return false;
         }
         return units.add(unit);
@@ -274,5 +274,7 @@ public class TownHall extends Building {
     }
 
     @Override
-    public void registerUnpaidUpkeep() {}
+    public boolean payUpkeep(TownHall townHall) {
+        return true;
+    }
 }

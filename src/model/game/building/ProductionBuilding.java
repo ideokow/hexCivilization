@@ -1,12 +1,14 @@
 package model.game.building;
 
 import model.game.hex.HexCoordinate;
+import model.game.hex.Resource;
 import model.game.player.Player;
 import model.game.unit.Unit;
 import model.game.unit.Worker;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /*
@@ -32,7 +34,7 @@ public class ProductionBuilding extends Building {
         return productionType;
     }
 
-    public List<Unit> getUnits() {
+    public List<Worker> getUnits() {
         return new ArrayList<>(stationedWorkers);
     }
 
@@ -47,7 +49,7 @@ public class ProductionBuilding extends Building {
         }
 
         Objects.requireNonNull(worker, "worker");
-        if (!isActive() || stationedWorkers.contains(worker)) {
+        if (isRuined() || stationedWorkers.contains(worker)) {
             return StationResult.WORKER_IS_IN_ALREADY;
         }
         stationedWorkers.add(worker);
@@ -61,6 +63,29 @@ public class ProductionBuilding extends Building {
             worker.setInBuilding(false);
             return true;
         } else {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean payUpkeep(TownHall townHall) {
+        if (isRuined()) {
+            return false;
+        }
+
+        /*
+        One unit of each material required for maintenance cost
+         */
+        Map<Resource, Integer> cost = productionType.getConstructionCost();
+        for (Resource resource : cost.keySet()) {
+            cost.put(resource, 1);
+        }
+
+        if (townHall.canAfford(cost)) {
+            townHall.spendResources(cost);
+            return true;
+        } else {
+            increaseUnpaidUpkeepTurns();
             return false;
         }
     }
