@@ -1,6 +1,7 @@
 hexCivilization.iml
 .idea/
 out/
+target/
 .vscode/
 .DS_Store
 phase-1.md
