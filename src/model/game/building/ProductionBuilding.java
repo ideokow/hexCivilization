@@ -47,12 +47,17 @@ public class ProductionBuilding extends Building {
             return StationResult.CAPACITY_REACHED;
         }
 
+        if (productionType.getStationApCost() > worker.getCurrentAP()) {
+            return StationResult.NOT_ENOUGH_STATION_AP;
+        }
+
         Objects.requireNonNull(worker, "worker");
         if (isRuined() || stationedWorkers.contains(worker)) {
             return StationResult.WORKER_IS_IN_ALREADY;
         }
         stationedWorkers.add(worker);
         worker.setInBuilding(true);
+        worker.spendAP(productionType.getStationApCost());
         return StationResult.SUCCESS;
     }
 
@@ -60,6 +65,7 @@ public class ProductionBuilding extends Building {
         if (stationedWorkers.contains(worker)) {
             stationedWorkers.remove(worker);
             worker.setInBuilding(false);
+            worker.addAP(productionType.getStationApCost());
             return true;
         } else {
             return false;

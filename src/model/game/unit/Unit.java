@@ -53,6 +53,11 @@ public abstract class Unit {
         return true;
     }
 
+    public void addAP(int amount) {
+        currentAP += amount;
+        if (currentAP > getType().getEachTurnAP()) resetAP();
+    }
+
     public HexCoordinate getPosition() {
         return position;
     }
