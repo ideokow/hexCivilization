@@ -107,6 +107,9 @@ public class GameEngine {
         // refresh upgrade queue
         townHallWaiterSystem.checkUpgrades();
 
+        // refresh generator queue
+        townHallWaiterSystem.checkGeneratorQueue();
+
         // TODO: #UI user listener
     }
 }
