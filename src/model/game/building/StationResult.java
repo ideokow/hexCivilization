@@ -3,6 +3,9 @@ package model.game.building;
 public enum StationResult {
     SUCCESS,
     WORKER_IS_IN_ALREADY,
+    WORKER_IS_NOT_HERE,
+    ANOTHER_PLAYER_WORKER,
+    BUILDING_IS_RUINED,
     NOT_ENOUGH_STATION_AP,
     CAPACITY_REACHED;
 }

@@ -43,18 +43,34 @@ public class ProductionBuilding extends Building {
 
     public StationResult stationWorker(Worker worker) {
 
+        // --- check requirement ---
+
+        // capacity check
         if (stationedWorkers.size() >= getProductionType().getWorkerCapacity()) {
             return StationResult.CAPACITY_REACHED;
         }
-
+        // entry ap check
         if (productionType.getStationApCost() > worker.getCurrentAP()) {
             return StationResult.NOT_ENOUGH_STATION_AP;
         }
-
+        // is worker in building check
         Objects.requireNonNull(worker, "worker");
         if (isRuined() || stationedWorkers.contains(worker)) {
             return StationResult.WORKER_IS_IN_ALREADY;
         }
+        // worker is in hex check
+        if (worker.getPosition().equals(getPosition())) {
+            return StationResult.WORKER_IS_NOT_HERE;
+        }
+        // building is ok
+        if (isRuined()) {
+            return StationResult.BUILDING_IS_RUINED;
+        }
+        // worker is not owned
+        if (!getOwner().equals(worker.getOwner())) {
+            return StationResult.ANOTHER_PLAYER_WORKER;
+        }
+
         stationedWorkers.add(worker);
         worker.setInBuilding(true);
         worker.spendAP(productionType.getStationApCost());
