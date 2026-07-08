@@ -5,11 +5,11 @@ import model.game.hex.Resource;
 import java.util.HashMap;
 import java.util.Map;
 
-public class TownHallUpgradeData {
+public class TownHallUpgrade {
 
     private final TownHall townHall;
 
-    public TownHallUpgradeData(TownHall townHall) {
+    public TownHallUpgrade(TownHall townHall) {
         this.townHall = townHall;
     }
 

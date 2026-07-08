@@ -18,7 +18,7 @@ public class TownHall extends Building {
 
     private final Map<Resource, Integer> resourceStorage;
 
-    private final TownHallUpgradeData upgrades;
+    private final TownHallUpgrade upgrades;
 
     private int resourceCap;
     private final int baseResourceCap = 100;
@@ -41,12 +41,12 @@ public class TownHall extends Building {
         resourceCap = baseResourceCap;
         unitCap = baseUnitCap;
 
-        upgrades = new TownHallUpgradeData(this);
+        upgrades = new TownHallUpgrade(this);
     }
 
     // --- upgrade ---
 
-    public TownHallUpgradeData getUpgrades() {
+    public TownHallUpgrade getUpgrades() {
         return upgrades;
     }
 

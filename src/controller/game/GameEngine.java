@@ -1,9 +1,6 @@
 package controller.game;
 
-import controller.game.system.ConstructionSystem;
-import controller.game.system.MovementSystem;
-import controller.game.system.RoutingSystem;
-import controller.game.system.StarvationSystem;
+import controller.game.system.*;
 import model.game.building.TownHall;
 import model.game.hex.HexCoordinate;
 import model.game.hex.HexGrid;
@@ -35,6 +32,7 @@ public class GameEngine {
     private final ConstructionSystem constructionSystem;
     private final RoutingSystem routingSystem;
     private final StarvationSystem starvationSystem;
+    private final TownHallWaiterSystem townHallWaiterSystem;
 
     private final Map<Route, Unit> inQueueRoutes;
 
@@ -65,6 +63,7 @@ public class GameEngine {
         MovementSystem movementSystem = new MovementSystem(hexGrid);
         routingSystem = new RoutingSystem(movementSystem);
         starvationSystem = new StarvationSystem(townHall);
+        townHallWaiterSystem = new TownHallWaiterSystem(townHall);
 
         inQueueRoutes = new HashMap<>();
     }
@@ -104,6 +103,9 @@ public class GameEngine {
         // check starvation
         boolean starvation = starvationSystem.checkStarvationStatus();
         // TODO: #UI show starvation status
+
+        // refresh upgrade queue
+        townHallWaiterSystem.checkUpgrades();
 
         // TODO: #UI user listener
     }
