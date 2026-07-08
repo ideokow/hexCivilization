@@ -6,6 +6,7 @@ import model.game.building.TownHall;
 import model.game.hex.Resource;
 import model.game.registry.BuildingRegistry;
 import model.game.registry.UnitRegistry;
+import model.game.unit.Unit;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,15 +28,24 @@ public class StarvationSystem {
     public boolean feedUnits() {
         // define cost
         Map<Resource, Integer> cost = new HashMap<>();
-        cost.put(Resource.FOOD, getFoodRequirement());
+        cost.put(Resource.FOOD, 0);
 
-        // check storage then pay
-        if (townHall.canAfford(cost)) {
-            townHall.spendResources(cost);
-            return true;
-        } else {
-            return false;
+        // feed
+        boolean flag = true;
+        for (Unit unit : unitRegistry.getUnitMap().values()) {
+            if (flag) {
+                cost.put(Resource.FOOD, cost.get(Resource.FOOD) + eachTurnFood);
+                if (!townHall.canAfford(cost)) {
+                    flag = false;
+                    cost.put(Resource.FOOD, cost.get(Resource.FOOD) - eachTurnFood);
+                }
+            } else {
+                unit.spendAP(unit.getCurrentAP() / 2);
+            }
         }
+
+        townHall.spendResources(cost);
+        return flag;
     }
 
     public boolean checkStarvationStatus() {
