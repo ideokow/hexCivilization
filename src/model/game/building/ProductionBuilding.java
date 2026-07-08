@@ -66,6 +66,13 @@ public class ProductionBuilding extends Building {
         }
     }
 
+    public int getProductionAmount(TownHall townHall) {
+        int baseRate = productionType.getProductionRate();
+        int workerN = stationedWorkers.size();
+        double techCoefficient = townHall.getUpgrades().isToolsUpgrade() ? 1.5 : 1.0;
+        return ((int)(((double) (baseRate * workerN)) * techCoefficient));
+    }
+
     @Override
     public boolean payUpkeep(TownHall townHall) {
         if (isRuined()) {

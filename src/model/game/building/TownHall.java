@@ -1,5 +1,6 @@
 package model.game.building;
 
+import controller.game.system.StarvationSystem;
 import model.game.hex.HexCoordinate;
 import model.game.hex.HexGrid;
 import model.game.player.Player;
@@ -214,7 +215,13 @@ public class TownHall extends Building {
 
     public boolean generateUnit(UnitType unitType) {
 
-        if (unitNumber >= unitCap) return false;
+        if (unitNumber >= unitCap) {
+            return false;
+        }
+
+        if ((new StarvationSystem(this)).checkStarvationStatus()) {
+            return false;
+        }
 
         Unit unit;
 

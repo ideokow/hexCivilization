@@ -80,19 +80,17 @@ public class BuildingRegistry {
 
         for (Building building : buildingMap.values()) {
             if (!building.isRuined() && building instanceof ProductionBuilding) {
-                // production data
+                // production type
                 Resource resource = ((ProductionBuilding) building).getProductionBuildingType().getProduceResource();
-                int baseRate = ((ProductionBuilding) building).getProductionBuildingType().getProductionRate();
-                int workerN = ((ProductionBuilding) building).getUnits().size();
-                double techCoefficient = townHall.getUpgrades().isToolsUpgrade() ? 1.5 : 1.0;
+                int productionAmount = ((ProductionBuilding) building).getProductionAmount(townHall);
 
                 // apply in town hall
                 Map<Resource, Integer> generatedResource = new HashMap<>();
-                generatedResource.put(resource, ((int)(((double) (baseRate * workerN)) * techCoefficient)));
+                generatedResource.put(resource, productionAmount);
                 townHall.addResources(generatedResource);
 
                 // add to statistics
-                allGeneratedResources.put(resource, allGeneratedResources.get(resource) + ((int)(((double) (baseRate * workerN)) * techCoefficient)));
+                allGeneratedResources.put(resource, allGeneratedResources.get(resource) + productionAmount);
             }
             else if (!building.isRuined() && building instanceof TownHall) {
                 // safeguard
