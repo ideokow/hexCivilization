@@ -21,7 +21,7 @@ public class BorderExpander extends Unit {
     public void expand(HexGrid hexGrid, TownHall townHall, Player player) {
         List<Hex> hexesInRange = hexGrid.hexesInRange(getPosition(), getType().getVisibilityRadius());
         for (Hex hex : hexesInRange) {
-            if (!player.ownsTerritory(hex.getCoordinate())) {
+            if (!player.ownsTerritory(hex.getCoordinate()) && hexGrid.isDiscovered(hex.getCoordinate())) {
                 player.addTerritory(hex.getCoordinate());
             }
         }
