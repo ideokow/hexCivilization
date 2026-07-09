@@ -1,9 +1,11 @@
 package controller.game;
 
+import model.game.building.Upgrade;
 import model.game.hex.HexCoordinate;
 import model.game.hex.Resource;
 import model.game.registry.UpKeepStatus;
 import model.game.unit.Unit;
+import model.game.unit.UnitType;
 import view.game.GameView;
 
 import java.util.List;
@@ -70,7 +72,21 @@ public class GameController {
     }
 
     public void starvationAlert() {
-        String message = MessageFormat.starvationAlert(engine.getTurnNumber());
+        String message = MessageFormat.formatStarvationAlert(engine.getTurnNumber());
         view.setAlert(message);
+    }
+
+    public void townHallAlert(Upgrade upgrade, UnitType unitType) {
+        if (upgrade != null) {
+            if (unitType == null) {
+                view.showToast(MessageFormat.formatUpgradeAlert(upgrade));
+            } else {
+                view.showToast(MessageFormat.formatUpgradeAlert(upgrade) + "\n" + MessageFormat.formatGeneratedAlert(unitType));
+            }
+        } else {
+            if (unitType != null) {
+                view.showToast(MessageFormat.formatGeneratedAlert(unitType));
+            }
+        }
     }
 }

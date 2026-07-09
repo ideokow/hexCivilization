@@ -59,6 +59,7 @@ public class GameView extends JFrame {
     private final JButton resetCameraButton;
 
     private Consumer<HexCoordinate> hexClickHandler;
+    private ToastWindow toast;
     private HexCoordinate selectedHex;
     private Unit selectedUnit;
     private boolean updatingUnitCombo;
@@ -412,6 +413,13 @@ public class GameView extends JFrame {
 
     public void setAlert(String message) {
         alertLabel.setText(message == null ? "" : message);
+    }
+
+    public void showToast(String message) {
+        if (toast == null) {
+            toast = new ToastWindow(this);
+        }
+        toast.show(message);
     }
 
     public void resetCamera() {
@@ -891,6 +899,46 @@ public class GameView extends JFrame {
                 setText(pretty(unit.getType()) + "  AP " + unit.getCurrentAP() + "/" + unit.getType().getEachTurnAP());
             }
             return component;
+        }
+    }
+
+    private static final class ToastWindow {
+        private static final int DURATION_MS = 3000;
+        private final JWindow window;
+        private final JLabel label;
+        private final JFrame owner;
+        private Timer timer;
+
+        ToastWindow(JFrame owner) {
+            this.owner = owner;
+            this.window = new JWindow(owner);
+            this.label = new JLabel(" ", SwingConstants.CENTER);
+            label.setOpaque(true);
+            label.setBackground(new Color(33, 40, 56));
+            label.setForeground(new Color(238, 241, 247));
+            label.setFont(new Font("SansSerif", Font.BOLD, 13));
+            label.setBorder(BorderFactory.createEmptyBorder(8, 16, 8, 16));
+            window.getContentPane().add(label);
+            window.setFocusableWindowState(false);
+        }
+
+        void show(String message) {
+            label.setText(message);
+            window.pack();
+
+            Point location = owner.getLocation();
+            int x = location.x + (owner.getWidth() - window.getWidth()) / 2;
+            int y = location.y + owner.getHeight() - window.getHeight() - 80;
+            window.setLocation(x, y);
+            window.setVisible(true);
+
+            if (timer != null && timer.isRunning()) {
+                timer.restart();
+            } else {
+                timer = new Timer(DURATION_MS, event -> window.setVisible(false));
+                timer.setRepeats(false);
+                timer.start();
+            }
         }
     }
 }

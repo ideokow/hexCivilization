@@ -30,7 +30,7 @@ public class TownHallWaiterSystem {
 
     // --- upgrade functions ---
 
-    public void checkUpgrades() {
+    public Upgrade checkUpgrades() {
         if (upgradeQueueTurns == 0) {
 
             if (inQueueUpgrade == Upgrade.RESOURCE) {
@@ -49,12 +49,17 @@ public class TownHallWaiterSystem {
                 townHallUpgrade.upgradeTown();
             }
 
+            Upgrade inQueueUpgradeCopy = inQueueUpgrade;
+
             // reset
             inQueueUpgrade = null;
             upgradeQueueTurns = -1;
+
+            return inQueueUpgradeCopy;
         } else if (upgradeQueueTurns > 0) {
             upgradeQueueTurns--;
         }
+        return null;
     }
 
     public boolean reserveUpgrade(Upgrade upgrade) {
@@ -80,16 +85,21 @@ public class TownHallWaiterSystem {
 
     // --- generator functions ---
 
-    public void checkGeneratorQueue() {
+    public UnitType checkGeneratorQueue() {
         if (generatorQueueTurns == 0) {
             townHall.generateUnit(inQueueUnitType);
+
+            UnitType inQueueUnitTypeCopy = inQueueUnitType;
 
             // reset
             inQueueUnitType = null;
             generatorQueueTurns = -1;
+
+            return inQueueUnitTypeCopy;
         } else if (generatorQueueTurns > 0) {
             generatorQueueTurns--;
         }
+        return null;
     }
 
     public boolean reserveGeneration(UnitType unitType) {

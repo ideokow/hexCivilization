@@ -1,11 +1,7 @@
 package controller.game;
 
 import controller.game.system.*;
-import model.game.building.TownHall;
-import model.game.building.Building;
-import model.game.building.BuildingType;
-import model.game.building.ProductionBuilding;
-import model.game.building.StationResult;
+import model.game.building.*;
 import model.game.hex.HexCoordinate;
 import model.game.hex.HexGrid;
 import model.game.hex.Resource;
@@ -128,10 +124,13 @@ public class GameEngine {
         }
 
         // refresh upgrade queue
-        townHallWaiterSystem.checkUpgrades();
+        Upgrade doneUpgrade = townHallWaiterSystem.checkUpgrades();
 
         // refresh generator queue
-        townHallWaiterSystem.checkGeneratorQueue();
+        UnitType generatedUnitType = townHallWaiterSystem.checkGeneratorQueue();
+
+        // town hall waiter alert
+        gameController.townHallAlert(doneUpgrade, generatedUnitType);
 
         // TODO: #UI user listener
     }

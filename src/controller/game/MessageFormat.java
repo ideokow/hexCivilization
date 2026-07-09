@@ -1,7 +1,9 @@
 package controller.game;
 
+import model.game.building.Upgrade;
 import model.game.hex.Resource;
 import model.game.registry.UpKeepStatus;
+import model.game.unit.UnitType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +54,15 @@ public final class MessageFormat {
         }
     }
 
-    public static String starvationAlert(int turnNumber) {
+    public static String formatStarvationAlert(int turnNumber) {
         return "Turn " + turnNumber + ": WARNING - starvation! Your civilization cannot feed its units. ";
+    }
+
+    public static String formatUpgradeAlert(Upgrade upgrade) {
+        return "Upgrade complete: " + upgrade.getName() + "!";
+    }
+
+    public static String formatGeneratedAlert(UnitType unitType) {
+        return "New unit generated: " + unitType.getName() + "!";
     }
 }
