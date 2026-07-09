@@ -12,6 +12,7 @@ import model.game.hex.Resource;
 import model.game.player.Player;
 import model.game.registry.BuildingRegistry;
 import model.game.registry.UnitRegistry;
+import model.game.registry.UpKeepStatus;
 import model.game.route.Route;
 import model.game.unit.*;
 
@@ -40,6 +41,7 @@ public class GameEngine {
     private final StarvationSystem starvationSystem;
     private final TownHallWaiterSystem townHallWaiterSystem;
     private final MovementSystem movementSystem;
+    private GameController gameController;
 
     private final Map<Route, Unit> inQueueRoutes;
     private int turnNumber;
@@ -80,6 +82,10 @@ public class GameEngine {
         }
     }
 
+    public void setController(GameController gameController) {
+        this.gameController = gameController;
+    }
+
     private void loadMap() {
         try {
             hexGrid = (new MapLoader()).loadMap01();
@@ -93,27 +99,27 @@ public class GameEngine {
     }
 
     public void executeTurn() {
-        turnNumber++;
-
         if (DEBUG_VERBOSE) System.out.println(" - Turn - " + turnNumber + " - ");
+
+        turnNumber++;
 
         // renew AP
         UnitRegistry.getInstance().renewUnitAPs();
 
         // generate resources
         Map<Resource, Integer> generatedResources = BuildingRegistry.getInstance().generateResources(townHall);
-        // TODO: #UI resource added message
 
         // pay upkeep
-        boolean upkeepStatus = BuildingRegistry.getInstance().payUpKeeps(townHall, hexGrid);
-        // TODO: #UI show upkeep paying status
+        UpKeepStatus upkeepStatus = BuildingRegistry.getInstance().payUpKeeps(townHall, hexGrid);
 
         // move in-way units
         routingSystem.moveUnits(inQueueRoutes);
 
         // feed units
         boolean feedStatus = starvationSystem.feedUnits();
-        // TODO: #UI show feeding status
+
+        // tell ui each turn detail
+        gameController.turnAlert(generatedResources, upkeepStatus, feedStatus);
 
         // check starvation
         boolean starvation = starvationSystem.checkStarvationStatus();

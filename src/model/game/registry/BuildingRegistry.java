@@ -35,7 +35,7 @@ public class BuildingRegistry {
         buildingMap.put(building.getBuildingID(), building);
     }
 
-    public boolean payUpKeeps(TownHall townHall, HexGrid hexGrid) {
+    public UpKeepStatus payUpKeeps(TownHall townHall, HexGrid hexGrid) {
 
         List<Building> finishedBuildings = new ArrayList<>();
         boolean flag=true;
@@ -67,7 +67,14 @@ public class BuildingRegistry {
             buildingMap.remove(building.getBuildingID());
         }
 
-        return flag;
+        // return status
+        if (flag) {
+            return UpKeepStatus.SUCCESS;
+        } else if (finishedBuildings.size() > 0) {
+            return UpKeepStatus.SOME_BUILDINGS_RUINED;
+        } else {
+            return UpKeepStatus.UP_KEEP_PAYMENT_FAILED;
+        }
     }
 
     public Map<Resource, Integer> generateResources(TownHall townHall) {

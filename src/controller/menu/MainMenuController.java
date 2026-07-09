@@ -45,7 +45,8 @@ public class MainMenuController {
     private void handleStart() {
         GameEngine gameEngine = GameEngine.getInstance();
         GameView gameView = new GameView(gameEngine);
-        new GameController(gameEngine, gameView);
+        GameController gameController = new GameController(gameEngine, gameView);
+        gameEngine.setController(gameController);
 
         view.dispose();
         gameView.setVisible(true);
