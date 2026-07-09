@@ -1,21 +1,176 @@
 {
   "hexes": [
     {
-      "q": -8,
+      "q": -16,
       "r": 0,
-      "terrain": "GRASSLAND",
-      "resources": []
-    },
-    {
-      "q": -8,
-      "r": 1,
-      "terrain": "GRASSLAND",
+      "terrain": "MOUNTAIN",
       "resources": [
-        "WHEAT"
+        "STONE"
       ]
     },
     {
-      "q": -8,
+      "q": -16,
+      "r": 1,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -16,
+      "r": 2,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -16,
+      "r": 3,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": -16,
+      "r": 4,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": -16,
+      "r": 5,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": -16,
+      "r": 6,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": -16,
+      "r": 7,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": -16,
+      "r": 8,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": -16,
+      "r": 9,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -16,
+      "r": 10,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -16,
+      "r": 11,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": -16,
+      "r": 12,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": -16,
+      "r": 13,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -16,
+      "r": 14,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": -16,
+      "r": 15,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": -16,
+      "r": 16,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": -15,
+      "r": -1,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -15,
+      "r": 0,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -15,
+      "r": 1,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -15,
       "r": 2,
       "terrain": "MOUNTAIN",
       "resources": [
@@ -24,7 +179,7 @@
       ]
     },
     {
-      "q": -8,
+      "q": -15,
       "r": 3,
       "terrain": "MOUNTAIN",
       "resources": [
@@ -32,68 +187,1421 @@
       ]
     },
     {
+      "q": -15,
+      "r": 4,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": -15,
+      "r": 5,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -15,
+      "r": 6,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -15,
+      "r": 7,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -15,
+      "r": 8,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -15,
+      "r": 9,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -15,
+      "r": 10,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": -15,
+      "r": 11,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": -15,
+      "r": 12,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -15,
+      "r": 13,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": -15,
+      "r": 14,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": -15,
+      "r": 15,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": -15,
+      "r": 16,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": -14,
+      "r": -2,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -14,
+      "r": -1,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -14,
+      "r": 0,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": -14,
+      "r": 1,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": -14,
+      "r": 2,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": -14,
+      "r": 3,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -14,
+      "r": 4,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": -14,
+      "r": 5,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -14,
+      "r": 6,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": -14,
+      "r": 7,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": -14,
+      "r": 8,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": -14,
+      "r": 9,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -14,
+      "r": 10,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -14,
+      "r": 11,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -14,
+      "r": 12,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": -14,
+      "r": 13,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -14,
+      "r": 14,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": -14,
+      "r": 15,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": -14,
+      "r": 16,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": -13,
+      "r": -3,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -13,
+      "r": -2,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -13,
+      "r": -1,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -13,
+      "r": 0,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": -13,
+      "r": 1,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": -13,
+      "r": 2,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": -13,
+      "r": 3,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": -13,
+      "r": 4,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -13,
+      "r": 5,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -13,
+      "r": 6,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -13,
+      "r": 7,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -13,
+      "r": 8,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -13,
+      "r": 9,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": -13,
+      "r": 10,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -13,
+      "r": 11,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -13,
+      "r": 12,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -13,
+      "r": 13,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": -13,
+      "r": 14,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": -13,
+      "r": 15,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": -13,
+      "r": 16,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": -12,
+      "r": -4,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -12,
+      "r": -3,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": -12,
+      "r": -2,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -12,
+      "r": -1,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -12,
+      "r": 0,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": -12,
+      "r": 1,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -12,
+      "r": 2,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": -12,
+      "r": 3,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -12,
+      "r": 4,
+      "terrain": "PLAINS",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": -12,
+      "r": 5,
+      "terrain": "PLAINS",
+      "resources": []
+    },
+    {
+      "q": -12,
+      "r": 6,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -12,
+      "r": 7,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -12,
+      "r": 8,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -12,
+      "r": 9,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -12,
+      "r": 10,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": -12,
+      "r": 11,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": -12,
+      "r": 12,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -12,
+      "r": 13,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": -12,
+      "r": 14,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": -12,
+      "r": 15,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": -12,
+      "r": 16,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": -11,
+      "r": -5,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": -11,
+      "r": -4,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -11,
+      "r": -3,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -11,
+      "r": -2,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": -11,
+      "r": -1,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -11,
+      "r": 0,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -11,
+      "r": 1,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": -11,
+      "r": 2,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": -11,
+      "r": 3,
+      "terrain": "PLAINS",
+      "resources": []
+    },
+    {
+      "q": -11,
+      "r": 4,
+      "terrain": "PLAINS",
+      "resources": []
+    },
+    {
+      "q": -11,
+      "r": 5,
+      "terrain": "PLAINS",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": -11,
+      "r": 6,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": -11,
+      "r": 7,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -11,
+      "r": 8,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": -11,
+      "r": 9,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": -11,
+      "r": 10,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -11,
+      "r": 11,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -11,
+      "r": 12,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": -11,
+      "r": 13,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": -11,
+      "r": 14,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": -11,
+      "r": 15,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": -11,
+      "r": 16,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": -10,
+      "r": -6,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -10,
+      "r": -5,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -10,
+      "r": -4,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -10,
+      "r": -3,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -10,
+      "r": -2,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -10,
+      "r": -1,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -10,
+      "r": 0,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": -10,
+      "r": 1,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -10,
+      "r": 2,
+      "terrain": "PLAINS",
+      "resources": []
+    },
+    {
+      "q": -10,
+      "r": 3,
+      "terrain": "PLAINS",
+      "resources": []
+    },
+    {
+      "q": -10,
+      "r": 4,
+      "terrain": "PLAINS",
+      "resources": []
+    },
+    {
+      "q": -10,
+      "r": 5,
+      "terrain": "PLAINS",
+      "resources": []
+    },
+    {
+      "q": -10,
+      "r": 6,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -10,
+      "r": 7,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -10,
+      "r": 8,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": -10,
+      "r": 9,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -10,
+      "r": 10,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -10,
+      "r": 11,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": -10,
+      "r": 12,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -10,
+      "r": 13,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": -10,
+      "r": 14,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": -10,
+      "r": 15,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": -10,
+      "r": 16,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": -9,
+      "r": -7,
+      "terrain": "GRASSLAND",
+      "resources": []
+    },
+    {
+      "q": -9,
+      "r": -6,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": -9,
+      "r": -5,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -9,
+      "r": -4,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": -9,
+      "r": -3,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -9,
+      "r": -2,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": -9,
+      "r": -1,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": -9,
+      "r": 0,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -9,
+      "r": 1,
+      "terrain": "PLAINS",
+      "resources": []
+    },
+    {
+      "q": -9,
+      "r": 2,
+      "terrain": "PLAINS",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": -9,
+      "r": 3,
+      "terrain": "PLAINS",
+      "resources": []
+    },
+    {
+      "q": -9,
+      "r": 4,
+      "terrain": "PLAINS",
+      "resources": []
+    },
+    {
+      "q": -9,
+      "r": 5,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -9,
+      "r": 6,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": -9,
+      "r": 7,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": -9,
+      "r": 8,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": -9,
+      "r": 9,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -9,
+      "r": 10,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": -9,
+      "r": 11,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": -9,
+      "r": 12,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -9,
+      "r": 13,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": -9,
+      "r": 14,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": -9,
+      "r": 15,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": -9,
+      "r": 16,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": -8,
+      "r": -8,
+      "terrain": "GRASSLAND",
+      "resources": []
+    },
+    {
+      "q": -8,
+      "r": -7,
+      "terrain": "GRASSLAND",
+      "resources": []
+    },
+    {
+      "q": -8,
+      "r": -6,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": -8,
+      "r": -5,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -8,
+      "r": -4,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -8,
+      "r": -3,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": -8,
+      "r": -2,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -8,
+      "r": -1,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": -8,
+      "r": 0,
+      "terrain": "PLAINS",
+      "resources": []
+    },
+    {
+      "q": -8,
+      "r": 1,
+      "terrain": "PLAINS",
+      "resources": []
+    },
+    {
+      "q": -8,
+      "r": 2,
+      "terrain": "PLAINS",
+      "resources": []
+    },
+    {
+      "q": -8,
+      "r": 3,
+      "terrain": "PLAINS",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
       "q": -8,
       "r": 4,
-      "terrain": "GRASSLAND",
+      "terrain": "PLAINS",
       "resources": []
     },
     {
       "q": -8,
       "r": 5,
-      "terrain": "GRASSLAND",
+      "terrain": "MOUNTAIN",
       "resources": [
-        "RICE"
+        "STONE"
       ]
     },
     {
       "q": -8,
       "r": 6,
-      "terrain": "GRASSLAND",
-      "resources": []
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
     },
     {
       "q": -8,
       "r": 7,
-      "terrain": "GRASSLAND",
+      "terrain": "MOUNTAIN",
       "resources": [
-        "WHEAT"
+        "STONE"
       ]
     },
     {
       "q": -8,
       "r": 8,
-      "terrain": "PLAINS",
+      "terrain": "MOUNTAIN",
       "resources": [
-        "SHEEP"
+        "STONE"
+      ]
+    },
+    {
+      "q": -8,
+      "r": 9,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -8,
+      "r": 10,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": -8,
+      "r": 11,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": -8,
+      "r": 12,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -8,
+      "r": 13,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": -8,
+      "r": 14,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": -8,
+      "r": 15,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": -8,
+      "r": 16,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": -7,
+      "r": -9,
+      "terrain": "GRASSLAND",
+      "resources": []
+    },
+    {
+      "q": -7,
+      "r": -8,
+      "terrain": "GRASSLAND",
+      "resources": []
+    },
+    {
+      "q": -7,
+      "r": -7,
+      "terrain": "GRASSLAND",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": -7,
+      "r": -6,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -7,
+      "r": -5,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -7,
+      "r": -4,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -7,
+      "r": -3,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": -7,
+      "r": -2,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
       ]
     },
     {
       "q": -7,
       "r": -1,
-      "terrain": "GRASSLAND",
-      "resources": [
-        "WHEAT"
-      ]
-    },
-    {
-      "q": -7,
-      "r": 0,
-      "terrain": "GRASSLAND",
-      "resources": [
-        "RICE"
-      ]
-    },
-    {
-      "q": -7,
-      "r": 1,
-      "terrain": "MOUNTAIN",
-      "resources": [
-        "STONE"
-      ]
-    },
-    {
-      "q": -7,
-      "r": 2,
       "terrain": "MOUNTAIN",
       "resources": [
         "STONE",
@@ -102,18 +1610,37 @@
     },
     {
       "q": -7,
-      "r": 3,
-      "terrain": "MOUNTAIN",
+      "r": 0,
+      "terrain": "GRASSLAND",
+      "resources": []
+    },
+    {
+      "q": -7,
+      "r": 1,
+      "terrain": "GRASSLAND",
+      "resources": []
+    },
+    {
+      "q": -7,
+      "r": 2,
+      "terrain": "GRASSLAND",
       "resources": [
-        "STONE"
+        "FOOD"
       ]
+    },
+    {
+      "q": -7,
+      "r": 3,
+      "terrain": "GRASSLAND",
+      "resources": []
     },
     {
       "q": -7,
       "r": 4,
       "terrain": "MOUNTAIN",
       "resources": [
-        "STONE"
+        "STONE",
+        "IRON"
       ]
     },
     {
@@ -121,12 +1648,21 @@
       "r": 5,
       "terrain": "MOUNTAIN",
       "resources": [
-        "STONE"
+        "STONE",
+        "IRON"
       ]
     },
     {
       "q": -7,
       "r": 6,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -7,
+      "r": 7,
       "terrain": "MOUNTAIN",
       "resources": [
         "STONE",
@@ -135,26 +1671,150 @@
     },
     {
       "q": -7,
-      "r": 7,
-      "terrain": "GRASSLAND",
+      "r": 8,
+      "terrain": "MOUNTAIN",
       "resources": [
-        "WHEAT"
+        "STONE",
+        "IRON"
       ]
     },
     {
       "q": -7,
-      "r": 8,
-      "terrain": "PLAINS",
+      "r": 9,
+      "terrain": "MOUNTAIN",
       "resources": [
-        "SHEEP"
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": -7,
+      "r": 10,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": -7,
+      "r": 11,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -7,
+      "r": 12,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": -7,
+      "r": 13,
+      "terrain": "GRASSLAND",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": -7,
+      "r": 14,
+      "terrain": "GRASSLAND",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": -7,
+      "r": 15,
+      "terrain": "GRASSLAND",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": -7,
+      "r": 16,
+      "terrain": "GRASSLAND",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": -6,
+      "r": -10,
+      "terrain": "GRASSLAND",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": -6,
+      "r": -9,
+      "terrain": "GRASSLAND",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": -6,
+      "r": -8,
+      "terrain": "GRASSLAND",
+      "resources": []
+    },
+    {
+      "q": -6,
+      "r": -7,
+      "terrain": "GRASSLAND",
+      "resources": []
+    },
+    {
+      "q": -6,
+      "r": -6,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -6,
+      "r": -5,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": -6,
+      "r": -4,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": -6,
+      "r": -3,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
       ]
     },
     {
       "q": -6,
       "r": -2,
-      "terrain": "GRASSLAND",
+      "terrain": "MOUNTAIN",
       "resources": [
-        "WHEAT"
+        "STONE",
+        "IRON"
       ]
     },
     {
@@ -166,33 +1826,31 @@
     {
       "q": -6,
       "r": 0,
-      "terrain": "PLAINS",
+      "terrain": "GRASSLAND",
       "resources": []
     },
     {
       "q": -6,
       "r": 1,
-      "terrain": "MOUNTAIN",
+      "terrain": "GRASSLAND",
       "resources": [
-        "STONE",
-        "IRON"
+        "FOOD"
       ]
     },
     {
       "q": -6,
       "r": 2,
-      "terrain": "MOUNTAIN",
+      "terrain": "GRASSLAND",
       "resources": [
-        "STONE"
+        "FOOD"
       ]
     },
     {
       "q": -6,
       "r": 3,
-      "terrain": "MOUNTAIN",
+      "terrain": "GRASSLAND",
       "resources": [
-        "STONE",
-        "IRON"
+        "FOOD"
       ]
     },
     {
@@ -200,7 +1858,8 @@
       "r": 4,
       "terrain": "MOUNTAIN",
       "resources": [
-        "STONE"
+        "STONE",
+        "IRON"
       ]
     },
     {
@@ -222,22 +1881,137 @@
     {
       "q": -6,
       "r": 7,
-      "terrain": "GRASSLAND",
+      "terrain": "MOUNTAIN",
       "resources": [
-        "WHEAT"
+        "STONE"
       ]
     },
     {
       "q": -6,
       "r": 8,
-      "terrain": "PLAINS",
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": -6,
+      "r": 9,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -6,
+      "r": 10,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -6,
+      "r": 11,
+      "terrain": "GRASSLAND",
       "resources": []
+    },
+    {
+      "q": -6,
+      "r": 12,
+      "terrain": "GRASSLAND",
+      "resources": []
+    },
+    {
+      "q": -6,
+      "r": 13,
+      "terrain": "GRASSLAND",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": -6,
+      "r": 14,
+      "terrain": "GRASSLAND",
+      "resources": []
+    },
+    {
+      "q": -6,
+      "r": 15,
+      "terrain": "GRASSLAND",
+      "resources": []
+    },
+    {
+      "q": -6,
+      "r": 16,
+      "terrain": "GRASSLAND",
+      "resources": []
+    },
+    {
+      "q": -5,
+      "r": -11,
+      "terrain": "GRASSLAND",
+      "resources": []
+    },
+    {
+      "q": -5,
+      "r": -10,
+      "terrain": "GRASSLAND",
+      "resources": []
+    },
+    {
+      "q": -5,
+      "r": -9,
+      "terrain": "GRASSLAND",
+      "resources": []
+    },
+    {
+      "q": -5,
+      "r": -8,
+      "terrain": "GRASSLAND",
+      "resources": []
+    },
+    {
+      "q": -5,
+      "r": -7,
+      "terrain": "GRASSLAND",
+      "resources": []
+    },
+    {
+      "q": -5,
+      "r": -6,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": -5,
+      "r": -5,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -5,
+      "r": -4,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
     },
     {
       "q": -5,
       "r": -3,
       "terrain": "PLAINS",
-      "resources": []
+      "resources": [
+        "FOOD"
+      ]
     },
     {
       "q": -5,
@@ -248,50 +2022,39 @@
     {
       "q": -5,
       "r": -1,
-      "terrain": "PLAINS",
+      "terrain": "GRASSLAND",
       "resources": []
     },
     {
       "q": -5,
       "r": 0,
-      "terrain": "FOREST",
-      "resources": [
-        "WOOD"
-      ]
+      "terrain": "GRASSLAND",
+      "resources": []
     },
     {
       "q": -5,
       "r": 1,
-      "terrain": "FOREST",
-      "resources": [
-        "WOOD"
-      ]
+      "terrain": "GRASSLAND",
+      "resources": []
     },
     {
       "q": -5,
       "r": 2,
-      "terrain": "MOUNTAIN",
-      "resources": [
-        "STONE",
-        "IRON"
-      ]
+      "terrain": "GRASSLAND",
+      "resources": []
     },
     {
       "q": -5,
       "r": 3,
-      "terrain": "MOUNTAIN",
-      "resources": [
-        "STONE",
-        "IRON"
-      ]
+      "terrain": "GRASSLAND",
+      "resources": []
     },
     {
       "q": -5,
       "r": 4,
       "terrain": "MOUNTAIN",
       "resources": [
-        "STONE",
-        "IRON"
+        "STONE"
       ]
     },
     {
@@ -299,7 +2062,8 @@
       "r": 5,
       "terrain": "MOUNTAIN",
       "resources": [
-        "STONE"
+        "STONE",
+        "IRON"
       ]
     },
     {
@@ -307,84 +2071,199 @@
       "r": 6,
       "terrain": "MOUNTAIN",
       "resources": [
-        "STONE"
+        "STONE",
+        "IRON"
       ]
     },
     {
       "q": -5,
       "r": 7,
-      "terrain": "PLAINS",
-      "resources": []
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
     },
     {
       "q": -5,
       "r": 8,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -5,
+      "r": 9,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -5,
+      "r": 10,
+      "terrain": "GRASSLAND",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": -5,
+      "r": 11,
+      "terrain": "GRASSLAND",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": -5,
+      "r": 12,
+      "terrain": "GRASSLAND",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": -5,
+      "r": 13,
+      "terrain": "GRASSLAND",
+      "resources": []
+    },
+    {
+      "q": -5,
+      "r": 14,
+      "terrain": "GRASSLAND",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": -5,
+      "r": 15,
+      "terrain": "GRASSLAND",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": -5,
+      "r": 16,
+      "terrain": "GRASSLAND",
+      "resources": []
+    },
+    {
+      "q": -4,
+      "r": -12,
+      "terrain": "GRASSLAND",
+      "resources": []
+    },
+    {
+      "q": -4,
+      "r": -11,
+      "terrain": "GRASSLAND",
+      "resources": []
+    },
+    {
+      "q": -4,
+      "r": -10,
+      "terrain": "GRASSLAND",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": -4,
+      "r": -9,
+      "terrain": "GRASSLAND",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": -4,
+      "r": -8,
+      "terrain": "GRASSLAND",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": -4,
+      "r": -7,
+      "terrain": "GRASSLAND",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": -4,
+      "r": -6,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": -4,
+      "r": -5,
       "terrain": "PLAINS",
       "resources": []
     },
     {
       "q": -4,
       "r": -4,
-      "terrain": "GRASSLAND",
+      "terrain": "PLAINS",
       "resources": [
-        "WHEAT"
+        "FOOD"
       ]
     },
     {
       "q": -4,
       "r": -3,
-      "terrain": "GRASSLAND",
-      "resources": [
-        "WHEAT"
-      ]
+      "terrain": "PLAINS",
+      "resources": []
     },
     {
       "q": -4,
       "r": -2,
       "terrain": "PLAINS",
-      "resources": [
-        "CATTLE"
-      ]
+      "resources": []
     },
     {
       "q": -4,
       "r": -1,
-      "terrain": "FOREST",
+      "terrain": "PLAINS",
       "resources": [
-        "WOOD"
+        "FOOD"
       ]
     },
     {
       "q": -4,
       "r": 0,
-      "terrain": "FOREST",
-      "resources": [
-        "WOOD"
-      ]
+      "terrain": "PLAINS",
+      "resources": []
     },
     {
       "q": -4,
       "r": 1,
-      "terrain": "FOREST",
+      "terrain": "GRASSLAND",
       "resources": [
-        "WOOD"
+        "FOOD"
       ]
     },
     {
       "q": -4,
       "r": 2,
-      "terrain": "MOUNTAIN",
-      "resources": [
-        "STONE",
-        "IRON"
-      ]
+      "terrain": "GRASSLAND",
+      "resources": []
     },
     {
       "q": -4,
       "r": 3,
-      "terrain": "MOUNTAIN",
+      "terrain": "GRASSLAND",
       "resources": [
-        "STONE"
+        "FOOD"
       ]
     },
     {
@@ -401,95 +2280,206 @@
       "r": 5,
       "terrain": "MOUNTAIN",
       "resources": [
-        "STONE"
+        "STONE",
+        "IRON"
       ]
     },
     {
       "q": -4,
       "r": 6,
-      "terrain": "PLAINS",
-      "resources": []
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
     },
     {
       "q": -4,
       "r": 7,
-      "terrain": "PLAINS",
+      "terrain": "MOUNTAIN",
       "resources": [
-        "SHEEP"
+        "STONE"
       ]
     },
     {
       "q": -4,
       "r": 8,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": -4,
+      "r": 9,
       "terrain": "GRASSLAND",
       "resources": [
-        "WHEAT"
+        "FOOD"
+      ]
+    },
+    {
+      "q": -4,
+      "r": 10,
+      "terrain": "GRASSLAND",
+      "resources": []
+    },
+    {
+      "q": -4,
+      "r": 11,
+      "terrain": "GRASSLAND",
+      "resources": []
+    },
+    {
+      "q": -4,
+      "r": 12,
+      "terrain": "GRASSLAND",
+      "resources": []
+    },
+    {
+      "q": -4,
+      "r": 13,
+      "terrain": "GRASSLAND",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": -4,
+      "r": 14,
+      "terrain": "GRASSLAND",
+      "resources": []
+    },
+    {
+      "q": -4,
+      "r": 15,
+      "terrain": "GRASSLAND",
+      "resources": []
+    },
+    {
+      "q": -4,
+      "r": 16,
+      "terrain": "GRASSLAND",
+      "resources": []
+    },
+    {
+      "q": -3,
+      "r": -13,
+      "terrain": "GRASSLAND",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": -3,
+      "r": -12,
+      "terrain": "GRASSLAND",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": -3,
+      "r": -11,
+      "terrain": "GRASSLAND",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": -3,
+      "r": -10,
+      "terrain": "GRASSLAND",
+      "resources": []
+    },
+    {
+      "q": -3,
+      "r": -9,
+      "terrain": "GRASSLAND",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": -3,
+      "r": -8,
+      "terrain": "GRASSLAND",
+      "resources": []
+    },
+    {
+      "q": -3,
+      "r": -7,
+      "terrain": "GRASSLAND",
+      "resources": []
+    },
+    {
+      "q": -3,
+      "r": -6,
+      "terrain": "PLAINS",
+      "resources": [
+        "FOOD"
       ]
     },
     {
       "q": -3,
       "r": -5,
       "terrain": "PLAINS",
-      "resources": []
+      "resources": [
+        "FOOD"
+      ]
     },
     {
       "q": -3,
       "r": -4,
       "terrain": "PLAINS",
-      "resources": []
+      "resources": [
+        "FOOD"
+      ]
     },
     {
       "q": -3,
       "r": -3,
-      "terrain": "GRASSLAND",
+      "terrain": "PLAINS",
       "resources": []
     },
     {
       "q": -3,
       "r": -2,
-      "terrain": "FOREST",
-      "resources": [
-        "WOOD"
-      ]
+      "terrain": "PLAINS",
+      "resources": []
     },
     {
       "q": -3,
       "r": -1,
-      "terrain": "FOREST",
-      "resources": [
-        "WOOD"
-      ]
+      "terrain": "PLAINS",
+      "resources": []
     },
     {
       "q": -3,
       "r": 0,
-      "terrain": "FOREST",
+      "terrain": "PLAINS",
       "resources": [
-        "WOOD"
+        "FOOD"
       ]
     },
     {
       "q": -3,
       "r": 1,
-      "terrain": "FOREST",
-      "resources": [
-        "WOOD"
-      ]
+      "terrain": "PLAINS",
+      "resources": []
     },
     {
       "q": -3,
       "r": 2,
-      "terrain": "MOUNTAIN",
-      "resources": [
-        "STONE"
-      ]
+      "terrain": "PLAINS",
+      "resources": []
     },
     {
       "q": -3,
       "r": 3,
-      "terrain": "MOUNTAIN",
+      "terrain": "PLAINS",
       "resources": [
-        "STONE"
+        "FOOD"
       ]
     },
     {
@@ -497,104 +2487,204 @@
       "r": 4,
       "terrain": "MOUNTAIN",
       "resources": [
-        "STONE"
+        "STONE",
+        "IRON"
       ]
     },
     {
       "q": -3,
       "r": 5,
-      "terrain": "PLAINS",
+      "terrain": "MOUNTAIN",
       "resources": [
-        "SHEEP"
+        "STONE",
+        "IRON"
       ]
     },
     {
       "q": -3,
       "r": 6,
       "terrain": "GRASSLAND",
-      "resources": [
-        "WHEAT"
-      ]
+      "resources": []
     },
     {
       "q": -3,
       "r": 7,
       "terrain": "GRASSLAND",
-      "resources": [
-        "WHEAT"
-      ]
+      "resources": []
     },
     {
       "q": -3,
       "r": 8,
       "terrain": "GRASSLAND",
       "resources": [
-        "WHEAT"
+        "FOOD"
       ]
+    },
+    {
+      "q": -3,
+      "r": 9,
+      "terrain": "GRASSLAND",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": -3,
+      "r": 10,
+      "terrain": "GRASSLAND",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": -3,
+      "r": 11,
+      "terrain": "GRASSLAND",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": -3,
+      "r": 12,
+      "terrain": "GRASSLAND",
+      "resources": []
+    },
+    {
+      "q": -3,
+      "r": 13,
+      "terrain": "GRASSLAND",
+      "resources": []
+    },
+    {
+      "q": -3,
+      "r": 14,
+      "terrain": "GRASSLAND",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": -3,
+      "r": 15,
+      "terrain": "GRASSLAND",
+      "resources": []
+    },
+    {
+      "q": -3,
+      "r": 16,
+      "terrain": "GRASSLAND",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": -2,
+      "r": -14,
+      "terrain": "GRASSLAND",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": -2,
+      "r": -13,
+      "terrain": "GRASSLAND",
+      "resources": []
+    },
+    {
+      "q": -2,
+      "r": -12,
+      "terrain": "GRASSLAND",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": -2,
+      "r": -11,
+      "terrain": "GRASSLAND",
+      "resources": []
+    },
+    {
+      "q": -2,
+      "r": -10,
+      "terrain": "GRASSLAND",
+      "resources": []
+    },
+    {
+      "q": -2,
+      "r": -9,
+      "terrain": "GRASSLAND",
+      "resources": []
+    },
+    {
+      "q": -2,
+      "r": -8,
+      "terrain": "GRASSLAND",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": -2,
+      "r": -7,
+      "terrain": "PLAINS",
+      "resources": []
     },
     {
       "q": -2,
       "r": -6,
-      "terrain": "FOREST",
-      "resources": [
-        "WOOD"
-      ]
+      "terrain": "PLAINS",
+      "resources": []
     },
     {
       "q": -2,
       "r": -5,
-      "terrain": "FOREST",
+      "terrain": "PLAINS",
       "resources": [
-        "WOOD"
+        "FOOD"
       ]
     },
     {
       "q": -2,
       "r": -4,
-      "terrain": "FOREST",
+      "terrain": "PLAINS",
       "resources": [
-        "WOOD"
+        "FOOD"
       ]
     },
     {
       "q": -2,
       "r": -3,
-      "terrain": "GRASSLAND",
-      "resources": [
-        "WHEAT"
-      ]
+      "terrain": "PLAINS",
+      "resources": []
     },
     {
       "q": -2,
       "r": -2,
-      "terrain": "FOREST",
-      "resources": [
-        "WOOD"
-      ]
+      "terrain": "PLAINS",
+      "resources": []
     },
     {
       "q": -2,
       "r": -1,
-      "terrain": "FOREST",
-      "resources": [
-        "WOOD"
-      ]
+      "terrain": "PLAINS",
+      "resources": []
     },
     {
       "q": -2,
       "r": 0,
-      "terrain": "FOREST",
+      "terrain": "PLAINS",
       "resources": [
-        "WOOD"
+        "FOOD"
       ]
     },
     {
       "q": -2,
       "r": 1,
-      "terrain": "FOREST",
-      "resources": [
-        "WOOD"
-      ]
+      "terrain": "PLAINS",
+      "resources": []
     },
     {
       "q": -2,
@@ -605,7 +2695,7 @@
     {
       "q": -2,
       "r": 3,
-      "terrain": "PLAINS",
+      "terrain": "GRASSLAND",
       "resources": []
     },
     {
@@ -613,21 +2703,23 @@
       "r": 4,
       "terrain": "GRASSLAND",
       "resources": [
-        "WHEAT"
+        "FOOD"
       ]
     },
     {
       "q": -2,
       "r": 5,
-      "terrain": "PLAINS",
-      "resources": []
+      "terrain": "GRASSLAND",
+      "resources": [
+        "FOOD"
+      ]
     },
     {
       "q": -2,
       "r": 6,
       "terrain": "GRASSLAND",
       "resources": [
-        "RICE"
+        "FOOD"
       ]
     },
     {
@@ -639,100 +2731,206 @@
     {
       "q": -2,
       "r": 8,
-      "terrain": "PLAINS",
+      "terrain": "GRASSLAND",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": -2,
+      "r": 9,
+      "terrain": "GRASSLAND",
       "resources": []
+    },
+    {
+      "q": -2,
+      "r": 10,
+      "terrain": "GRASSLAND",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": -2,
+      "r": 11,
+      "terrain": "GRASSLAND",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": -2,
+      "r": 12,
+      "terrain": "GRASSLAND",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": -2,
+      "r": 13,
+      "terrain": "GRASSLAND",
+      "resources": []
+    },
+    {
+      "q": -2,
+      "r": 14,
+      "terrain": "GRASSLAND",
+      "resources": []
+    },
+    {
+      "q": -2,
+      "r": 15,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": -2,
+      "r": 16,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": -1,
+      "r": -15,
+      "terrain": "GRASSLAND",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": -1,
+      "r": -14,
+      "terrain": "GRASSLAND",
+      "resources": []
+    },
+    {
+      "q": -1,
+      "r": -13,
+      "terrain": "GRASSLAND",
+      "resources": []
+    },
+    {
+      "q": -1,
+      "r": -12,
+      "terrain": "GRASSLAND",
+      "resources": []
+    },
+    {
+      "q": -1,
+      "r": -11,
+      "terrain": "GRASSLAND",
+      "resources": []
+    },
+    {
+      "q": -1,
+      "r": -10,
+      "terrain": "GRASSLAND",
+      "resources": []
+    },
+    {
+      "q": -1,
+      "r": -9,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": -1,
+      "r": -8,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
     },
     {
       "q": -1,
       "r": -7,
-      "terrain": "FOREST",
+      "terrain": "PLAINS",
       "resources": [
-        "WOOD"
+        "FOOD"
       ]
     },
     {
       "q": -1,
       "r": -6,
-      "terrain": "FOREST",
-      "resources": [
-        "WOOD"
-      ]
-    },
-    {
-      "q": -1,
-      "r": -5,
-      "terrain": "FOREST",
-      "resources": [
-        "WOOD"
-      ]
-    },
-    {
-      "q": -1,
-      "r": -4,
-      "terrain": "FOREST",
-      "resources": [
-        "WOOD"
-      ]
-    },
-    {
-      "q": -1,
-      "r": -3,
-      "terrain": "GRASSLAND",
+      "terrain": "PLAINS",
       "resources": []
     },
     {
       "q": -1,
-      "r": -2,
-      "terrain": "FOREST",
+      "r": -5,
+      "terrain": "PLAINS",
+      "resources": []
+    },
+    {
+      "q": -1,
+      "r": -4,
+      "terrain": "PLAINS",
+      "resources": []
+    },
+    {
+      "q": -1,
+      "r": -3,
+      "terrain": "PLAINS",
       "resources": [
-        "WOOD"
+        "FOOD"
+      ]
+    },
+    {
+      "q": -1,
+      "r": -2,
+      "terrain": "PLAINS",
+      "resources": [
+        "FOOD"
       ]
     },
     {
       "q": -1,
       "r": -1,
-      "terrain": "FOREST",
-      "resources": [
-        "WOOD"
-      ]
+      "terrain": "PLAINS",
+      "resources": []
     },
     {
       "q": -1,
       "r": 0,
-      "terrain": "FOREST",
+      "terrain": "PLAINS",
       "resources": [
-        "WOOD"
+        "FOOD"
       ]
     },
     {
       "q": -1,
       "r": 1,
       "terrain": "PLAINS",
-      "resources": []
+      "resources": [
+        "FOOD"
+      ]
     },
     {
       "q": -1,
       "r": 2,
-      "terrain": "PLAINS",
+      "terrain": "FOREST",
       "resources": [
-        "SHEEP"
+        "WOOD"
       ]
     },
     {
       "q": -1,
       "r": 3,
-      "terrain": "MOUNTAIN",
-      "resources": [
-        "STONE"
-      ]
+      "terrain": "GRASSLAND",
+      "resources": []
     },
     {
       "q": -1,
       "r": 4,
-      "terrain": "MOUNTAIN",
-      "resources": [
-        "STONE"
-      ]
+      "terrain": "GRASSLAND",
+      "resources": []
     },
     {
       "q": -1,
@@ -751,19 +2949,2724 @@
       "r": 7,
       "terrain": "GRASSLAND",
       "resources": [
-        "RICE"
+        "FOOD"
       ]
     },
     {
       "q": -1,
       "r": 8,
-      "terrain": "PLAINS",
+      "terrain": "GRASSLAND",
+      "resources": []
+    },
+    {
+      "q": -1,
+      "r": 9,
+      "terrain": "GRASSLAND",
       "resources": [
-        "SHEEP"
+        "FOOD"
+      ]
+    },
+    {
+      "q": -1,
+      "r": 10,
+      "terrain": "GRASSLAND",
+      "resources": []
+    },
+    {
+      "q": -1,
+      "r": 11,
+      "terrain": "GRASSLAND",
+      "resources": []
+    },
+    {
+      "q": -1,
+      "r": 12,
+      "terrain": "GRASSLAND",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": -1,
+      "r": 13,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": -1,
+      "r": 14,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": -1,
+      "r": 15,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": -1,
+      "r": 16,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
       ]
     },
     {
       "q": 0,
+      "r": -16,
+      "terrain": "GRASSLAND",
+      "resources": []
+    },
+    {
+      "q": 0,
+      "r": -15,
+      "terrain": "GRASSLAND",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": 0,
+      "r": -14,
+      "terrain": "GRASSLAND",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": 0,
+      "r": -13,
+      "terrain": "GRASSLAND",
+      "resources": []
+    },
+    {
+      "q": 0,
+      "r": -12,
+      "terrain": "GRASSLAND",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": 0,
+      "r": -11,
+      "terrain": "GRASSLAND",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": 0,
+      "r": -10,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 0,
+      "r": -9,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 0,
+      "r": -8,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 0,
+      "r": -7,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": 0,
+      "r": -6,
+      "terrain": "PLAINS",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": 0,
+      "r": -5,
+      "terrain": "PLAINS",
+      "resources": []
+    },
+    {
+      "q": 0,
+      "r": -4,
+      "terrain": "PLAINS",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": 0,
+      "r": -3,
+      "terrain": "PLAINS",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": 0,
+      "r": -2,
+      "terrain": "PLAINS",
+      "resources": []
+    },
+    {
+      "q": 0,
+      "r": -1,
+      "terrain": "PLAINS",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": 0,
+      "r": 0,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 0,
+      "r": 1,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 0,
+      "r": 2,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 0,
+      "r": 3,
+      "terrain": "GRASSLAND",
+      "resources": []
+    },
+    {
+      "q": 0,
+      "r": 4,
+      "terrain": "GRASSLAND",
+      "resources": []
+    },
+    {
+      "q": 0,
+      "r": 5,
+      "terrain": "GRASSLAND",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": 0,
+      "r": 6,
+      "terrain": "GRASSLAND",
+      "resources": []
+    },
+    {
+      "q": 0,
+      "r": 7,
+      "terrain": "GRASSLAND",
+      "resources": []
+    },
+    {
+      "q": 0,
+      "r": 8,
+      "terrain": "GRASSLAND",
+      "resources": []
+    },
+    {
+      "q": 0,
+      "r": 9,
+      "terrain": "GRASSLAND",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": 0,
+      "r": 10,
+      "terrain": "GRASSLAND",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": 0,
+      "r": 11,
+      "terrain": "GRASSLAND",
+      "resources": []
+    },
+    {
+      "q": 0,
+      "r": 12,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 0,
+      "r": 13,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 0,
+      "r": 14,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 0,
+      "r": 15,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 0,
+      "r": 16,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 1,
+      "r": -16,
+      "terrain": "GRASSLAND",
+      "resources": []
+    },
+    {
+      "q": 1,
+      "r": -15,
+      "terrain": "GRASSLAND",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": 1,
+      "r": -14,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": 1,
+      "r": -13,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": 1,
+      "r": -12,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 1,
+      "r": -11,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 1,
+      "r": -10,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": 1,
+      "r": -9,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 1,
+      "r": -8,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 1,
+      "r": -7,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": 1,
+      "r": -6,
+      "terrain": "PLAINS",
+      "resources": []
+    },
+    {
+      "q": 1,
+      "r": -5,
+      "terrain": "PLAINS",
+      "resources": []
+    },
+    {
+      "q": 1,
+      "r": -4,
+      "terrain": "PLAINS",
+      "resources": []
+    },
+    {
+      "q": 1,
+      "r": -3,
+      "terrain": "PLAINS",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": 1,
+      "r": -2,
+      "terrain": "PLAINS",
+      "resources": []
+    },
+    {
+      "q": 1,
+      "r": -1,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 1,
+      "r": 0,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 1,
+      "r": 1,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 1,
+      "r": 2,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 1,
+      "r": 3,
+      "terrain": "GRASSLAND",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": 1,
+      "r": 4,
+      "terrain": "GRASSLAND",
+      "resources": []
+    },
+    {
+      "q": 1,
+      "r": 5,
+      "terrain": "GRASSLAND",
+      "resources": []
+    },
+    {
+      "q": 1,
+      "r": 6,
+      "terrain": "GRASSLAND",
+      "resources": []
+    },
+    {
+      "q": 1,
+      "r": 7,
+      "terrain": "GRASSLAND",
+      "resources": []
+    },
+    {
+      "q": 1,
+      "r": 8,
+      "terrain": "GRASSLAND",
+      "resources": []
+    },
+    {
+      "q": 1,
+      "r": 9,
+      "terrain": "GRASSLAND",
+      "resources": []
+    },
+    {
+      "q": 1,
+      "r": 10,
+      "terrain": "GRASSLAND",
+      "resources": []
+    },
+    {
+      "q": 1,
+      "r": 11,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 1,
+      "r": 12,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 1,
+      "r": 13,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 1,
+      "r": 14,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 1,
+      "r": 15,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 2,
+      "r": -16,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": 2,
+      "r": -15,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 2,
+      "r": -14,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 2,
+      "r": -13,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": 2,
+      "r": -12,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": 2,
+      "r": -11,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 2,
+      "r": -10,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 2,
+      "r": -9,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": 2,
+      "r": -8,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": 2,
+      "r": -7,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": 2,
+      "r": -6,
+      "terrain": "PLAINS",
+      "resources": []
+    },
+    {
+      "q": 2,
+      "r": -5,
+      "terrain": "PLAINS",
+      "resources": []
+    },
+    {
+      "q": 2,
+      "r": -4,
+      "terrain": "PLAINS",
+      "resources": []
+    },
+    {
+      "q": 2,
+      "r": -3,
+      "terrain": "PLAINS",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": 2,
+      "r": -2,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 2,
+      "r": -1,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 2,
+      "r": 0,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 2,
+      "r": 1,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 2,
+      "r": 2,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 2,
+      "r": 3,
+      "terrain": "GRASSLAND",
+      "resources": []
+    },
+    {
+      "q": 2,
+      "r": 4,
+      "terrain": "GRASSLAND",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": 2,
+      "r": 5,
+      "terrain": "GRASSLAND",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": 2,
+      "r": 6,
+      "terrain": "GRASSLAND",
+      "resources": []
+    },
+    {
+      "q": 2,
+      "r": 7,
+      "terrain": "GRASSLAND",
+      "resources": []
+    },
+    {
+      "q": 2,
+      "r": 8,
+      "terrain": "GRASSLAND",
+      "resources": []
+    },
+    {
+      "q": 2,
+      "r": 9,
+      "terrain": "GRASSLAND",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": 2,
+      "r": 10,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 2,
+      "r": 11,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 2,
+      "r": 12,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 2,
+      "r": 13,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 2,
+      "r": 14,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 3,
+      "r": -16,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 3,
+      "r": -15,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 3,
+      "r": -14,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 3,
+      "r": -13,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": 3,
+      "r": -12,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": 3,
+      "r": -11,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": 3,
+      "r": -10,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": 3,
+      "r": -9,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": 3,
+      "r": -8,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": 3,
+      "r": -7,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": 3,
+      "r": -6,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": 3,
+      "r": -5,
+      "terrain": "PLAINS",
+      "resources": []
+    },
+    {
+      "q": 3,
+      "r": -4,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 3,
+      "r": -3,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 3,
+      "r": -2,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 3,
+      "r": -1,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 3,
+      "r": 0,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 3,
+      "r": 1,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 3,
+      "r": 2,
+      "terrain": "GRASSLAND",
+      "resources": []
+    },
+    {
+      "q": 3,
+      "r": 3,
+      "terrain": "GRASSLAND",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": 3,
+      "r": 4,
+      "terrain": "GRASSLAND",
+      "resources": []
+    },
+    {
+      "q": 3,
+      "r": 5,
+      "terrain": "GRASSLAND",
+      "resources": []
+    },
+    {
+      "q": 3,
+      "r": 6,
+      "terrain": "PLAINS",
+      "resources": []
+    },
+    {
+      "q": 3,
+      "r": 7,
+      "terrain": "PLAINS",
+      "resources": []
+    },
+    {
+      "q": 3,
+      "r": 8,
+      "terrain": "PLAINS",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": 3,
+      "r": 9,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 3,
+      "r": 10,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 3,
+      "r": 11,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 3,
+      "r": 12,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 3,
+      "r": 13,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 4,
+      "r": -16,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": 4,
+      "r": -15,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": 4,
+      "r": -14,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 4,
+      "r": -13,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 4,
+      "r": -12,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 4,
+      "r": -11,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 4,
+      "r": -10,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": 4,
+      "r": -9,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": 4,
+      "r": -8,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 4,
+      "r": -7,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": 4,
+      "r": -6,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 4,
+      "r": -5,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 4,
+      "r": -4,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 4,
+      "r": -3,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 4,
+      "r": -2,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 4,
+      "r": -1,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 4,
+      "r": 0,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 4,
+      "r": 1,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 4,
+      "r": 2,
+      "terrain": "GRASSLAND",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": 4,
+      "r": 3,
+      "terrain": "GRASSLAND",
+      "resources": []
+    },
+    {
+      "q": 4,
+      "r": 4,
+      "terrain": "GRASSLAND",
+      "resources": []
+    },
+    {
+      "q": 4,
+      "r": 5,
+      "terrain": "PLAINS",
+      "resources": []
+    },
+    {
+      "q": 4,
+      "r": 6,
+      "terrain": "PLAINS",
+      "resources": []
+    },
+    {
+      "q": 4,
+      "r": 7,
+      "terrain": "PLAINS",
+      "resources": []
+    },
+    {
+      "q": 4,
+      "r": 8,
+      "terrain": "PLAINS",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": 4,
+      "r": 9,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 4,
+      "r": 10,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 4,
+      "r": 11,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 4,
+      "r": 12,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 5,
+      "r": -16,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": 5,
+      "r": -15,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 5,
+      "r": -14,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 5,
+      "r": -13,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 5,
+      "r": -12,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 5,
+      "r": -11,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 5,
+      "r": -10,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 5,
+      "r": -9,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 5,
+      "r": -8,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": 5,
+      "r": -7,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": 5,
+      "r": -6,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 5,
+      "r": -5,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 5,
+      "r": -4,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 5,
+      "r": -3,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 5,
+      "r": -2,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 5,
+      "r": -1,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 5,
+      "r": 0,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 5,
+      "r": 1,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 5,
+      "r": 2,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 5,
+      "r": 3,
+      "terrain": "GRASSLAND",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": 5,
+      "r": 4,
+      "terrain": "PLAINS",
+      "resources": []
+    },
+    {
+      "q": 5,
+      "r": 5,
+      "terrain": "PLAINS",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": 5,
+      "r": 6,
+      "terrain": "PLAINS",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": 5,
+      "r": 7,
+      "terrain": "PLAINS",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": 5,
+      "r": 8,
+      "terrain": "PLAINS",
+      "resources": []
+    },
+    {
+      "q": 5,
+      "r": 9,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 5,
+      "r": 10,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 5,
+      "r": 11,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 6,
+      "r": -16,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 6,
+      "r": -15,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 6,
+      "r": -14,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": 6,
+      "r": -13,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": 6,
+      "r": -12,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": 6,
+      "r": -11,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 6,
+      "r": -10,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": 6,
+      "r": -9,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 6,
+      "r": -8,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 6,
+      "r": -7,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 6,
+      "r": -6,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 6,
+      "r": -5,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 6,
+      "r": -4,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 6,
+      "r": -3,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 6,
+      "r": -2,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 6,
+      "r": -1,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 6,
+      "r": 0,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 6,
+      "r": 1,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": 6,
+      "r": 2,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": 6,
+      "r": 3,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 6,
+      "r": 4,
+      "terrain": "PLAINS",
+      "resources": []
+    },
+    {
+      "q": 6,
+      "r": 5,
+      "terrain": "PLAINS",
+      "resources": []
+    },
+    {
+      "q": 6,
+      "r": 6,
+      "terrain": "PLAINS",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": 6,
+      "r": 7,
+      "terrain": "PLAINS",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": 6,
+      "r": 8,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 6,
+      "r": 9,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 6,
+      "r": 10,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 7,
+      "r": -16,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 7,
+      "r": -15,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": 7,
+      "r": -14,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 7,
+      "r": -13,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": 7,
+      "r": -12,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 7,
+      "r": -11,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 7,
+      "r": -10,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 7,
+      "r": -9,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": 7,
+      "r": -8,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 7,
+      "r": -7,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 7,
+      "r": -6,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 7,
+      "r": -5,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 7,
+      "r": -4,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 7,
+      "r": -3,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 7,
+      "r": -2,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": 7,
+      "r": -1,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 7,
+      "r": 0,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 7,
+      "r": 1,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 7,
+      "r": 2,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 7,
+      "r": 3,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 7,
+      "r": 4,
+      "terrain": "PLAINS",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": 7,
+      "r": 5,
+      "terrain": "PLAINS",
+      "resources": []
+    },
+    {
+      "q": 7,
+      "r": 6,
+      "terrain": "PLAINS",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": 7,
+      "r": 7,
+      "terrain": "PLAINS",
+      "resources": []
+    },
+    {
+      "q": 7,
+      "r": 8,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 7,
+      "r": 9,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 8,
+      "r": -16,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": 8,
+      "r": -15,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": 8,
+      "r": -14,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 8,
+      "r": -13,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 8,
+      "r": -12,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 8,
+      "r": -11,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 8,
+      "r": -10,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": 8,
+      "r": -9,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 8,
+      "r": -8,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 8,
+      "r": -7,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": 8,
+      "r": -6,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": 8,
+      "r": -5,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 8,
+      "r": -4,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": 8,
+      "r": -3,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 8,
+      "r": -2,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": 8,
+      "r": -1,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": 8,
+      "r": 0,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 8,
+      "r": 1,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 8,
+      "r": 2,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 8,
+      "r": 3,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 8,
+      "r": 4,
+      "terrain": "PLAINS",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": 8,
+      "r": 5,
+      "terrain": "PLAINS",
+      "resources": []
+    },
+    {
+      "q": 8,
+      "r": 6,
+      "terrain": "PLAINS",
+      "resources": []
+    },
+    {
+      "q": 8,
+      "r": 7,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 8,
+      "r": 8,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 9,
+      "r": -16,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": 9,
+      "r": -15,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": 9,
+      "r": -14,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": 9,
+      "r": -13,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": 9,
+      "r": -12,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": 9,
+      "r": -11,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": 9,
+      "r": -10,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": 9,
+      "r": -9,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": 9,
+      "r": -8,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 9,
+      "r": -7,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": 9,
+      "r": -6,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": 9,
+      "r": -5,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 9,
+      "r": -4,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": 9,
+      "r": -3,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 9,
+      "r": -2,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 9,
+      "r": -1,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": 9,
+      "r": 0,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 9,
+      "r": 1,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 9,
+      "r": 2,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 9,
+      "r": 3,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 9,
+      "r": 4,
+      "terrain": "PLAINS",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": 9,
+      "r": 5,
+      "terrain": "PLAINS",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": 9,
+      "r": 6,
+      "terrain": "PLAINS",
+      "resources": []
+    },
+    {
+      "q": 9,
+      "r": 7,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 10,
+      "r": -16,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": 10,
+      "r": -15,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": 10,
+      "r": -14,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": 10,
+      "r": -13,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": 10,
+      "r": -12,
+      "terrain": "PLAINS",
+      "resources": []
+    },
+    {
+      "q": 10,
+      "r": -11,
+      "terrain": "PLAINS",
+      "resources": []
+    },
+    {
+      "q": 10,
+      "r": -10,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 10,
+      "r": -9,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 10,
+      "r": -8,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 10,
+      "r": -7,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 10,
+      "r": -6,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 10,
+      "r": -5,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": 10,
+      "r": -4,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 10,
+      "r": -3,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": 10,
+      "r": -2,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 10,
+      "r": -1,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": 10,
+      "r": 0,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": 10,
+      "r": 1,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 10,
+      "r": 2,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": 10,
+      "r": 3,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 10,
+      "r": 4,
+      "terrain": "PLAINS",
+      "resources": []
+    },
+    {
+      "q": 10,
+      "r": 5,
+      "terrain": "PLAINS",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": 10,
+      "r": 6,
+      "terrain": "PLAINS",
+      "resources": []
+    },
+    {
+      "q": 11,
+      "r": -16,
+      "terrain": "PLAINS",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": 11,
+      "r": -15,
+      "terrain": "PLAINS",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": 11,
+      "r": -14,
+      "terrain": "PLAINS",
+      "resources": []
+    },
+    {
+      "q": 11,
+      "r": -13,
+      "terrain": "PLAINS",
+      "resources": []
+    },
+    {
+      "q": 11,
+      "r": -12,
+      "terrain": "PLAINS",
+      "resources": []
+    },
+    {
+      "q": 11,
+      "r": -11,
+      "terrain": "PLAINS",
+      "resources": []
+    },
+    {
+      "q": 11,
+      "r": -10,
+      "terrain": "PLAINS",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": 11,
+      "r": -9,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 11,
+      "r": -8,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 11,
+      "r": -7,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": 11,
+      "r": -6,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": 11,
+      "r": -5,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE"
+      ]
+    },
+    {
+      "q": 11,
+      "r": -4,
+      "terrain": "MOUNTAIN",
+      "resources": [
+        "STONE",
+        "IRON"
+      ]
+    },
+    {
+      "q": 11,
+      "r": -3,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 11,
+      "r": -2,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 11,
+      "r": -1,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 11,
+      "r": 0,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 11,
+      "r": 1,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 11,
+      "r": 2,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 11,
+      "r": 3,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 11,
+      "r": 4,
+      "terrain": "PLAINS",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": 11,
+      "r": 5,
+      "terrain": "PLAINS",
+      "resources": []
+    },
+    {
+      "q": 12,
+      "r": -16,
+      "terrain": "PLAINS",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": 12,
+      "r": -15,
+      "terrain": "PLAINS",
+      "resources": []
+    },
+    {
+      "q": 12,
+      "r": -14,
+      "terrain": "PLAINS",
+      "resources": []
+    },
+    {
+      "q": 12,
+      "r": -13,
+      "terrain": "PLAINS",
+      "resources": []
+    },
+    {
+      "q": 12,
+      "r": -12,
+      "terrain": "PLAINS",
+      "resources": []
+    },
+    {
+      "q": 12,
+      "r": -11,
+      "terrain": "PLAINS",
+      "resources": []
+    },
+    {
+      "q": 12,
+      "r": -10,
+      "terrain": "PLAINS",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": 12,
+      "r": -9,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 12,
       "r": -8,
       "terrain": "FOREST",
       "resources": [
@@ -771,7 +5674,7 @@
       ]
     },
     {
-      "q": 0,
+      "q": 12,
       "r": -7,
       "terrain": "FOREST",
       "resources": [
@@ -779,7 +5682,7 @@
       ]
     },
     {
-      "q": 0,
+      "q": 12,
       "r": -6,
       "terrain": "FOREST",
       "resources": [
@@ -787,7 +5690,7 @@
       ]
     },
     {
-      "q": 0,
+      "q": 12,
       "r": -5,
       "terrain": "FOREST",
       "resources": [
@@ -795,7 +5698,7 @@
       ]
     },
     {
-      "q": 0,
+      "q": 12,
       "r": -4,
       "terrain": "FOREST",
       "resources": [
@@ -803,44 +5706,47 @@
       ]
     },
     {
-      "q": 0,
+      "q": 12,
       "r": -3,
-      "terrain": "PLAINS",
+      "terrain": "FOREST",
       "resources": [
-        "SHEEP"
+        "WOOD"
       ]
     },
     {
-      "q": 0,
+      "q": 12,
       "r": -2,
-      "terrain": "GRASSLAND",
+      "terrain": "FOREST",
       "resources": [
-        "WHEAT"
+        "WOOD"
       ]
     },
     {
-      "q": 0,
+      "q": 12,
       "r": -1,
-      "terrain": "GRASSLAND",
-      "resources": []
-    },
-    {
-      "q": 0,
-      "r": 0,
-      "terrain": "TOWN_HALL",
-      "resources": []
-    },
-    {
-      "q": 0,
-      "r": 1,
-      "terrain": "MOUNTAIN",
+      "terrain": "FOREST",
       "resources": [
-        "STONE",
-        "IRON"
+        "WOOD"
       ]
     },
     {
-      "q": 0,
+      "q": 12,
+      "r": 0,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 12,
+      "r": 1,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 12,
       "r": 2,
       "terrain": "FOREST",
       "resources": [
@@ -848,271 +5754,15 @@
       ]
     },
     {
-      "q": 0,
+      "q": 12,
       "r": 3,
-      "terrain": "MOUNTAIN",
-      "resources": [
-        "STONE"
-      ]
-    },
-    {
-      "q": 0,
-      "r": 4,
-      "terrain": "MOUNTAIN",
-      "resources": [
-        "STONE"
-      ]
-    },
-    {
-      "q": 0,
-      "r": 5,
-      "terrain": "PLAINS",
-      "resources": [
-        "CATTLE"
-      ]
-    },
-    {
-      "q": 0,
-      "r": 6,
       "terrain": "FOREST",
       "resources": [
         "WOOD"
       ]
     },
     {
-      "q": 0,
-      "r": 7,
-      "terrain": "FOREST",
-      "resources": [
-        "WOOD"
-      ]
-    },
-    {
-      "q": 0,
-      "r": 8,
-      "terrain": "FOREST",
-      "resources": [
-        "WOOD"
-      ]
-    },
-    {
-      "q": 1,
-      "r": -8,
-      "terrain": "FOREST",
-      "resources": [
-        "WOOD"
-      ]
-    },
-    {
-      "q": 1,
-      "r": -7,
-      "terrain": "FOREST",
-      "resources": [
-        "WOOD"
-      ]
-    },
-    {
-      "q": 1,
-      "r": -6,
-      "terrain": "FOREST",
-      "resources": [
-        "WOOD"
-      ]
-    },
-    {
-      "q": 1,
-      "r": -5,
-      "terrain": "FOREST",
-      "resources": [
-        "WOOD"
-      ]
-    },
-    {
-      "q": 1,
-      "r": -4,
-      "terrain": "GRASSLAND",
-      "resources": []
-    },
-    {
-      "q": 1,
-      "r": -3,
-      "terrain": "GRASSLAND",
-      "resources": [
-        "WHEAT"
-      ]
-    },
-    {
-      "q": 1,
-      "r": -2,
-      "terrain": "PLAINS",
-      "resources": []
-    },
-    {
-      "q": 1,
-      "r": -1,
-      "terrain": "GRASSLAND",
-      "resources": [
-        "RICE"
-      ]
-    },
-    {
-      "q": 1,
-      "r": 0,
-      "terrain": "MOUNTAIN",
-      "resources": [
-        "STONE",
-        "IRON"
-      ]
-    },
-    {
-      "q": 1,
-      "r": 1,
-      "terrain": "MOUNTAIN",
-      "resources": [
-        "STONE"
-      ]
-    },
-    {
-      "q": 1,
-      "r": 2,
-      "terrain": "MOUNTAIN",
-      "resources": [
-        "STONE"
-      ]
-    },
-    {
-      "q": 1,
-      "r": 3,
-      "terrain": "MOUNTAIN",
-      "resources": [
-        "STONE",
-        "IRON"
-      ]
-    },
-    {
-      "q": 1,
-      "r": 4,
-      "terrain": "MOUNTAIN",
-      "resources": [
-        "STONE",
-        "IRON"
-      ]
-    },
-    {
-      "q": 1,
-      "r": 5,
-      "terrain": "FOREST",
-      "resources": [
-        "WOOD"
-      ]
-    },
-    {
-      "q": 1,
-      "r": 6,
-      "terrain": "FOREST",
-      "resources": [
-        "WOOD"
-      ]
-    },
-    {
-      "q": 1,
-      "r": 7,
-      "terrain": "FOREST",
-      "resources": [
-        "WOOD"
-      ]
-    },
-    {
-      "q": 2,
-      "r": -8,
-      "terrain": "FOREST",
-      "resources": [
-        "WOOD"
-      ]
-    },
-    {
-      "q": 2,
-      "r": -7,
-      "terrain": "FOREST",
-      "resources": [
-        "WOOD"
-      ]
-    },
-    {
-      "q": 2,
-      "r": -6,
-      "terrain": "FOREST",
-      "resources": [
-        "WOOD"
-      ]
-    },
-    {
-      "q": 2,
-      "r": -5,
-      "terrain": "GRASSLAND",
-      "resources": []
-    },
-    {
-      "q": 2,
-      "r": -4,
-      "terrain": "GRASSLAND",
-      "resources": [
-        "WHEAT"
-      ]
-    },
-    {
-      "q": 2,
-      "r": -3,
-      "terrain": "GRASSLAND",
-      "resources": []
-    },
-    {
-      "q": 2,
-      "r": -2,
-      "terrain": "GRASSLAND",
-      "resources": []
-    },
-    {
-      "q": 2,
-      "r": -1,
-      "terrain": "GRASSLAND",
-      "resources": []
-    },
-    {
-      "q": 2,
-      "r": 0,
-      "terrain": "MOUNTAIN",
-      "resources": [
-        "STONE"
-      ]
-    },
-    {
-      "q": 2,
-      "r": 1,
-      "terrain": "MOUNTAIN",
-      "resources": [
-        "STONE"
-      ]
-    },
-    {
-      "q": 2,
-      "r": 2,
-      "terrain": "MOUNTAIN",
-      "resources": [
-        "STONE",
-        "IRON"
-      ]
-    },
-    {
-      "q": 2,
-      "r": 3,
-      "terrain": "MOUNTAIN",
-      "resources": [
-        "STONE"
-      ]
-    },
-    {
-      "q": 2,
+      "q": 12,
       "r": 4,
       "terrain": "FOREST",
       "resources": [
@@ -1120,23 +5770,65 @@
       ]
     },
     {
-      "q": 2,
-      "r": 5,
+      "q": 13,
+      "r": -16,
+      "terrain": "PLAINS",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": 13,
+      "r": -15,
+      "terrain": "PLAINS",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": 13,
+      "r": -14,
+      "terrain": "PLAINS",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": 13,
+      "r": -13,
+      "terrain": "PLAINS",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": 13,
+      "r": -12,
+      "terrain": "PLAINS",
+      "resources": []
+    },
+    {
+      "q": 13,
+      "r": -11,
+      "terrain": "PLAINS",
+      "resources": []
+    },
+    {
+      "q": 13,
+      "r": -10,
+      "terrain": "PLAINS",
+      "resources": []
+    },
+    {
+      "q": 13,
+      "r": -9,
       "terrain": "FOREST",
       "resources": [
         "WOOD"
       ]
     },
     {
-      "q": 2,
-      "r": 6,
-      "terrain": "FOREST",
-      "resources": [
-        "WOOD"
-      ]
-    },
-    {
-      "q": 3,
+      "q": 13,
       "r": -8,
       "terrain": "FOREST",
       "resources": [
@@ -1144,7 +5836,7 @@
       ]
     },
     {
-      "q": 3,
+      "q": 13,
       "r": -7,
       "terrain": "FOREST",
       "resources": [
@@ -1152,7 +5844,7 @@
       ]
     },
     {
-      "q": 3,
+      "q": 13,
       "r": -6,
       "terrain": "FOREST",
       "resources": [
@@ -1160,90 +5852,135 @@
       ]
     },
     {
-      "q": 3,
+      "q": 13,
       "r": -5,
-      "terrain": "PLAINS",
-      "resources": []
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
     },
     {
-      "q": 3,
+      "q": 13,
       "r": -4,
-      "terrain": "GRASSLAND",
-      "resources": []
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
     },
     {
-      "q": 3,
+      "q": 13,
       "r": -3,
-      "terrain": "PLAINS",
-      "resources": []
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
     },
     {
-      "q": 3,
+      "q": 13,
       "r": -2,
-      "terrain": "PLAINS",
+      "terrain": "FOREST",
       "resources": [
-        "CATTLE"
+        "WOOD"
       ]
     },
     {
-      "q": 3,
+      "q": 13,
       "r": -1,
-      "terrain": "GRASSLAND",
+      "terrain": "FOREST",
       "resources": [
-        "WHEAT"
+        "WOOD"
       ]
     },
     {
-      "q": 3,
+      "q": 13,
       "r": 0,
-      "terrain": "MOUNTAIN",
+      "terrain": "FOREST",
       "resources": [
-        "STONE"
+        "WOOD"
       ]
     },
     {
-      "q": 3,
+      "q": 13,
       "r": 1,
-      "terrain": "MOUNTAIN",
+      "terrain": "FOREST",
       "resources": [
-        "STONE",
-        "IRON"
+        "WOOD"
       ]
     },
     {
-      "q": 3,
+      "q": 13,
       "r": 2,
-      "terrain": "MOUNTAIN",
+      "terrain": "FOREST",
       "resources": [
-        "STONE"
+        "WOOD"
       ]
     },
     {
-      "q": 3,
+      "q": 13,
       "r": 3,
-      "terrain": "GRASSLAND",
-      "resources": [
-        "RICE"
-      ]
-    },
-    {
-      "q": 3,
-      "r": 4,
       "terrain": "FOREST",
       "resources": [
         "WOOD"
       ]
     },
     {
-      "q": 3,
-      "r": 5,
+      "q": 14,
+      "r": -16,
+      "terrain": "PLAINS",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": 14,
+      "r": -15,
+      "terrain": "PLAINS",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": 14,
+      "r": -14,
+      "terrain": "PLAINS",
+      "resources": []
+    },
+    {
+      "q": 14,
+      "r": -13,
+      "terrain": "PLAINS",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": 14,
+      "r": -12,
+      "terrain": "PLAINS",
+      "resources": []
+    },
+    {
+      "q": 14,
+      "r": -11,
+      "terrain": "PLAINS",
+      "resources": []
+    },
+    {
+      "q": 14,
+      "r": -10,
+      "terrain": "PLAINS",
+      "resources": []
+    },
+    {
+      "q": 14,
+      "r": -9,
       "terrain": "FOREST",
       "resources": [
         "WOOD"
       ]
     },
     {
-      "q": 4,
+      "q": 14,
       "r": -8,
       "terrain": "FOREST",
       "resources": [
@@ -1251,7 +5988,7 @@
       ]
     },
     {
-      "q": 4,
+      "q": 14,
       "r": -7,
       "terrain": "FOREST",
       "resources": [
@@ -1259,125 +5996,185 @@
       ]
     },
     {
-      "q": 4,
+      "q": 14,
       "r": -6,
-      "terrain": "GRASSLAND",
+      "terrain": "FOREST",
       "resources": [
-        "WHEAT"
+        "WOOD"
       ]
     },
     {
-      "q": 4,
+      "q": 14,
       "r": -5,
-      "terrain": "GRASSLAND",
+      "terrain": "FOREST",
       "resources": [
-        "WHEAT"
+        "WOOD"
       ]
     },
     {
-      "q": 4,
+      "q": 14,
       "r": -4,
-      "terrain": "GRASSLAND",
+      "terrain": "FOREST",
       "resources": [
-        "RICE"
+        "WOOD"
       ]
     },
     {
-      "q": 4,
+      "q": 14,
       "r": -3,
-      "terrain": "PLAINS",
-      "resources": []
-    },
-    {
-      "q": 4,
-      "r": -2,
-      "terrain": "PLAINS",
-      "resources": []
-    },
-    {
-      "q": 4,
-      "r": -1,
-      "terrain": "GRASSLAND",
+      "terrain": "FOREST",
       "resources": [
-        "RICE"
+        "WOOD"
       ]
     },
     {
-      "q": 4,
+      "q": 14,
+      "r": -2,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 14,
+      "r": -1,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 14,
       "r": 0,
-      "terrain": "PLAINS",
-      "resources": []
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
     },
     {
-      "q": 4,
+      "q": 14,
       "r": 1,
-      "terrain": "GRASSLAND",
-      "resources": []
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
     },
     {
-      "q": 4,
+      "q": 14,
       "r": 2,
-      "terrain": "GRASSLAND",
-      "resources": []
-    },
-    {
-      "q": 4,
-      "r": 3,
-      "terrain": "PLAINS",
-      "resources": []
-    },
-    {
-      "q": 4,
-      "r": 4,
       "terrain": "FOREST",
       "resources": [
         "WOOD"
       ]
     },
     {
-      "q": 5,
+      "q": 15,
+      "r": -16,
+      "terrain": "PLAINS",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": 15,
+      "r": -15,
+      "terrain": "PLAINS",
+      "resources": []
+    },
+    {
+      "q": 15,
+      "r": -14,
+      "terrain": "PLAINS",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": 15,
+      "r": -13,
+      "terrain": "PLAINS",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": 15,
+      "r": -12,
+      "terrain": "PLAINS",
+      "resources": []
+    },
+    {
+      "q": 15,
+      "r": -11,
+      "terrain": "PLAINS",
+      "resources": []
+    },
+    {
+      "q": 15,
+      "r": -10,
+      "terrain": "PLAINS",
+      "resources": [
+        "FOOD"
+      ]
+    },
+    {
+      "q": 15,
+      "r": -9,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 15,
       "r": -8,
-      "terrain": "GRASSLAND",
+      "terrain": "FOREST",
       "resources": [
-        "RICE"
+        "WOOD"
       ]
     },
     {
-      "q": 5,
+      "q": 15,
       "r": -7,
-      "terrain": "GRASSLAND",
-      "resources": []
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
     },
     {
-      "q": 5,
+      "q": 15,
       "r": -6,
-      "terrain": "GRASSLAND",
-      "resources": []
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
     },
     {
-      "q": 5,
+      "q": 15,
       "r": -5,
-      "terrain": "GRASSLAND",
+      "terrain": "FOREST",
       "resources": [
-        "RICE"
+        "WOOD"
       ]
     },
     {
-      "q": 5,
+      "q": 15,
       "r": -4,
-      "terrain": "PLAINS",
+      "terrain": "FOREST",
       "resources": [
-        "SHEEP"
+        "WOOD"
       ]
     },
     {
-      "q": 5,
+      "q": 15,
       "r": -3,
-      "terrain": "PLAINS",
-      "resources": []
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
     },
     {
-      "q": 5,
+      "q": 15,
       "r": -2,
       "terrain": "FOREST",
       "resources": [
@@ -1385,7 +6182,7 @@
       ]
     },
     {
-      "q": 5,
+      "q": 15,
       "r": -1,
       "terrain": "FOREST",
       "resources": [
@@ -1393,7 +6190,7 @@
       ]
     },
     {
-      "q": 5,
+      "q": 15,
       "r": 0,
       "terrain": "FOREST",
       "resources": [
@@ -1401,75 +6198,117 @@
       ]
     },
     {
-      "q": 5,
+      "q": 15,
       "r": 1,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 16,
+      "r": -16,
       "terrain": "PLAINS",
       "resources": []
     },
     {
-      "q": 5,
-      "r": 2,
+      "q": 16,
+      "r": -15,
+      "terrain": "PLAINS",
+      "resources": []
+    },
+    {
+      "q": 16,
+      "r": -14,
+      "terrain": "PLAINS",
+      "resources": []
+    },
+    {
+      "q": 16,
+      "r": -13,
       "terrain": "PLAINS",
       "resources": [
-        "SHEEP"
+        "FOOD"
       ]
     },
     {
-      "q": 5,
-      "r": 3,
+      "q": 16,
+      "r": -12,
+      "terrain": "PLAINS",
+      "resources": []
+    },
+    {
+      "q": 16,
+      "r": -11,
+      "terrain": "PLAINS",
+      "resources": []
+    },
+    {
+      "q": 16,
+      "r": -10,
       "terrain": "PLAINS",
       "resources": [
-        "CATTLE"
+        "FOOD"
       ]
     },
     {
-      "q": 6,
+      "q": 16,
+      "r": -9,
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
+    },
+    {
+      "q": 16,
       "r": -8,
-      "terrain": "GRASSLAND",
+      "terrain": "FOREST",
       "resources": [
-        "WHEAT"
+        "WOOD"
       ]
     },
     {
-      "q": 6,
+      "q": 16,
       "r": -7,
-      "terrain": "PLAINS",
-      "resources": []
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
     },
     {
-      "q": 6,
+      "q": 16,
       "r": -6,
-      "terrain": "PLAINS",
-      "resources": []
+      "terrain": "FOREST",
+      "resources": [
+        "WOOD"
+      ]
     },
     {
-      "q": 6,
+      "q": 16,
       "r": -5,
-      "terrain": "MOUNTAIN",
+      "terrain": "FOREST",
       "resources": [
-        "STONE",
-        "IRON"
+        "WOOD"
       ]
     },
     {
-      "q": 6,
+      "q": 16,
       "r": -4,
-      "terrain": "MOUNTAIN",
+      "terrain": "FOREST",
       "resources": [
-        "STONE",
-        "IRON"
+        "WOOD"
       ]
     },
     {
-      "q": 6,
+      "q": 16,
       "r": -3,
-      "terrain": "MOUNTAIN",
+      "terrain": "FOREST",
       "resources": [
-        "STONE"
+        "WOOD"
       ]
     },
     {
-      "q": 6,
+      "q": 16,
       "r": -2,
       "terrain": "FOREST",
       "resources": [
@@ -1477,7 +6316,7 @@
       ]
     },
     {
-      "q": 6,
+      "q": 16,
       "r": -1,
       "terrain": "FOREST",
       "resources": [
@@ -1485,182 +6324,257 @@
       ]
     },
     {
-      "q": 6,
+      "q": 16,
       "r": 0,
       "terrain": "FOREST",
       "resources": [
         "WOOD"
       ]
-    },
-    {
-      "q": 6,
-      "r": 1,
-      "terrain": "PLAINS",
-      "resources": []
-    },
-    {
-      "q": 6,
-      "r": 2,
-      "terrain": "PLAINS",
-      "resources": [
-        "CATTLE"
-      ]
-    },
-    {
-      "q": 7,
-      "r": -8,
-      "terrain": "PLAINS",
-      "resources": [
-        "SHEEP"
-      ]
-    },
-    {
-      "q": 7,
-      "r": -7,
-      "terrain": "GRASSLAND",
-      "resources": [
-        "RICE"
-      ]
-    },
-    {
-      "q": 7,
-      "r": -6,
-      "terrain": "MOUNTAIN",
-      "resources": [
-        "STONE"
-      ]
-    },
-    {
-      "q": 7,
-      "r": -5,
-      "terrain": "MOUNTAIN",
-      "resources": [
-        "STONE"
-      ]
-    },
-    {
-      "q": 7,
-      "r": -4,
-      "terrain": "MOUNTAIN",
-      "resources": [
-        "STONE"
-      ]
-    },
-    {
-      "q": 7,
-      "r": -3,
-      "terrain": "MOUNTAIN",
-      "resources": [
-        "STONE",
-        "IRON"
-      ]
-    },
-    {
-      "q": 7,
-      "r": -2,
-      "terrain": "FOREST",
-      "resources": [
-        "WOOD"
-      ]
-    },
-    {
-      "q": 7,
-      "r": -1,
-      "terrain": "FOREST",
-      "resources": [
-        "WOOD"
-      ]
-    },
-    {
-      "q": 7,
-      "r": 0,
-      "terrain": "FOREST",
-      "resources": [
-        "WOOD"
-      ]
-    },
-    {
-      "q": 7,
-      "r": 1,
-      "terrain": "PLAINS",
-      "resources": []
-    },
-    {
-      "q": 8,
-      "r": -8,
-      "terrain": "PLAINS",
-      "resources": []
-    },
-    {
-      "q": 8,
-      "r": -7,
-      "terrain": "GRASSLAND",
-      "resources": [
-        "RICE"
-      ]
-    },
-    {
-      "q": 8,
-      "r": -6,
-      "terrain": "MOUNTAIN",
-      "resources": [
-        "STONE",
-        "IRON"
-      ]
-    },
-    {
-      "q": 8,
-      "r": -5,
-      "terrain": "MOUNTAIN",
-      "resources": [
-        "STONE",
-        "IRON"
-      ]
-    },
-    {
-      "q": 8,
-      "r": -4,
-      "terrain": "MOUNTAIN",
-      "resources": [
-        "STONE",
-        "IRON"
-      ]
-    },
-    {
-      "q": 8,
-      "r": -3,
-      "terrain": "MOUNTAIN",
-      "resources": [
-        "STONE",
-        "IRON"
-      ]
-    },
-    {
-      "q": 8,
-      "r": -2,
-      "terrain": "FOREST",
-      "resources": [
-        "WOOD"
-      ]
-    },
-    {
-      "q": 8,
-      "r": -1,
-      "terrain": "FOREST",
-      "resources": [
-        "WOOD"
-      ]
-    },
-    {
-      "q": 8,
-      "r": 0,
-      "terrain": "GRASSLAND",
-      "resources": []
     }
   ],
   "discovered": [
     {
+      "q": -4,
+      "r": 0
+    },
+    {
+      "q": -4,
+      "r": 1
+    },
+    {
+      "q": -4,
+      "r": 2
+    },
+    {
+      "q": -4,
+      "r": 3
+    },
+    {
+      "q": -4,
+      "r": 4
+    },
+    {
+      "q": -3,
+      "r": -1
+    },
+    {
+      "q": -3,
+      "r": 0
+    },
+    {
+      "q": -3,
+      "r": 1
+    },
+    {
+      "q": -3,
+      "r": 2
+    },
+    {
+      "q": -3,
+      "r": 3
+    },
+    {
+      "q": -3,
+      "r": 4
+    },
+    {
+      "q": -2,
+      "r": -2
+    },
+    {
+      "q": -2,
+      "r": -1
+    },
+    {
+      "q": -2,
+      "r": 0
+    },
+    {
+      "q": -2,
+      "r": 1
+    },
+    {
+      "q": -2,
+      "r": 2
+    },
+    {
+      "q": -2,
+      "r": 3
+    },
+    {
+      "q": -2,
+      "r": 4
+    },
+    {
+      "q": -1,
+      "r": -3
+    },
+    {
+      "q": -1,
+      "r": -2
+    },
+    {
+      "q": -1,
+      "r": -1
+    },
+    {
+      "q": -1,
+      "r": 0
+    },
+    {
+      "q": -1,
+      "r": 1
+    },
+    {
+      "q": -1,
+      "r": 2
+    },
+    {
+      "q": -1,
+      "r": 3
+    },
+    {
+      "q": -1,
+      "r": 4
+    },
+    {
       "q": 0,
+      "r": -4
+    },
+    {
+      "q": 0,
+      "r": -3
+    },
+    {
+      "q": 0,
+      "r": -2
+    },
+    {
+      "q": 0,
+      "r": -1
+    },
+    {
+      "q": 0,
+      "r": 0
+    },
+    {
+      "q": 0,
+      "r": 1
+    },
+    {
+      "q": 0,
+      "r": 2
+    },
+    {
+      "q": 0,
+      "r": 3
+    },
+    {
+      "q": 0,
+      "r": 4
+    },
+    {
+      "q": 1,
+      "r": -4
+    },
+    {
+      "q": 1,
+      "r": -3
+    },
+    {
+      "q": 1,
+      "r": -2
+    },
+    {
+      "q": 1,
+      "r": -1
+    },
+    {
+      "q": 1,
+      "r": 0
+    },
+    {
+      "q": 1,
+      "r": 1
+    },
+    {
+      "q": 1,
+      "r": 2
+    },
+    {
+      "q": 1,
+      "r": 3
+    },
+    {
+      "q": 2,
+      "r": -4
+    },
+    {
+      "q": 2,
+      "r": -3
+    },
+    {
+      "q": 2,
+      "r": -2
+    },
+    {
+      "q": 2,
+      "r": -1
+    },
+    {
+      "q": 2,
+      "r": 0
+    },
+    {
+      "q": 2,
+      "r": 1
+    },
+    {
+      "q": 2,
+      "r": 2
+    },
+    {
+      "q": 3,
+      "r": -4
+    },
+    {
+      "q": 3,
+      "r": -3
+    },
+    {
+      "q": 3,
+      "r": -2
+    },
+    {
+      "q": 3,
+      "r": -1
+    },
+    {
+      "q": 3,
+      "r": 0
+    },
+    {
+      "q": 3,
+      "r": 1
+    },
+    {
+      "q": 4,
+      "r": -4
+    },
+    {
+      "q": 4,
+      "r": -3
+    },
+    {
+      "q": 4,
+      "r": -2
+    },
+    {
+      "q": 4,
+      "r": -1
+    },
+    {
+      "q": 4,
       "r": 0
     }
   ]

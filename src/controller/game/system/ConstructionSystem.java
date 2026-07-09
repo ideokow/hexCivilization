@@ -128,6 +128,15 @@ public class ConstructionSystem {
         if (requiredResource != null && !hex.isAvailable(requiredResource)) {
             return BuildResult.MISSING_HEX_RESOURCE;
         }
+        if (type == BuildingType.FARM && !hex.isAvailable(Resource.FOOD)) {
+            return BuildResult.MISSING_HEX_RESOURCE;
+        }
+        if (type == BuildingType.STABLE && !hex.isAvailable(Resource.FOOD)) {
+            return BuildResult.MISSING_HEX_RESOURCE;
+        }
+        if (type == BuildingType.IRON_MINE && !hex.isAvailable(Resource.IRON)) {
+            return BuildResult.MISSING_HEX_RESOURCE;
+        }
 
         if (PopulationType.fromBuildingType(type) != null && !hex.getAvailableResources().isEmpty()) {
             return BuildResult.HEX_HAS_RESOURCE;

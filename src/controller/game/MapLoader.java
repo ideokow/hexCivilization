@@ -19,8 +19,18 @@ public class MapLoader {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
+    /*
+    map 01 : normal map
+     */
     public HexGrid loadMap01() throws IOException {
         return load(Path.of("resources", "map", "map01.json"));
+    }
+
+    /*
+    map 02 : bigger map (optimization needed)
+     */
+    public HexGrid loadMap02() throws IOException {
+        return load(Path.of("resources", "map", "map02.json"));
     }
 
     public HexGrid load(Path path) throws IOException {

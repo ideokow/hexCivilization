@@ -13,8 +13,8 @@ public enum ProductionType {
     LUMBER_MILL(BuildingType.LUMBER_MILL, Resource.WOOD, TerrainType.FOREST, Resource.WOOD, 3, 2, 1, 1, cost(2, 0, 0, 0)),
     STONE_MINE(BuildingType.STONE_MINE, Resource.STONE, TerrainType.MOUNTAIN, Resource.STONE, 2, 2, 2, 2, cost(3, 0, 0, 0)),
     IRON_MINE(BuildingType.IRON_MINE, Resource.IRON, TerrainType.MOUNTAIN, Resource.IRON, 2, 1, 2, 2, cost(4, 1, 0, 0)),
-    FARM(BuildingType.FARM, Resource.FOOD, TerrainType.GRASSLAND, Resource.FOOD, 3, 3, 1, 1, cost(1, 0, 0, 0)),
-    STABLE(BuildingType.STABLE, Resource.FOOD, TerrainType.PLAINS, Resource.FOOD, 2, 2, 2, 2, cost(3, 1, 0, 0));
+    FARM(BuildingType.FARM, Resource.FOOD, TerrainType.GRASSLAND, null, 3, 3, 1, 1, cost(1, 0, 0, 0)),
+    STABLE(BuildingType.STABLE, Resource.FOOD, TerrainType.PLAINS, null, 2, 2, 2, 2, cost(3, 1, 0, 0));
 
     private final BuildingType buildingType;
     private final Resource produceResource;
