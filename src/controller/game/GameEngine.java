@@ -2,6 +2,10 @@ package controller.game;
 
 import controller.game.system.*;
 import model.game.building.TownHall;
+import model.game.building.Building;
+import model.game.building.BuildingType;
+import model.game.building.ProductionBuilding;
+import model.game.building.StationResult;
 import model.game.hex.HexCoordinate;
 import model.game.hex.HexGrid;
 import model.game.hex.Resource;
@@ -17,8 +21,10 @@ import java.util.Map;
 
 public class GameEngine {
 
+    public static final boolean DEBUG_VERBOSE = true;
+
     // singleton
-    public static GameEngine instance;
+    private static GameEngine instance;
     public static GameEngine getInstance() {
         if (instance == null) instance = new GameEngine();
         return instance;
@@ -33,8 +39,10 @@ public class GameEngine {
     private final RoutingSystem routingSystem;
     private final StarvationSystem starvationSystem;
     private final TownHallWaiterSystem townHallWaiterSystem;
+    private final MovementSystem movementSystem;
 
     private final Map<Route, Unit> inQueueRoutes;
+    private int turnNumber;
 
     private GameEngine() {
 
@@ -60,12 +68,16 @@ public class GameEngine {
 
         // essential systems
         constructionSystem = new ConstructionSystem(hexGrid, townHall);
-        MovementSystem movementSystem = new MovementSystem(hexGrid);
+        movementSystem = new MovementSystem(hexGrid);
         routingSystem = new RoutingSystem(movementSystem);
         starvationSystem = new StarvationSystem(townHall);
         townHallWaiterSystem = new TownHallWaiterSystem(townHall);
 
         inQueueRoutes = new HashMap<>();
+        turnNumber = 1;
+        for (HexCoordinate hexCoordinate : hexGrid.getDiscovered()) {
+            player.addTerritory(hexCoordinate);
+        }
     }
 
     private void loadMap() {
@@ -81,6 +93,9 @@ public class GameEngine {
     }
 
     public void executeTurn() {
+        turnNumber++;
+
+        if (DEBUG_VERBOSE) System.out.println(" - Turn - " + turnNumber + " - ");
 
         // renew AP
         UnitRegistry.getInstance().renewUnitAPs();
@@ -111,5 +126,29 @@ public class GameEngine {
         townHallWaiterSystem.checkGeneratorQueue();
 
         // TODO: #UI user listener
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public HexGrid getHexGrid() {
+        return hexGrid;
+    }
+
+    public TownHall getTownHall() {
+        return townHall;
+    }
+
+    public int getTurnNumber() {
+        return turnNumber;
+    }
+
+    public Map<String, Unit> getUnits() {
+        return UnitRegistry.getInstance().getUnitMap();
+    }
+
+    public Map<String, Building> getBuildings() {
+        return new HashMap<>(BuildingRegistry.getInstance().getBuildingMap());
     }
 }

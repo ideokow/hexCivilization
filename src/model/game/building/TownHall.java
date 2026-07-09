@@ -56,6 +56,10 @@ public class TownHall extends Building {
         return baseResourceCap;
     }
 
+    public int getResourceCap() {
+        return resourceCap;
+    }
+
     public void setResourceCap(int resourceCap) {
         this.resourceCap = resourceCap;
     }
@@ -64,6 +68,10 @@ public class TownHall extends Building {
 
     public int getUnitCap() {
         return unitCap;
+    }
+
+    public int getUnitNumber() {
+        return unitNumber;
     }
 
     public void setUnitCap(int townsNumber, int villageNumber) {

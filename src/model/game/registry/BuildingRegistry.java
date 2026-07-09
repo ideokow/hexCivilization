@@ -72,33 +72,38 @@ public class BuildingRegistry {
 
     public Map<Resource, Integer> generateResources(TownHall townHall) {
 
-        Map<Resource, Integer> allGeneratedResources = new HashMap<>();
-        allGeneratedResources.put(Resource.STONE, 0);
-        allGeneratedResources.put(Resource.IRON, 0);
-        allGeneratedResources.put(Resource.FOOD, 0);
-        allGeneratedResources.put(Resource.WOOD, 0);
+        Map<Resource, Integer> generatedResources = new HashMap<>();
+        generatedResources.put(Resource.STONE, getNetResource(Resource.STONE, townHall));
+        generatedResources.put(Resource.IRON, getNetResource(Resource.IRON, townHall));
+        generatedResources.put(Resource.FOOD, getNetResource(Resource.FOOD, townHall));
+        generatedResources.put(Resource.WOOD, getNetResource(Resource.WOOD, townHall));
+
+        townHall.addResources(generatedResources);
+        return generatedResources;
+    }
+
+    public int getNetResource(Resource resource, TownHall townHall) {
+        int amount = 0;
 
         for (Building building : buildingMap.values()) {
             if (!building.isRuined() && building instanceof ProductionBuilding) {
                 // production type
-                Resource resource = ((ProductionBuilding) building).getProductionBuildingType().getProduceResource();
-                int productionAmount = ((ProductionBuilding) building).getProductionAmount(townHall);
+                Resource productionResource = ((ProductionBuilding) building).getProductionBuildingType().getProduceResource();
 
-                // apply in town hall
-                Map<Resource, Integer> generatedResource = new HashMap<>();
-                generatedResource.put(resource, productionAmount);
-                townHall.addResources(generatedResource);
-
-                // add to statistics
-                allGeneratedResources.put(resource, allGeneratedResources.get(resource) + productionAmount);
+                if (resource == productionResource){
+                    int productionAmount = ((ProductionBuilding) building).getProductionAmount(townHall);
+                    amount += productionAmount;
+                }
             }
             else if (!building.isRuined() && building instanceof TownHall) {
                 // safeguard
-                ((TownHall) building).safeGuardGenerator();
+                if (resource == Resource.FOOD || resource == Resource.WOOD) {
+                    amount += TownHall.SAFE_GUARD_VALUE;
+                }
             }
         }
 
-        return allGeneratedResources;
+        return amount;
     }
 
     public void refreshUnitCap(TownHall townHall) {

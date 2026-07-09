@@ -1,6 +1,9 @@
 package controller.menu;
 
+import controller.game.GameController;
+import controller.game.GameEngine;
 import model.menu.MusicManager;
+import view.game.GameView;
 import view.menu.MainMenuView;
 
 import javax.swing.*;
@@ -40,7 +43,12 @@ public class MainMenuController {
     }
 
     private void handleStart() {
-        // TODO: start here
+        GameEngine gameEngine = GameEngine.getInstance();
+        GameView gameView = new GameView(gameEngine);
+        new GameController(gameEngine, gameView);
+
+        view.dispose();
+        gameView.setVisible(true);
     }
 
     private void handleSettings() {
