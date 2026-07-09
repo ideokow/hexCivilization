@@ -51,4 +51,8 @@ public final class MessageFormat {
             return "Some units went hungry.";
         }
     }
+
+    public static String starvationAlert(int turnNumber) {
+        return "Turn " + turnNumber + ": WARNING - starvation! Your civilization cannot feed its units. ";
+    }
 }

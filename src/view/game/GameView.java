@@ -49,6 +49,7 @@ public class GameView extends JFrame {
     private final Map<Resource, JLabel> resourceLabels;
     private final JTextArea selectedInfoArea;
     private final JLabel statusLabel;
+    private final JLabel alertLabel;
     private final JComboBox<Unit> selectedUnitCombo;
     private final DefaultComboBoxModel<Unit> selectedUnitModel;
     private final JComboBox<BuildingType> buildingCombo;
@@ -71,6 +72,7 @@ public class GameView extends JFrame {
         this.resourceLabels = new EnumMap<>(Resource.class);
         this.selectedInfoArea = new JTextArea();
         this.statusLabel = new JLabel("Select a hex. Select a unit, then click an adjacent discovered hex to move.");
+        this.alertLabel = new JLabel();
         this.selectedUnitModel = new DefaultComboBoxModel<>();
         this.selectedUnitCombo = new JComboBox<>(selectedUnitModel);
         this.buildingCombo = new JComboBox<>(new BuildingType[]{
@@ -237,6 +239,10 @@ public class GameView extends JFrame {
         statusLabel.setForeground(new Color(228, 232, 240));
         statusLabel.setFont(new Font("SansSerif", Font.PLAIN, 13));
         panel.add(statusLabel, BorderLayout.CENTER);
+
+        alertLabel.setForeground(new Color(211, 63, 73));
+        alertLabel.setFont(new Font("SansSerif", Font.BOLD, 13));
+        panel.add(alertLabel, BorderLayout.EAST);
         return panel;
     }
 
@@ -402,6 +408,10 @@ public class GameView extends JFrame {
 
     public void setStatus(String message) {
         statusLabel.setText(message);
+    }
+
+    public void setAlert(String message) {
+        alertLabel.setText(message == null ? "" : message);
     }
 
     public void resetCamera() {

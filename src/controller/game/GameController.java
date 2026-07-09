@@ -66,5 +66,11 @@ public class GameController {
         int turn = engine.getTurnNumber();
         String message = MessageFormat.turnStatusAlert(turn, generatedResources, upkeepStatus, feedStatus);
         view.setStatus(message);
+        view.setAlert("");
+    }
+
+    public void starvationAlert() {
+        String message = MessageFormat.starvationAlert(engine.getTurnNumber());
+        view.setAlert(message);
     }
 }
