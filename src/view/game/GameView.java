@@ -16,6 +16,7 @@ public class GameView extends JFrame {
     private final GameSidePanel sidePanel;
     private final GameStatusPanel statusPanel;
     private final HexMapPanel mapPanel;
+    private Runnable routeControlsRefreshHandler = () -> {};
 
     private ToastWindow toast;
 
@@ -54,6 +55,7 @@ public class GameView extends JFrame {
 
     private void handleUnitSelectionChanged() {
         sidePanel.refreshSelectionPanel();
+        routeControlsRefreshHandler.run();
         mapPanel.repaint();
     }
 
@@ -76,6 +78,25 @@ public class GameView extends JFrame {
 
     public JButton getStationButton() {
         return sidePanel.getStationButton();
+    }
+
+    public JButton getRouteButton() {
+        return sidePanel.getRouteButton();
+    }
+
+    public JButton getClearRouteButton() {
+        return sidePanel.getClearRouteButton();
+    }
+
+    public void setRouteControls(
+            boolean unitSelected,
+            boolean routeExists
+    ) {
+        sidePanel.setRouteControls(unitSelected, routeExists);
+    }
+
+    public void setRouteControlsRefreshHandler(Runnable handler) {
+        routeControlsRefreshHandler = handler == null ? () -> {} : handler;
     }
 
     public JButton getEndTurnButton() {

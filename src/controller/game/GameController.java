@@ -9,20 +9,25 @@ import model.game.unit.UnitType;
 import view.game.GameView;
 
 import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public class GameController {
 
-    public static final boolean DEBUG_VERBOSE = true;
-
     private final GameEngine engine;
     private final GameView view;
+    private final Set<Unit> unitsWithRoutes = new HashSet<>();
+    private boolean waitingForRouteDestination;
+    private Unit routingUnit;
 
     public GameController(GameEngine engine, GameView view) {
         this.engine = engine;
         this.view = view;
         attachListeners();
+        view.setRouteControlsRefreshHandler(this::refreshRouteControls);
         view.refresh();
+        refreshRouteControls();
     }
 
     private void attachListeners() {
@@ -30,13 +35,19 @@ public class GameController {
         view.getEndTurnButton().addActionListener(e -> handleEndTurn());
         view.getBuildButton().addActionListener(e -> handleBuild());
         view.getStationButton().addActionListener(e -> handleStationWorker());
+        view.getRouteButton().addActionListener(e -> beginRouteSelection());
+        view.getClearRouteButton().addActionListener(e -> clearSelectedRoute());
         view.getResetCameraButton().addActionListener(e -> view.resetCamera());
     }
 
     // --- handlers ---
 
     private void handleHexClick(HexCoordinate coordinate) {
-        if (DEBUG_VERBOSE) System.out.println("click in <" + coordinate.getQ() + ", " + coordinate.getR() + ">");
+
+        if (waitingForRouteDestination) {
+            finishRouteSelection(coordinate);
+            return;
+        }
 
         // set selected hex in memory (for other functions)
         view.setSelectedHex(coordinate);
@@ -47,19 +58,108 @@ public class GameController {
 
         // refresh
         view.refresh();
+        refreshRouteControls();
+    }
+
+    private void beginRouteSelection() {
+
+        Unit selectedUnit = view.getSelectedUnit();
+
+        if (selectedUnit == null) {
+            return;
+        }
+
+        routingUnit = selectedUnit;
+        waitingForRouteDestination = true;
+        view.setStatus("Select a destination hex for the selected unit.");
+    }
+
+    private void finishRouteSelection(HexCoordinate destination) {
+        Unit unit = routingUnit;
+        routingUnit = null;
+        waitingForRouteDestination = false;
+
+        if (unit == null) {
+            return;
+        }
+
+        routeUnit(unit, destination);
+        view.setStatus("");
+        view.refresh();
+        refreshRouteControls();
+    }
+
+    private void clearSelectedRoute() {
+        Unit selectedUnit = view.getSelectedUnit();
+
+        if (selectedUnit == null) {
+            return;
+        }
+
+        clearRoute(selectedUnit);
+        refreshRouteControls();
+    }
+
+    /*
+    Route hook used by the route-selection UI. Replace or extend this
+    method when route ownership/cancellation is moved into the model.
+     */
+    public void routeUnit(Unit unit, HexCoordinate destination) {
+        if (unit == null || destination == null) {
+            return;
+        }
+
+        engine.routeTrigger(unit, destination);
+        unitsWithRoutes.add(unit);
+    }
+
+    /* Route cancellation hook for the Clear Route button. */
+    public void clearRoute(Unit unit) {
+        if (unit != null) {
+            unitsWithRoutes.remove(unit);
+        }
+    }
+
+    public boolean hasRouteInUI(Unit unit) {
+        return unit != null && unitsWithRoutes.contains(unit);
+    }
+
+    private void refreshRouteControls() {
+        Unit selectedUnit = view.getSelectedUnit();
+        view.setRouteControls(
+                selectedUnit != null,
+                hasRouteInUI(selectedUnit)
+        );
+
+        for (Unit unit : unitsWithRoutes) {
+            if (!engine.isThereRoute(unit)) {
+                clearRoute(unit);
+            }
+        }
     }
 
     private void handleEndTurn() {
+        // cancel selection
+        waitingForRouteDestination = false;
+
+        // execution
         engine.executeTurn();
         view.refresh();
+        refreshRouteControls();
     }
 
     private void handleBuild() {
-        System.out.println("its build handle");
+        // cancel selection
+        waitingForRouteDestination = false;
+
+        // build
     }
 
     private void handleStationWorker() {
-        System.out.println("its station handle");
+        // cancel selection
+        waitingForRouteDestination = false;
+
+        // station
     }
 
     // --- alert triggers ---

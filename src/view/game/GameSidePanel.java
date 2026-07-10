@@ -22,6 +22,8 @@ final class GameSidePanel extends JPanel {
     private final JComboBox<BuildingType> buildingCombo;
     private final JButton buildButton;
     private final JButton stationButton;
+    private final JButton routeButton;
+    private final JButton clearRouteButton;
     private final JButton endTurnButton;
     private final JButton resetCameraButton;
 
@@ -56,6 +58,8 @@ final class GameSidePanel extends JPanel {
 
         this.buildButton = new JButton("Build");
         this.stationButton = new JButton("Station Worker");
+        this.routeButton = new JButton("Set Route");
+        this.clearRouteButton = new JButton("Clear Route");
         this.endTurnButton = new JButton("End Turn");
         this.resetCameraButton = new JButton("Reset Camera");
 
@@ -101,6 +105,12 @@ final class GameSidePanel extends JPanel {
         addActionButton(stationButton, 34);
         add(Box.createVerticalStrut(6));
 
+        addActionButton(routeButton, 34);
+        add(Box.createVerticalStrut(6));
+
+        addActionButton(clearRouteButton, 34);
+        add(Box.createVerticalStrut(6));
+
         addActionButton(endTurnButton, 38);
         add(Box.createVerticalStrut(6));
 
@@ -110,6 +120,8 @@ final class GameSidePanel extends JPanel {
         add(createTitle("Legend"));
         add(Box.createVerticalStrut(8));
         add(createLegendArea());
+
+        clearRouteButton.setVisible(false);
     }
 
     private JLabel createTitle(String text) {
@@ -284,6 +296,14 @@ final class GameSidePanel extends JPanel {
         );
     }
 
+    void setRouteControls(boolean unitSelected, boolean routeExists) {
+        routeButton.setEnabled(unitSelected);
+        routeButton.setVisible(unitSelected);
+        clearRouteButton.setVisible(unitSelected && routeExists);
+        revalidate();
+        repaint();
+    }
+
     private String buildSelectionText(
             HexCoordinate selectedHex,
             Hex hex
@@ -421,6 +441,14 @@ final class GameSidePanel extends JPanel {
 
     JButton getStationButton() {
         return stationButton;
+    }
+
+    JButton getRouteButton() {
+        return routeButton;
+    }
+
+    JButton getClearRouteButton() {
+        return clearRouteButton;
     }
 
     JButton getEndTurnButton() {

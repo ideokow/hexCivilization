@@ -192,4 +192,8 @@ public class GameEngine {
     public Map<String, Building> getBuildings() {
         return new HashMap<>(BuildingRegistry.getInstance().getBuildingMap());
     }
+
+    public boolean isThereRoute(Unit unit) {
+        return inQueueRoutes.containsValue(unit);
+    }
 }
