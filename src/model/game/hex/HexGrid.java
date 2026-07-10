@@ -34,6 +34,9 @@ public class HexGrid {
 
     // --- queries ---
 
+    /*
+    usage: routing system and movement logic
+     */
     public List<Hex> neighborsOf(HexCoordinate coordinate) {
         List<Hex> result = new ArrayList<>(6);
         for (HexCoordinate c : coordinate.getNeighbors()) {
@@ -43,6 +46,9 @@ public class HexGrid {
         return result;
     }
 
+    /*
+    usage: units logic, like explorer and expander and ...
+     */
     public List<Hex> hexesInRange(HexCoordinate center, int radius) {
         List<Hex> result = new ArrayList<>();
         for (int q = -radius; q <= radius; q++) {
@@ -52,6 +58,33 @@ public class HexGrid {
                 if (hex != null) result.add(hex);
             }
         }
+        return result;
+    }
+
+    /*
+    usage: in UI, prevents loading the whole map in a one scene
+     */
+    public List<Hex> hexesInBounds(
+            int minQ,
+            int maxQ,
+            int minR,
+            int maxR
+    ) {
+        if (minQ > maxQ || minR > maxR) {
+            return Collections.emptyList();
+        }
+
+        List<Hex> result = new ArrayList<>();
+
+        for (int r = minR; r <= maxR; r++) {
+            for (int q = minQ; q <= maxQ; q++) {
+                Hex hex = hexes.get(new HexCoordinate(q, r));
+                if (hex != null) {
+                    result.add(hex);
+                }
+            }
+        }
+
         return result;
     }
 

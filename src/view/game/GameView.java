@@ -1,11 +1,8 @@
 package view.game;
 
 import controller.game.GameEngine;
-import controller.game.system.StarvationSystem;
 import model.game.building.Building;
 import model.game.building.BuildingType;
-import model.game.building.PopulationType;
-import model.game.building.ProductionBuilding;
 import model.game.building.TownHall;
 import model.game.hex.Hex;
 import model.game.hex.HexCoordinate;
@@ -24,9 +21,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.EnumMap;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -474,11 +469,13 @@ public class GameView extends JFrame {
 
     private final class HexMapPanel extends JPanel {
 
+        private static final int DRAG_REPAINT_INTERVAL_NS = 16_000_000;
+        private long lastDragRepaintTime;
+
         private static final double ROOT_THREE = 1.7320508075688772;
         private static final int BASE_HEX_SIZE = 32;
         private static final int UNIT_ANIMATION_FRAMES = 14;
         private final double[] zoomLevels = {0.70, 0.85, 1.0, 1.20, 1.45, 1.75, 2.10};
-        private final Map<HexCoordinate, Polygon> screenHexes = new HashMap<>();
 
         private int zoomIndex = 2;
         private int panOffsetX;
@@ -515,13 +512,20 @@ public class GameView extends JFrame {
                     panOffsetX += deltaX;
                     panOffsetY += deltaY;
                     dragDistance += Math.abs(deltaX) + Math.abs(deltaY);
+
                     lastDragPoint = mouseEvent.getPoint();
-                    repaint();
+
+                    long currentTime = System.nanoTime();
+                    if (currentTime - lastDragRepaintTime >= DRAG_REPAINT_INTERVAL_NS) {
+                        lastDragRepaintTime = currentTime;
+                        repaint();
+                    }
                 }
 
                 @Override
                 public void mouseReleased(MouseEvent mouseEvent) {
                     lastDragPoint = null;
+                    repaint();
                 }
 
                 @Override
@@ -584,28 +588,138 @@ public class GameView extends JFrame {
         }
 
         private HexCoordinate getCoordinateAt(Point point) {
-            for (Map.Entry<HexCoordinate, Polygon> entry : screenHexes.entrySet()) {
-                if (entry.getValue().contains(point)) {
-                    return entry.getKey();
-                }
+            FractionalHex fractionalHex = screenToFractionalHex(point.x, point.y);
+            HexCoordinate coordinate = roundAxial(
+                    fractionalHex.q(),
+                    fractionalHex.r()
+            );
+
+            if (!engine.getHexGrid().contains(coordinate)) {
+                return null;
             }
-            return null;
+
+            return coordinate;
+        }
+
+        private FractionalHex screenToFractionalHex(
+                double screenX,
+                double screenY
+        ) {
+            double hexSize = currentHexSize();
+
+            double localX = screenX - getWidth() / 2.0 - panOffsetX;
+            double localY = screenY - getHeight() / 2.0 - panOffsetY;
+
+            double fractionalR = (2.0 / 3.0) * localY / hexSize;
+            double fractionalQ = localX / (ROOT_THREE * hexSize)
+                    - fractionalR / 2.0;
+
+            return new FractionalHex(fractionalQ, fractionalR);
+        }
+
+        private HexCoordinate roundAxial(double q, double r) {
+            double cubeX = q;
+            double cubeZ = r;
+            double cubeY = -cubeX - cubeZ;
+
+            int roundedX = (int) Math.round(cubeX);
+            int roundedY = (int) Math.round(cubeY);
+            int roundedZ = (int) Math.round(cubeZ);
+
+            double xDifference = Math.abs(roundedX - cubeX);
+            double yDifference = Math.abs(roundedY - cubeY);
+            double zDifference = Math.abs(roundedZ - cubeZ);
+
+            if (xDifference > yDifference && xDifference > zDifference) {
+                roundedX = -roundedY - roundedZ;
+            } else if (yDifference > zDifference) {
+                roundedY = -roundedX - roundedZ;
+            } else {
+                roundedZ = -roundedX - roundedY;
+            }
+
+            return new HexCoordinate(roundedX, roundedZ);
+        }
+
+        private record FractionalHex(double q, double r) {
+        }
+
+        private List<Hex> getVisibleHexes() {
+            double margin = currentHexSize() * 2.0;
+
+            FractionalHex topLeft = screenToFractionalHex(
+                    -margin,
+                    -margin
+            );
+            FractionalHex topRight = screenToFractionalHex(
+                    getWidth() + margin,
+                    -margin
+            );
+            FractionalHex bottomLeft = screenToFractionalHex(
+                    -margin,
+                    getHeight() + margin
+            );
+            FractionalHex bottomRight = screenToFractionalHex(
+                    getWidth() + margin,
+                    getHeight() + margin
+            );
+
+            double minQValue = Math.min(
+                    Math.min(topLeft.q(), topRight.q()),
+                    Math.min(bottomLeft.q(), bottomRight.q())
+            );
+            double maxQValue = Math.max(
+                    Math.max(topLeft.q(), topRight.q()),
+                    Math.max(bottomLeft.q(), bottomRight.q())
+            );
+            double minRValue = Math.min(
+                    Math.min(topLeft.r(), topRight.r()),
+                    Math.min(bottomLeft.r(), bottomRight.r())
+            );
+            double maxRValue = Math.max(
+                    Math.max(topLeft.r(), topRight.r()),
+                    Math.max(bottomLeft.r(), bottomRight.r())
+            );
+
+            int minQ = (int) Math.floor(minQValue) - 1;
+            int maxQ = (int) Math.ceil(maxQValue) + 1;
+            int minR = (int) Math.floor(minRValue) - 1;
+            int maxR = (int) Math.ceil(maxRValue) + 1;
+
+            return engine.getHexGrid().hexesInBounds(
+                    minQ,
+                    maxQ,
+                    minR,
+                    maxR
+            );
         }
 
         @Override
         protected void paintComponent(Graphics graphics) {
             super.paintComponent(graphics);
+
             Graphics2D graphics2D = (Graphics2D) graphics.create();
-            graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            graphics2D.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+            try {
+                graphics2D.setRenderingHint(
+                        RenderingHints.KEY_ANTIALIASING,
+                        RenderingHints.VALUE_ANTIALIAS_ON
+                );
+                graphics2D.setRenderingHint(
+                        RenderingHints.KEY_TEXT_ANTIALIASING,
+                        RenderingHints.VALUE_TEXT_ANTIALIAS_ON
+                );
 
-            drawBackground(graphics2D);
-            drawHexes(graphics2D);
-            drawUnits(graphics2D);
-            drawMovingUnit(graphics2D);
-            drawMapInstructions(graphics2D);
+                drawBackground(graphics2D);
 
-            graphics2D.dispose();
+                List<Hex> visibleHexes = getVisibleHexes();
+                drawHexes(graphics2D, visibleHexes);
+                drawUnits(graphics2D, visibleHexes);
+
+                drawMovingUnit(graphics2D);
+                drawMapInstructions(graphics2D);
+            } finally {
+                graphics2D.dispose();
+            }
         }
 
         private void drawBackground(Graphics2D graphics2D) {
@@ -615,32 +729,37 @@ public class GameView extends JFrame {
             graphics2D.fillRect(0, 0, getWidth(), getHeight());
         }
 
-        private void drawHexes(Graphics2D graphics2D) {
-            screenHexes.clear();
-            List<Hex> hexes = engine.getHexGrid().getAllHexes();
-            hexes.sort(Comparator
-                    .comparingInt((Hex hex) -> hex.getCoordinate().getR())
-                    .thenComparingInt(hex -> hex.getCoordinate().getQ()));
+        private void drawHexes(
+                Graphics2D graphics2D,
+                List<Hex> visibleHexes
+        ) {
+            for (Hex hex : visibleHexes) {
+                HexCoordinate coordinate = hex.getCoordinate();
+                Polygon polygon = createHexPolygon(coordinate);
 
-            for (Hex hex : hexes) {
-                Polygon polygon = createHexPolygon(hex.getCoordinate());
-                screenHexes.put(hex.getCoordinate(), polygon);
+                boolean discovered = engine.getHexGrid().isDiscovered(coordinate);
+                Color fillColor = discovered
+                        ? terrainColor(hex)
+                        : new Color(29, 33, 43);
 
-                boolean discovered = engine.getHexGrid().isDiscovered(hex.getCoordinate());
-                Color fillColor = discovered ? terrainColor(hex) : new Color(29, 33, 43);
                 graphics2D.setColor(fillColor);
                 graphics2D.fillPolygon(polygon);
 
-                if (engine.getPlayer().ownsTerritory(hex.getCoordinate())) {
+                if (engine.getPlayer().ownsTerritory(coordinate)) {
                     graphics2D.setColor(new Color(231, 184, 77));
                     graphics2D.setStroke(new BasicStroke(2.2f));
                 } else {
-                    graphics2D.setColor(discovered ? new Color(70, 80, 92) : new Color(43, 48, 58));
+                    graphics2D.setColor(
+                            discovered
+                                    ? new Color(70, 80, 92)
+                                    : new Color(43, 48, 58)
+                    );
                     graphics2D.setStroke(new BasicStroke(1.0f));
                 }
+
                 graphics2D.drawPolygon(polygon);
 
-                if (selectedHex != null && selectedHex.equals(hex.getCoordinate())) {
+                if (coordinate.equals(selectedHex)) {
                     graphics2D.setColor(new Color(255, 255, 255, 180));
                     graphics2D.setStroke(new BasicStroke(3.0f));
                     graphics2D.drawPolygon(polygon);
@@ -696,19 +815,32 @@ public class GameView extends JFrame {
             drawCenteredString(graphics2D, "?", bounds.getCenterX(), bounds.getCenterY() + 5);
         }
 
-        private void drawUnits(Graphics2D graphics2D) {
-            for (Hex hex : engine.getHexGrid().getAllHexes()) {
-                if (!engine.getHexGrid().isDiscovered(hex.getCoordinate())) {
+        private void drawUnits(
+                Graphics2D graphics2D,
+                List<Hex> visibleHexes
+        ) {
+            for (Hex hex : visibleHexes) {
+                HexCoordinate coordinate = hex.getCoordinate();
+
+                if (!engine.getHexGrid().isDiscovered(coordinate)) {
                     continue;
                 }
 
                 List<Unit> units = hex.getUnits();
                 for (int unitIndex = 0; unitIndex < units.size(); unitIndex++) {
                     Unit unit = units.get(unitIndex);
+
                     if (unit.equals(movingUnit)) {
                         continue;
                     }
-                    drawUnit(graphics2D, unit, hex.getCoordinate(), unitIndex, units.size());
+
+                    drawUnit(
+                            graphics2D,
+                            unit,
+                            coordinate,
+                            unitIndex,
+                            units.size()
+                    );
                 }
             }
         }
