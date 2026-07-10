@@ -1,9 +1,6 @@
 package model.game.registry;
 
-import model.game.building.Building;
-import model.game.building.BuildingType;
-import model.game.building.ProductionBuilding;
-import model.game.building.TownHall;
+import model.game.building.*;
 import model.game.hex.HexGrid;
 import model.game.hex.Resource;
 import model.game.unit.Worker;
@@ -80,16 +77,16 @@ public class BuildingRegistry {
     public Map<Resource, Integer> generateResources(TownHall townHall) {
 
         Map<Resource, Integer> generatedResources = new HashMap<>();
-        generatedResources.put(Resource.STONE, getNetResource(Resource.STONE, townHall));
-        generatedResources.put(Resource.IRON, getNetResource(Resource.IRON, townHall));
-        generatedResources.put(Resource.FOOD, getNetResource(Resource.FOOD, townHall));
-        generatedResources.put(Resource.WOOD, getNetResource(Resource.WOOD, townHall));
+        generatedResources.put(Resource.STONE, getGenerateResource(Resource.STONE, townHall));
+        generatedResources.put(Resource.IRON, getGenerateResource(Resource.IRON, townHall));
+        generatedResources.put(Resource.FOOD, getGenerateResource(Resource.FOOD, townHall));
+        generatedResources.put(Resource.WOOD, getGenerateResource(Resource.WOOD, townHall));
 
         townHall.addResources(generatedResources);
         return generatedResources;
     }
 
-    public int getNetResource(Resource resource, TownHall townHall) {
+    public int getGenerateResource(Resource resource, TownHall townHall) {
         int amount = 0;
 
         for (Building building : buildingMap.values()) {
@@ -106,6 +103,28 @@ public class BuildingRegistry {
                 // safeguard
                 if (resource == Resource.FOOD || resource == Resource.WOOD) {
                     amount += TownHall.SAFE_GUARD_VALUE;
+                }
+            }
+        }
+
+        return amount;
+    }
+
+    public int getNetResource(Resource resource, TownHall townHall) {
+        int amount = getGenerateResource(resource, townHall);
+
+        // unit foods
+        if (resource == Resource.FOOD) {
+            amount -= UnitRegistry.getInstance().getUnitMap().size();
+        }
+        // upkeep
+        else {
+            for (Building building : buildingMap.values()) {
+                if (building instanceof PopulationBuilding) {
+                    amount -= ((PopulationBuilding) building).getPopulationType().getConstructionCost().containsKey(resource) ? 1 : 0;
+                }
+                else if (building instanceof ProductionBuilding) {
+                    amount -= ((ProductionBuilding) building).getProductionType().getConstructionCost().containsKey(resource) ? 1 : 0;
                 }
             }
         }

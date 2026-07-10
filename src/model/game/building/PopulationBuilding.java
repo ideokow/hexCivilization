@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class PopulationBuilding extends Building {
 
-    private PopulationType populationType = null;
+    private PopulationType populationType;
 
     public PopulationBuilding(Player owner, BuildingType type, HexCoordinate position) {
         super(type, owner, position);
@@ -22,6 +22,10 @@ public class PopulationBuilding extends Building {
         else {
             throw new IllegalArgumentException("Population building type must be VILLAGE or TOWN");
         }
+    }
+
+    public PopulationType getPopulationType() {
+        return populationType;
     }
 
     @Override
