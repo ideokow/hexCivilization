@@ -3,6 +3,7 @@ package controller.game.system;
 import model.game.building.TownHall;
 import model.game.building.TownHallUpgrade;
 import model.game.building.Upgrade;
+import model.game.building.UpgradeStatus;
 import model.game.unit.UnitType;
 
 /*
@@ -32,23 +33,6 @@ public class TownHallWaiterSystem {
 
     public Upgrade checkUpgrades() {
         if (upgradeQueueTurns == 0) {
-
-            if (inQueueUpgrade == Upgrade.RESOURCE) {
-                townHallUpgrade.upgradeResourceStorage();
-            }
-            else if (inQueueUpgrade == Upgrade.STONE) {
-                townHallUpgrade.upgradeStone();
-            }
-            else if (inQueueUpgrade == Upgrade.IRON) {
-                townHallUpgrade.upgradeIron();
-            }
-            else if (inQueueUpgrade == Upgrade.TOOLS) {
-                townHallUpgrade.upgradeTools();
-            }
-            else if (inQueueUpgrade == Upgrade.TOWN) {
-                townHallUpgrade.upgradeTown();
-            }
-
             Upgrade inQueueUpgradeCopy = inQueueUpgrade;
 
             // reset
@@ -62,13 +46,64 @@ public class TownHallWaiterSystem {
         return null;
     }
 
-    public boolean reserveUpgrade(Upgrade upgrade) {
-        if (inQueueUpgrade == null) {
-            inQueueUpgrade = upgrade;
-            upgradeQueueTurns = upgrade.getUpgradeQueueTurns();
-            return true;
+    public UpgradeStatus reserveUpgrade(Upgrade upgrade) {
+
+        if (inQueueUpgrade != null) return UpgradeStatus.UPGRADING;
+
+        if (upgrade == Upgrade.RESOURCE) {
+            UpgradeStatus upgradeStatus = townHallUpgrade.canUpgradeResourceStorage();
+
+            if (upgradeStatus == UpgradeStatus.SUCCESS) {
+                townHallUpgrade.upgradeResourceStorage();
+            } else {
+                return upgradeStatus;
+            }
         }
-        return false;
+
+        else if (upgrade == Upgrade.STONE) {
+            UpgradeStatus upgradeStatus = townHallUpgrade.canUpgradeStone();
+
+            if (townHallUpgrade.canUpgradeStone() == UpgradeStatus.SUCCESS) {
+                townHallUpgrade.upgradeStone();
+            } else {
+                return upgradeStatus;
+            }
+        }
+
+        else if (upgrade == Upgrade.IRON) {
+            UpgradeStatus upgradeStatus = townHallUpgrade.canUpgradeIron();
+
+            if (townHallUpgrade.canUpgradeIron() == UpgradeStatus.SUCCESS) {
+                townHallUpgrade.upgradeIron();
+            } else {
+                return upgradeStatus;
+            }
+        }
+
+        else if (upgrade == Upgrade.TOOLS) {
+            UpgradeStatus upgradeStatus = townHallUpgrade.canUpgradeTools();
+
+            if (townHallUpgrade.canUpgradeTools() == UpgradeStatus.SUCCESS) {
+                townHallUpgrade.upgradeTools();
+            } else {
+                return upgradeStatus;
+            }
+        }
+
+        else if (upgrade == Upgrade.TOWN) {
+            UpgradeStatus upgradeStatus = townHallUpgrade.canUpgradeTown();
+
+            if (townHallUpgrade.canUpgradeTown() == UpgradeStatus.SUCCESS) {
+                townHallUpgrade.upgradeTown();
+            } else {
+                return upgradeStatus;
+            }
+        }
+
+        inQueueUpgrade = upgrade;
+        upgradeQueueTurns = upgrade.getUpgradeQueueTurns();
+
+        return UpgradeStatus.SUCCESS;
     }
 
     public Upgrade getInQueueUpgrade() {

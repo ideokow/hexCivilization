@@ -9,116 +9,152 @@ public class TownHallUpgrade {
 
     private final TownHall townHall;
 
+    private int resourceStorageUpgrade = 1;
+    private boolean stoneUpgrade = false;
+    private boolean ironUpgrade = false;
+    private boolean toolsUpgrade = false;
+    private boolean townUpgrade = false;
+
     public TownHallUpgrade(TownHall townHall) {
         this.townHall = townHall;
     }
 
-    /*
-    upgrade prices
-    resource -> 10 wood
-    stone -> 2 wood
-    iron  -> 2 stone
-    tools -> 1 iron, 1 stone, 1 wood
-    town  -> 2 iron, 2 stone, 2 wood
-     */
-
-    private int resourceStorageUpgrade = 1;
-    private boolean stoneUpgrade = false;
-    private boolean ironUpgrade  = false;
-    private boolean toolsUpgrade = false;
-    private boolean townUpgrade  = false;
-
-    public UpgradeStatus upgradeStone() {
+    public UpgradeStatus canUpgradeStone() {
         if (stoneUpgrade) {
             return UpgradeStatus.MAXIMUM_REACHED;
         }
-
-        Map<Resource, Integer> cost = new HashMap<>();
-        cost.put(Resource.WOOD, 2);
-        if(!townHall.canAfford(cost)) {
+        else if (townHall.canAfford(getStoneUpgradeCost())) {
             return UpgradeStatus.NOT_ENOUGH_RESOURCE;
         }
-
-        townHall.spendResources(cost);
-        stoneUpgrade = true;
-        return UpgradeStatus.SUCCESS;
+        else {
+            return UpgradeStatus.SUCCESS;
+        }
     }
 
-    public UpgradeStatus upgradeIron() {
-        if (ironUpgrade) {
-            return UpgradeStatus.MAXIMUM_REACHED;
-        }
+    public void upgradeStone() {
+        if (!(canUpgradeStone() == UpgradeStatus.SUCCESS)) return;
 
+        townHall.spendResources(getStoneUpgradeCost());
+        stoneUpgrade = true;
+    }
+
+    public UpgradeStatus canUpgradeIron() {
         if (!stoneUpgrade) {
             return UpgradeStatus.BAD_HIERARCHY;
         }
-
-        Map<Resource, Integer> cost = new HashMap<>();
-        cost.put(Resource.STONE, 2);
-        if(!townHall.canAfford(cost)) {
-            return UpgradeStatus.NOT_ENOUGH_RESOURCE;
-        }
-
-        townHall.spendResources(cost);
-        ironUpgrade = true;
-        return UpgradeStatus.SUCCESS;
-    }
-
-    public UpgradeStatus upgradeTools() {
-        if (toolsUpgrade) {
+        else if (ironUpgrade) {
             return UpgradeStatus.MAXIMUM_REACHED;
         }
-
-        if (!stoneUpgrade || !ironUpgrade) {
-            return UpgradeStatus.BAD_HIERARCHY;
-        }
-
-        Map<Resource, Integer> cost = new HashMap<>();
-        cost.put(Resource.IRON , 1);
-        cost.put(Resource.STONE, 1);
-        cost.put(Resource.WOOD , 1);
-        if(!townHall.canAfford(cost)) {
+        else if (townHall.canAfford(getIronUpgradeCost())) {
             return UpgradeStatus.NOT_ENOUGH_RESOURCE;
         }
-
-        townHall.spendResources(cost);
-        toolsUpgrade = true;
-        return UpgradeStatus.SUCCESS;
+        else {
+            return UpgradeStatus.SUCCESS;
+        }
     }
 
-    public UpgradeStatus upgradeTown() {
+    public void upgradeIron() {
+        if (!(canUpgradeTools() == UpgradeStatus.SUCCESS)) return;
+
+        townHall.spendResources(getIronUpgradeCost());
+        ironUpgrade = true;
+    }
+
+    public UpgradeStatus canUpgradeTools() {
+        if (!ironUpgrade) {
+            return UpgradeStatus.BAD_HIERARCHY;
+        }
+        else if (toolsUpgrade) {
+            return UpgradeStatus.MAXIMUM_REACHED;
+        }
+        else if (townHall.canAfford(getToolsUpgradeCost())) {
+            return UpgradeStatus.NOT_ENOUGH_RESOURCE;
+        }
+        else {
+            return UpgradeStatus.SUCCESS;
+        }
+    }
+
+    public void upgradeTools() {
+        if (!(canUpgradeTools() == UpgradeStatus.SUCCESS)) return;
+
+        townHall.spendResources(getToolsUpgradeCost());
+        toolsUpgrade = true;
+    }
+
+    public UpgradeStatus canUpgradeTown() {
         if (townUpgrade) {
             return UpgradeStatus.MAXIMUM_REACHED;
         }
-
-        Map<Resource, Integer> cost = new HashMap<>();
-        cost.put(Resource.IRON , 2);
-        cost.put(Resource.STONE, 2);
-        cost.put(Resource.WOOD , 2);
-        if(!townHall.canAfford(cost)) {
+        else if (townHall.canAfford(getTownUpgradeCost())) {
             return UpgradeStatus.NOT_ENOUGH_RESOURCE;
         }
-
-        townHall.spendResources(cost);
-        townUpgrade = true;
-        return UpgradeStatus.SUCCESS;
+        else {
+            return UpgradeStatus.SUCCESS;
+        }
     }
 
-    public UpgradeStatus upgradeResourceStorage() {
-        if (resourceStorageUpgrade >= 3) {
+    public void upgradeTown() {
+        if (!(canUpgradeTown() == UpgradeStatus.SUCCESS)) return;
+
+        townHall.spendResources(getTownUpgradeCost());
+        townUpgrade = true;
+    }
+
+    public UpgradeStatus canUpgradeResourceStorage() {
+        if (resourceStorageUpgrade > 3) {
             return UpgradeStatus.MAXIMUM_REACHED;
         }
-
-        Map<Resource, Integer> cost = new HashMap<>();
-        cost.put(Resource.WOOD , 20);
-        if(!townHall.canAfford(cost)) {
+        else if (townHall.canAfford(getResourceStorageUpgradeCost())) {
             return UpgradeStatus.NOT_ENOUGH_RESOURCE;
         }
+        else {
+            return UpgradeStatus.SUCCESS;
+        }
+    }
 
-        townHall.spendResources(cost);
+    public void upgradeResourceStorage() {
+        if (!(canUpgradeResourceStorage() == UpgradeStatus.SUCCESS)) return;
+
+        townHall.spendResources(getResourceStorageUpgradeCost());
         resourceStorageUpgrade++;
-        townHall.setResourceCap(townHall.getBaseResourceCap() * resourceStorageUpgrade);
-        return UpgradeStatus.SUCCESS;
+        townHall.setResourceCap(
+                townHall.getBaseResourceCap() * resourceStorageUpgrade
+        );
+    }
+
+    private Map<Resource, Integer> getStoneUpgradeCost() {
+        Map<Resource, Integer> cost = new HashMap<>();
+        cost.put(Resource.WOOD, 2);
+        return cost;
+    }
+
+    private Map<Resource, Integer> getIronUpgradeCost() {
+        Map<Resource, Integer> cost = new HashMap<>();
+        cost.put(Resource.STONE, 2);
+        return cost;
+    }
+
+    private Map<Resource, Integer> getToolsUpgradeCost() {
+        Map<Resource, Integer> cost = new HashMap<>();
+        cost.put(Resource.IRON, 1);
+        cost.put(Resource.STONE, 1);
+        cost.put(Resource.WOOD, 1);
+        return cost;
+    }
+
+    private Map<Resource, Integer> getTownUpgradeCost() {
+        Map<Resource, Integer> cost = new HashMap<>();
+        cost.put(Resource.IRON, 2);
+        cost.put(Resource.STONE, 2);
+        cost.put(Resource.WOOD, 2);
+        return cost;
+    }
+
+    private Map<Resource, Integer> getResourceStorageUpgradeCost() {
+        Map<Resource, Integer> cost = new HashMap<>();
+        cost.put(Resource.WOOD, 20);
+        return cost;
     }
 
     public boolean isStoneUpgrade() {

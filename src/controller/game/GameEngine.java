@@ -183,6 +183,26 @@ public class GameEngine {
         }
     }
 
+    /*
+    upgrade trigger
+     */
+    public void upgradeTrigger(Upgrade upgrade) {
+        UpgradeStatus upgradeStatus = townHallWaiterSystem.reserveUpgrade(upgrade);
+        gameController.toastAlert(upgradeStatus.getMessage());
+    }
+
+    /*
+    generate units
+     */
+    public void generateTrigger(UnitType unitType) {
+        boolean generatedStatus = townHallWaiterSystem.reserveGeneration(unitType);
+        if (generatedStatus) {
+            gameController.toastAlert("Generation goes in queue successfully.");
+        } else {
+            gameController.toastAlert("A generation is in queue already.");
+        }
+    }
+
     public void clearRoute(Unit unit) {
         if (unit != null) {
             inQueueRoutes.entrySet().removeIf(entry -> entry.getValue().equals(unit));
