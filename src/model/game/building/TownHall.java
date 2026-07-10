@@ -227,10 +227,6 @@ public class TownHall extends Building {
             return false;
         }
 
-        if ((new StarvationSystem(this)).checkStarvationStatus()) {
-            return false;
-        }
-
         Unit unit;
 
         // make unit

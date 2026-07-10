@@ -2,8 +2,10 @@ package view.game;
 
 import controller.game.GameEngine;
 import model.game.building.BuildingType;
+import model.game.building.Upgrade;
 import model.game.hex.HexCoordinate;
 import model.game.unit.Unit;
+import model.game.unit.UnitType;
 
 import javax.swing.*;
 import java.awt.*;
@@ -63,6 +65,7 @@ public class GameView extends JFrame {
         hudPanel.refresh();
         sidePanel.refreshUnitCombo();
         sidePanel.refreshSelectionPanel();
+        sidePanel.refreshTownHallQueue();
         mapPanel.repaint();
     }
 
@@ -78,6 +81,14 @@ public class GameView extends JFrame {
 
     public JButton getStationButton() {
         return sidePanel.getStationButton();
+    }
+
+    public JButton getUpgradeButton() {
+        return sidePanel.getUpgradeButton();
+    }
+
+    public JButton getGenerateUnitButton() {
+        return sidePanel.getGenerateUnitButton();
     }
 
     public JButton getRouteButton() {
@@ -125,6 +136,14 @@ public class GameView extends JFrame {
 
     public BuildingType getSelectedBuildingType() {
         return sidePanel.getSelectedBuildingType();
+    }
+
+    public Upgrade getSelectedUpgrade() {
+        return sidePanel.getSelectedUpgrade();
+    }
+
+    public UnitType getSelectedUnitType() {
+        return sidePanel.getSelectedUnitType();
     }
 
     public void setStatus(String message) {

@@ -34,6 +34,8 @@ public class GameController {
         view.setHexClickHandler(this::handleHexClick);
         view.getEndTurnButton().addActionListener(e -> handleEndTurn());
         view.getBuildButton().addActionListener(e -> handleBuild());
+        view.getUpgradeButton().addActionListener(e -> handleUpgrade());
+        view.getGenerateUnitButton().addActionListener(e -> handleGenerateUnit());
         view.getStationButton().addActionListener(e -> handleStationWorker());
         view.getRouteButton().addActionListener(e -> beginRouteSelection());
         view.getClearRouteButton().addActionListener(e -> clearSelectedRoute());
@@ -162,6 +164,20 @@ public class GameController {
         waitingForRouteDestination = false;
 
         engine.stationTrigger(view.getSelectedUnit(), view.getSelectedHex());
+        view.refresh();
+    }
+
+    private void handleUpgrade() {
+        waitingForRouteDestination = false;
+
+        engine.upgradeTrigger(view.getSelectedUpgrade());
+        view.refresh();
+    }
+
+    private void handleGenerateUnit() {
+        waitingForRouteDestination = false;
+
+        engine.generateTrigger(view.getSelectedUnitType());
         view.refresh();
     }
 

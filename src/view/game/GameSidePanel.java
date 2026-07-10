@@ -1,11 +1,13 @@
 package view.game;
 
 import model.game.building.BuildingType;
+import model.game.building.Upgrade;
 import model.game.hex.Hex;
 import model.game.hex.HexCoordinate;
 import model.game.unit.Builder;
 import model.game.unit.Unit;
 import model.game.unit.Worker;
+import model.game.unit.UnitType;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,10 +19,15 @@ final class GameSidePanel extends JPanel {
     private final Runnable unitSelectionChangedHandler;
 
     private final JTextArea selectedInfoArea;
+    private final JTextArea townHallQueueArea;
     private final DefaultComboBoxModel<Unit> selectedUnitModel;
     private final JComboBox<Unit> selectedUnitCombo;
     private final JComboBox<BuildingType> buildingCombo;
+    private final JComboBox<Upgrade> upgradeCombo;
+    private final JComboBox<UnitType> unitTypeCombo;
     private final JButton buildButton;
+    private final JButton upgradeButton;
+    private final JButton generateUnitButton;
     private final JButton stationButton;
     private final JButton routeButton;
     private final JButton clearRouteButton;
@@ -40,6 +47,7 @@ final class GameSidePanel extends JPanel {
                 unitSelectionChangedHandler;
 
         this.selectedInfoArea = new JTextArea();
+        this.townHallQueueArea = new JTextArea();
         this.selectedUnitModel = new DefaultComboBoxModel<>();
         this.selectedUnitCombo =
                 new JComboBox<>(selectedUnitModel);
@@ -55,8 +63,12 @@ final class GameSidePanel extends JPanel {
                         BuildingType.TOWN
                 }
         );
+        this.upgradeCombo = new JComboBox<>(Upgrade.values());
+        this.unitTypeCombo = new JComboBox<>(UnitType.values());
 
         this.buildButton = new JButton("Build");
+        this.upgradeButton = new JButton("Start Upgrade");
+        this.generateUnitButton = new JButton("Generate Unit");
         this.stationButton = new JButton("Station Worker");
         this.routeButton = new JButton("Set Route");
         this.clearRouteButton = new JButton("Clear Route");
@@ -84,6 +96,24 @@ final class GameSidePanel extends JPanel {
         configureSelectedInfoArea();
         add(selectedInfoArea);
         add(Box.createVerticalStrut(12));
+
+        add(createTitle("Town Hall Queue"));
+        add(Box.createVerticalStrut(8));
+        configureTownHallQueueArea();
+        add(townHallQueueArea);
+        add(Box.createVerticalStrut(8));
+
+        configureUpgradeCombo();
+        add(upgradeCombo);
+        add(Box.createVerticalStrut(6));
+        addActionButton(upgradeButton, 34);
+        add(Box.createVerticalStrut(6));
+
+        configureUnitTypeCombo();
+        add(unitTypeCombo);
+        add(Box.createVerticalStrut(6));
+        addActionButton(generateUnitButton, 34);
+        add(Box.createVerticalStrut(16));
 
         add(createSectionLabel("Unit on selected hex"));
         add(Box.createVerticalStrut(4));
@@ -154,6 +184,23 @@ final class GameSidePanel extends JPanel {
                 new Dimension(Integer.MAX_VALUE, 30)
         );
         selectedUnitCombo.setRenderer(new UnitRenderer());
+    }
+
+    private void configureTownHallQueueArea() {
+        townHallQueueArea.setEditable(false);
+        townHallQueueArea.setOpaque(false);
+        townHallQueueArea.setFont(new Font("Monospaced", Font.PLAIN, 12));
+        townHallQueueArea.setLineWrap(true);
+        townHallQueueArea.setWrapStyleWord(true);
+        townHallQueueArea.setAlignmentX(Component.LEFT_ALIGNMENT);
+    }
+
+    private void configureUpgradeCombo() {
+        upgradeCombo.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
+    }
+
+    private void configureUnitTypeCombo() {
+        unitTypeCombo.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
     }
 
     private void configureBuildingCombo() {
@@ -294,6 +341,36 @@ final class GameSidePanel extends JPanel {
         selectedInfoArea.setText(
                 buildSelectionText(selectedHex, hex)
         );
+    }
+
+    void refreshTownHallQueue() {
+        Upgrade upgrade = viewModel.getInQueueUpgrade();
+        UnitType unitType = viewModel.getInQueueUnitType();
+
+        StringBuilder text = new StringBuilder();
+        text.append("Upgrade: ");
+        if (upgrade == null) {
+            text.append("Empty");
+        } else {
+            text.append(upgrade.getName())
+                    .append(" (")
+                    .append(viewModel.getUpgradeRemainingTurns())
+                    .append(" turns)");
+        }
+
+        text.append('\n').append("Unit: ");
+        if (unitType == null) {
+            text.append("Empty");
+        } else {
+            text.append(unitType.getName())
+                    .append(" (")
+                    .append(viewModel.getGenerationRemainingTurns())
+                    .append(" turns)");
+        }
+
+        townHallQueueArea.setText(text.toString());
+        upgradeButton.setEnabled(upgrade == null);
+        generateUnitButton.setEnabled(unitType == null);
     }
 
     void setRouteControls(boolean unitSelected, boolean routeExists) {
@@ -439,6 +516,14 @@ final class GameSidePanel extends JPanel {
         return buildButton;
     }
 
+    JButton getUpgradeButton() {
+        return upgradeButton;
+    }
+
+    JButton getGenerateUnitButton() {
+        return generateUnitButton;
+    }
+
     JButton getStationButton() {
         return stationButton;
     }
@@ -461,5 +546,13 @@ final class GameSidePanel extends JPanel {
 
     BuildingType getSelectedBuildingType() {
         return (BuildingType) buildingCombo.getSelectedItem();
+    }
+
+    Upgrade getSelectedUpgrade() {
+        return (Upgrade) upgradeCombo.getSelectedItem();
+    }
+
+    UnitType getSelectedUnitType() {
+        return (UnitType) unitTypeCombo.getSelectedItem();
     }
 }

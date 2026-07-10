@@ -114,10 +114,6 @@ public class TownHallWaiterSystem {
         return upgradeQueueTurns;
     }
 
-    public boolean isThereUpgrade() {
-        return !(inQueueUpgrade == null);
-    }
-
     // --- generator functions ---
 
     public UnitType checkGeneratorQueue() {
@@ -137,20 +133,25 @@ public class TownHallWaiterSystem {
         return null;
     }
 
-    public boolean reserveGeneration(UnitType unitType) {
+    public GenerationReserveStatus reserveGeneration(UnitType unitType) {
         if (inQueueUnitType == null) {
+
+            if ((new StarvationSystem(townHall)).checkStarvationStatus()) {
+                return GenerationReserveStatus.STARVATION;
+            }
+
             inQueueUnitType = unitType;
             generatorQueueTurns = requiredGeneratorQueueTurns;
-            return true;
+            return GenerationReserveStatus.SUCCESS;
         }
-        return false;
+        return GenerationReserveStatus.GENERATION_IN_QUEUE;
     }
 
     public int getGenerationRemainingTurns() {
         return generatorQueueTurns;
     }
 
-    public boolean isThereGeneration() {
-        return !(inQueueUnitType == null);
+    public UnitType getInQueueUnitType() {
+        return inQueueUnitType;
     }
 }

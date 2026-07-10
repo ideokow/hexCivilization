@@ -95,7 +95,7 @@ public class GameEngine {
     }
 
     public void executeTurn() {
-        if (DEBUG_VERBOSE) System.out.println(" - Turn - " + turnNumber + " - ");
+        if (DEBUG_VERBOSE) System.out.println("Turn > " + turnNumber);
 
         turnNumber++;
 
@@ -195,11 +195,15 @@ public class GameEngine {
     generate units
      */
     public void generateTrigger(UnitType unitType) {
-        boolean generatedStatus = townHallWaiterSystem.reserveGeneration(unitType);
-        if (generatedStatus) {
+        GenerationReserveStatus generationReserveStatus = townHallWaiterSystem.reserveGeneration(unitType);
+        if (generationReserveStatus == GenerationReserveStatus.SUCCESS) {
             gameController.toastAlert("Generation goes in queue successfully.");
-        } else {
+        }
+        else if (generationReserveStatus == GenerationReserveStatus.GENERATION_IN_QUEUE) {
             gameController.toastAlert("A generation is in queue already.");
+        }
+        else if (generationReserveStatus == GenerationReserveStatus.STARVATION) {
+            gameController.toastAlert(("You can't generate unit in a crisis."));
         }
     }
 
@@ -225,6 +229,22 @@ public class GameEngine {
 
     public int getTurnNumber() {
         return turnNumber;
+    }
+
+    public Upgrade getInQueueUpgrade() {
+        return townHallWaiterSystem.getInQueueUpgrade();
+    }
+
+    public int getUpgradeRemainingTurns() {
+        return townHallWaiterSystem.getUpgradeRemainingTurns();
+    }
+
+    public UnitType getInQueueUnitType() {
+        return townHallWaiterSystem.getInQueueUnitType();
+    }
+
+    public int getGenerationRemainingTurns() {
+        return townHallWaiterSystem.getGenerationRemainingTurns();
     }
 
     public Map<String, Unit> getUnits() {
