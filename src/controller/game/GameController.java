@@ -116,6 +116,7 @@ public class GameController {
     /* Route cancellation hook for the Clear Route button. */
     public void clearRoute(Unit unit) {
         if (unit != null) {
+            engine.clearRoute(unit);
             unitsWithRoutes.remove(unit);
         }
     }
@@ -125,17 +126,13 @@ public class GameController {
     }
 
     private void refreshRouteControls() {
+        unitsWithRoutes.removeIf(unit -> !engine.isThereRoute(unit));
+
         Unit selectedUnit = view.getSelectedUnit();
         view.setRouteControls(
                 selectedUnit != null,
                 hasRouteInUI(selectedUnit)
         );
-
-        for (Unit unit : unitsWithRoutes) {
-            if (!engine.isThereRoute(unit)) {
-                clearRoute(unit);
-            }
-        }
     }
 
     private void handleEndTurn() {
@@ -152,14 +149,20 @@ public class GameController {
         // cancel selection
         waitingForRouteDestination = false;
 
-        // build
+        engine.buildTrigger(
+                view.getSelectedUnit(),
+                view.getSelectedBuildingType(),
+                view.getSelectedHex()
+        );
+        view.refresh();
     }
 
     private void handleStationWorker() {
         // cancel selection
         waitingForRouteDestination = false;
 
-        // station
+        engine.stationTrigger(view.getSelectedUnit(), view.getSelectedHex());
+        view.refresh();
     }
 
     // --- alert triggers ---

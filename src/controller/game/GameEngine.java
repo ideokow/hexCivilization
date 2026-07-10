@@ -138,20 +138,33 @@ public class GameEngine {
     /*
     build caller and alert handler
      */
-    public void buildTrigger(Unit unit, BuildingType buildingType, HexCoordinate hexCoordinate) {
-        BuildResult buildResult = constructionSystem.build(player, unit, buildingType, hexCoordinate);
+    public void buildTrigger(
+            Unit unit,
+            BuildingType buildingType,
+            HexCoordinate hexCoordinate
+    ) {
+        BuildResult buildResult = constructionSystem.build(
+                player,
+                unit,
+                buildingType,
+                hexCoordinate
+        );
         gameController.toastAlert(buildResult.getMessage());
     }
 
     /*
     unit station caller and alert handler
      */
-    public void  stationTrigger(Building building, Unit unit) {
+    public void  stationTrigger(Unit unit, HexCoordinate hexCoordinate) {
+        Building building = hexGrid.get(hexCoordinate).getBuilding();
+
         if (!(building instanceof ProductionBuilding)) {
             gameController.toastAlert(StationResult.NOT_PRODUCTION_BUILDING.getMessage());
-        } else if (!(unit instanceof Worker)) {
+        }
+        else if (!(unit instanceof Worker)) {
             gameController.toastAlert(StationResult.NOT_A_WORKER.getMessage());
-        } else {
+        }
+        else {
             StationResult stationResult = ((ProductionBuilding) building).stationWorker(((Worker) unit));
             gameController.toastAlert(stationResult.getMessage());
         }
@@ -161,9 +174,20 @@ public class GameEngine {
     route caller and alert handler
      */
     public void routeTrigger(Unit unit, HexCoordinate destination) {
+        if (unit == null || destination == null || unit.getPosition() == null) {
+            return;
+        }
+
         Route route = routingSystem.route(unit.getPosition(), destination, hexGrid, gameController);
         if (route != null) {
+            inQueueRoutes.entrySet().removeIf(entry -> entry.getValue().equals(unit));
             inQueueRoutes.put(route, unit);
+        }
+    }
+
+    public void clearRoute(Unit unit) {
+        if (unit != null) {
+            inQueueRoutes.entrySet().removeIf(entry -> entry.getValue().equals(unit));
         }
     }
 

@@ -59,7 +59,8 @@ public class ProductionBuilding extends Building {
             return StationResult.WORKER_IS_IN_ALREADY;
         }
         // worker is in hex check
-        if (worker.getPosition().equals(getPosition())) {
+        if (worker.getPosition() == null
+                || !worker.getPosition().equals(getPosition())) {
             return StationResult.WORKER_IS_NOT_HERE;
         }
         // building is ok
