@@ -28,7 +28,7 @@ public class Route {
 
         generateSteps(hexGrid);
         if (steps.size() == 0) {
-            throw new IllegalArgumentException("router cant find any route");
+            throw new IllegalArgumentException("Can't find any routes!");
         }
 
         currentPosition = new HexCoordinate(origin.getQ(), origin.getR());

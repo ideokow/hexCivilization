@@ -1,8 +1,12 @@
 package controller.game.system;
 
+import controller.game.GameController;
+import model.game.hex.HexCoordinate;
+import model.game.hex.HexGrid;
 import model.game.route.Route;
 import model.game.unit.Unit;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -15,16 +19,30 @@ public class RoutingSystem {
         this.movementSystem = movementSystem;
     }
 
-    public void moveUnits(Map<Route, Unit> inQueueRoutes) {
+    // game controller needed for alerts
+    public Route route(HexCoordinate origin, HexCoordinate destination, HexGrid hexGrid, GameController gameController) {
+        try {
+            return new Route(origin, destination, hexGrid);
+        } catch (IllegalArgumentException e) {
+            gameController.toastAlert(e.getMessage());
+            return null;
+        }
+    }
+
+    /*
+    a function for update routes in each turn
+    game controller needed for alert trigger
+     */
+    public void moveUnits(Map<Route, Unit> inQueueRoutes, GameController gameController) {
         // store finished ones (blocked or arrived)
         List<Route> finishedRoutes = new ArrayList<>();
         try {
             for (Route thisRoute : inQueueRoutes.keySet()) {
                 Unit thisUnit = inQueueRoutes.get(thisRoute);
-                handleRoute(thisRoute, thisUnit, finishedRoutes);
+                handleRoute(thisRoute, thisUnit, finishedRoutes, gameController);
             }
         } catch (IllegalStateException exception) {
-            // TODO: #UI show that route failed
+            gameController.toastAlert(exception.getMessage());
         } finally {
             for (Route finishedRoute : finishedRoutes) {
                 inQueueRoutes.remove(finishedRoute);
@@ -32,7 +50,8 @@ public class RoutingSystem {
         }
     }
 
-    private void handleRoute(Route thisRoute, Unit thisUnit, List<Route> finishedRoutes) {
+    // game controller needed for alert trigger
+    private void handleRoute(Route thisRoute, Unit thisUnit, List<Route> finishedRoutes, GameController gameController) {
         boolean canContinue = true;
         while (canContinue) {
             MoveResult moveResult = movementSystem.move(thisUnit, thisRoute.getNextStep());
@@ -42,7 +61,7 @@ public class RoutingSystem {
                 // TODO: #UI movement animation
 
                 if (thisRoute.isDone()) {
-                    // TODO: #UI successfully finished animation
+                    gameController.toastAlert(thisUnit.getType().getName() + " unit has arrived!");
                     finishedRoutes.add(thisRoute);
                     break;
                 }
@@ -56,7 +75,7 @@ public class RoutingSystem {
                     moveResult == MoveResult.UNIT_IS_IN_BUILDING
                 ) {
                     finishedRoutes.add(thisRoute);
-                    throw new IllegalStateException("Route was wrong!");
+                    throw new IllegalStateException(thisUnit.getType().getName() + "'s route was wrong!");
                 }
             }
         }

@@ -79,14 +79,19 @@ public class GameController {
     public void townHallAlert(Upgrade upgrade, UnitType unitType) {
         if (upgrade != null) {
             if (unitType == null) {
-                view.showToast(MessageFormat.formatUpgradeAlert(upgrade));
+                toastAlert(MessageFormat.formatUpgradeAlert(upgrade));
             } else {
-                view.showToast(MessageFormat.formatUpgradeAlert(upgrade) + "\n" + MessageFormat.formatGeneratedAlert(unitType));
+                toastAlert(MessageFormat.formatUpgradeAlert(upgrade) + "\n" + MessageFormat.formatGeneratedAlert(unitType));
             }
         } else {
             if (unitType != null) {
-                view.showToast(MessageFormat.formatGeneratedAlert(unitType));
+                toastAlert(MessageFormat.formatGeneratedAlert(unitType));
             }
         }
+    }
+
+    // TODO: make responsible for multi message (cascade show)
+    public void toastAlert(String message) {
+        view.showToast(message);
     }
 }

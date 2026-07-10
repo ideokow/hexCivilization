@@ -26,7 +26,7 @@ public class ConstructionSystem {
         this.townHall = Objects.requireNonNull(townHall, "town hall is null");
     }
 
-    public BuildResult canBuild(Player player, Unit unit, BuildingType type, HexCoordinate coordinate) {
+    private BuildResult canBuild(Player player, Unit unit, BuildingType type, HexCoordinate coordinate) {
         if (player == null || type == null || coordinate == null) {
             return BuildResult.UNIT_NOT_ON_MAP;
         }

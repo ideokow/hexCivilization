@@ -1,19 +1,44 @@
 package controller.game.system;
 
 public enum BuildResult {
-    SUCCESS,
-    NOT_A_BUILDER,        // only Builder can construct
-    BUILDER_NOT_ON_HEX,   // builder must stand on the target hex
-    OUTSIDE_TERRITORY,    // must be inside player borders
-    HEX_NOT_DISCOVERED,   // hex not discovered
-    HEX_HAS_BUILDING,     // hex must be clear
-    WRONG_TERRAIN,        // e.g. Lumber Mill off forest
-    MISSING_HEX_RESOURCE, // e.g. Iron Mine without iron
-    HEX_HAS_RESOURCE,     // Town only on resource-free hexes
-    NOT_ENOUGH_RESOURCES,
-    NOT_ENOUGH_AP,
-    NOT_ENOUGH_CHARGE,
-    UPGRADE_REQUIRED,    // Stone/Iron Mine tech & Town/Village
-    CANT_BUILD_TOWN_HALL,
+    SUCCESS
+            ("Building constructed successfully."),
+    NOT_A_BUILDER
+            ("Only Builder units can construct buildings."),
+    BUILDER_NOT_ON_HEX
+            ("The Builder must stand on the target hex."),
+    OUTSIDE_TERRITORY
+            ("Buildings can only be constructed inside your territory."),
+    HEX_NOT_DISCOVERED
+            ("The target hex has not been discovered yet."),
+    HEX_HAS_BUILDING
+            ("The target hex already contains a building."),
+    WRONG_TERRAIN
+            ("This building cannot be constructed on the selected terrain."),
+    MISSING_HEX_RESOURCE
+            ("The target hex does not contain the required resource."),
+    HEX_HAS_RESOURCE
+            ("This building requires a resource-free hex."),
+    NOT_ENOUGH_RESOURCES
+            ("You do not have enough resources to construct this building."),
+    NOT_ENOUGH_AP
+            ("The Builder does not have enough action points."),
+    NOT_ENOUGH_CHARGE
+            ("The Builder does not have enough build charges."),
+    UPGRADE_REQUIRED
+            ("The required upgrade has not been unlocked."),
+    CANT_BUILD_TOWN_HALL
+            ("A Town Hall cannot be constructed directly."),
     UNIT_NOT_ON_MAP
+            ("The Builder is not currently on the map.");
+
+    private final String message;
+
+    BuildResult(String message) {
+        this.message = message;
+    }
+
+    public String getMessage() {
+        return message;
+    }
 }

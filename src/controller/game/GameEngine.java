@@ -109,7 +109,7 @@ public class GameEngine {
         UpKeepStatus upkeepStatus = BuildingRegistry.getInstance().payUpKeeps(townHall, hexGrid);
 
         // move in-way units
-        routingSystem.moveUnits(inQueueRoutes);
+        routingSystem.moveUnits(inQueueRoutes, gameController);
 
         // feed units
         boolean feedStatus = starvationSystem.feedUnits();
@@ -134,6 +134,40 @@ public class GameEngine {
 
         // TODO: #UI user listener
     }
+
+    /*
+    build caller and alert handler
+     */
+    public void buildTrigger(Unit unit, BuildingType buildingType, HexCoordinate hexCoordinate) {
+        BuildResult buildResult = constructionSystem.build(player, unit, buildingType, hexCoordinate);
+        gameController.toastAlert(buildResult.getMessage());
+    }
+
+    /*
+    unit station caller and alert handler
+     */
+    public void  stationTrigger(Building building, Unit unit) {
+        if (!(building instanceof ProductionBuilding)) {
+            gameController.toastAlert(StationResult.NOT_PRODUCTION_BUILDING.getMessage());
+        } else if (!(unit instanceof Worker)) {
+            gameController.toastAlert(StationResult.NOT_A_WORKER.getMessage());
+        } else {
+            StationResult stationResult = ((ProductionBuilding) building).stationWorker(((Worker) unit));
+            gameController.toastAlert(stationResult.getMessage());
+        }
+    }
+
+    /*
+    route caller and alert handler
+     */
+    public void routeTrigger(Unit unit, HexCoordinate destination) {
+        Route route = routingSystem.route(unit.getPosition(), destination, hexGrid, gameController);
+        if (route != null) {
+            inQueueRoutes.put(route, unit);
+        }
+    }
+
+    // UI getters
 
     public Player getPlayer() {
         return player;
