@@ -119,9 +119,7 @@ public class GameEngine {
 
         // check starvation
         boolean starvation = starvationSystem.checkStarvationStatus();
-        if (starvation) {
-            gameController.starvationAlert();
-        }
+        gameController.starvationAlert(starvation);
 
         // refresh upgrade queue
         Upgrade doneUpgrade = townHallWaiterSystem.checkUpgrades();

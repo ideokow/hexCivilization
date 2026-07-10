@@ -174,9 +174,14 @@ public class GameController {
         view.setAlert("");
     }
 
-    public void starvationAlert() {
-        String message = MessageFormat.formatStarvationAlert(engine.getTurnNumber());
-        view.setAlert(message);
+    public void starvationAlert(boolean starvation) {
+        if (starvation) {
+            String message = MessageFormat.formatStarvationAlert(engine.getTurnNumber());
+            view.setAlert(message);
+        }
+        else {
+            view.setAlert("");
+        }
     }
 
     public void townHallAlert(Upgrade upgrade, UnitType unitType) {
