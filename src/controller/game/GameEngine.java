@@ -219,6 +219,18 @@ public class GameEngine {
         }
     }
 
+    /*
+    expand trigger
+     */
+    public void expandTrigger(Unit unit) {
+        if (!(unit instanceof BorderExpander)) {
+            gameController.toastAlert("Select an expander.");
+        }
+        else {
+            ((BorderExpander) unit).expand(hexGrid, townHall, player);
+        }
+    }
+
     public void clearRoute(Unit unit) {
         if (unit != null) {
             inQueueRoutes.entrySet().removeIf(entry -> entry.getValue().equals(unit));

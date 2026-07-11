@@ -37,6 +37,7 @@ public class GameController {
         view.getUpgradeButton().addActionListener(e -> handleUpgrade());
         view.getGenerateUnitButton().addActionListener(e -> handleGenerateUnit());
         view.getStationButton().addActionListener(e -> handleStationWorker());
+        view.getExpandButton().addActionListener(e -> handleExpand());
         view.getRouteButton().addActionListener(e -> beginRouteSelection());
         view.getClearRouteButton().addActionListener(e -> clearSelectedRoute());
         view.getResetCameraButton().addActionListener(e -> view.resetCamera());
@@ -63,7 +64,14 @@ public class GameController {
         refreshRouteControls();
     }
 
+    private void exitSelectionMode() {
+        waitingForRouteDestination = false;
+        view.setAlert("");
+    }
+
     private void beginRouteSelection() {
+
+        if (waitingForRouteDestination) waitingForRouteDestination = false;
 
         Unit selectedUnit = view.getSelectedUnit();
 
@@ -147,7 +155,7 @@ public class GameController {
 
     private void handleEndTurn() {
         // cancel selection
-        waitingForRouteDestination = false;
+        exitSelectionMode();
 
         // execution
         engine.executeTurn();
@@ -157,7 +165,7 @@ public class GameController {
 
     private void handleBuild() {
         // cancel selection
-        waitingForRouteDestination = false;
+        exitSelectionMode();
 
         engine.buildTrigger(
                 view.getSelectedUnit(),
@@ -169,21 +177,29 @@ public class GameController {
 
     private void handleStationWorker() {
         // cancel selection
-        waitingForRouteDestination = false;
+        exitSelectionMode();
 
         engine.stationTrigger(view.getSelectedUnit(), view.getSelectedHex());
         view.refresh();
     }
 
+    private void handleExpand() {
+        // cancel selection
+        exitSelectionMode();
+
+        engine.expandTrigger(view.getSelectedUnit());
+        view.refresh();
+    }
+
     private void handleUpgrade() {
-        waitingForRouteDestination = false;
+        exitSelectionMode();
 
         engine.upgradeTrigger(view.getSelectedUpgrade());
         view.refresh();
     }
 
     private void handleGenerateUnit() {
-        waitingForRouteDestination = false;
+        exitSelectionMode();
 
         engine.generateTrigger(view.getSelectedUnitType());
         view.refresh();

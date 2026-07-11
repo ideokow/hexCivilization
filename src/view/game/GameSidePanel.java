@@ -38,6 +38,7 @@ final class GameSidePanel extends JPanel {
     private final JButton upgradeButton;
     private final JButton generateUnitButton;
     private final JButton stationButton;
+    private final JButton expandButton;
     private final JButton routeButton;
     private final JButton clearRouteButton;
     private final JButton endTurnButton;
@@ -79,6 +80,7 @@ final class GameSidePanel extends JPanel {
         this.upgradeButton = new JButton("Start Upgrade");
         this.generateUnitButton = new JButton("Generate Unit");
         this.stationButton = new JButton("Station Worker");
+        this.expandButton = new JButton("Expand Territory");
         this.routeButton = new JButton("Set Route");
         this.clearRouteButton = new JButton("Clear Route");
         this.endTurnButton = new JButton("End Turn");
@@ -151,6 +153,9 @@ final class GameSidePanel extends JPanel {
         add(Box.createVerticalStrut(6));
 
         addActionButton(stationButton, 34);
+        add(Box.createVerticalStrut(6));
+
+        addActionButton(expandButton, 34);
         add(Box.createVerticalStrut(6));
 
         addActionButton(routeButton, 34);
@@ -656,6 +661,10 @@ final class GameSidePanel extends JPanel {
 
     JButton getStationButton() {
         return stationButton;
+    }
+
+    JButton getExpandButton() {
+        return expandButton;
     }
 
     JButton getRouteButton() {

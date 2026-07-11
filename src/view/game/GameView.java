@@ -83,6 +83,10 @@ public class GameView extends JFrame {
         return sidePanel.getStationButton();
     }
 
+    public JButton getExpandButton() {
+        return sidePanel.getExpandButton();
+    }
+
     public JButton getUpgradeButton() {
         return sidePanel.getUpgradeButton();
     }
