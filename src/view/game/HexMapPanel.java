@@ -15,6 +15,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.List;
 import java.util.Set;
 
@@ -23,7 +25,8 @@ final class HexMapPanel extends JPanel {
     private static final int DRAG_REPAINT_INTERVAL_NS = 16_000_000;
     private static final double ROOT_THREE = 1.7320508075688772;
     private static final int BASE_HEX_SIZE = 32;
-    private static final int UNIT_ANIMATION_FRAMES = 14;
+    private static final int UNIT_ANIMATION_FRAMES = 1;
+    private static final int UNIT_ANIMATION_DELAY_MS = 24;
     private static final int DEFAULT_ZOOM_INDEX = 2;
 
     private static final double[] ZOOM_LEVELS = {
@@ -51,6 +54,7 @@ final class HexMapPanel extends JPanel {
     private HexCoordinate animationDestination;
     private int animationFrame;
     private Timer animationTimer;
+    private final Deque<MovementAnimation> animationQueue = new ArrayDeque<>();
 
     HexMapPanel(
             GameViewModel viewModel,
@@ -152,18 +156,42 @@ final class HexMapPanel extends JPanel {
             HexCoordinate origin,
             HexCoordinate destination
     ) {
-        movingUnit = unit;
-        animationOrigin = origin;
-        animationDestination = destination;
+        if (unit == null || origin == null || destination == null) {
+            return;
+        }
+
+        animationQueue.addLast(
+                new MovementAnimation(unit, origin, destination)
+        );
+
+        if (movingUnit == null) {
+            startNextAnimation();
+        }
+    }
+
+    private void startNextAnimation() {
+        MovementAnimation nextAnimation = animationQueue.pollFirst();
+
+        if (nextAnimation == null) {
+            stopAnimationTimer();
+            return;
+        }
+
+        movingUnit = nextAnimation.unit();
+        animationOrigin = nextAnimation.origin();
+        animationDestination = nextAnimation.destination();
         animationFrame = 0;
 
-        stopAnimationTimer();
+        if (animationTimer == null) {
+            animationTimer = new Timer(
+                    UNIT_ANIMATION_DELAY_MS,
+                    event -> advanceAnimation()
+            );
+        }
 
-        animationTimer = new Timer(
-                24,
-                event -> advanceAnimation()
-        );
-        animationTimer.start();
+        if (!animationTimer.isRunning()) {
+            animationTimer.start();
+        }
     }
 
     private void stopAnimationTimer() {
@@ -178,7 +206,7 @@ final class HexMapPanel extends JPanel {
 
         if (animationFrame >= UNIT_ANIMATION_FRAMES) {
             movingUnit = null;
-            animationTimer.stop();
+            startNextAnimation();
         }
 
         repaint();
@@ -646,7 +674,7 @@ final class HexMapPanel extends JPanel {
             ) {
                 Unit unit = units.get(unitIndex);
 
-                if (unit.equals(movingUnit)) {
+                if (isAnimationPending(unit)) {
                     continue;
                 }
 
@@ -659,6 +687,20 @@ final class HexMapPanel extends JPanel {
                 );
             }
         }
+    }
+
+    private boolean isAnimationPending(Unit unit) {
+        if (unit.equals(movingUnit)) {
+            return true;
+        }
+
+        for (MovementAnimation animation : animationQueue) {
+            if (unit.equals(animation.unit())) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private void drawMovingUnit(Graphics2D graphics2D) {
@@ -1032,5 +1074,12 @@ final class HexMapPanel extends JPanel {
     }
 
     private record FractionalHex(double q, double r) {
+    }
+
+    private record MovementAnimation(
+            Unit unit,
+            HexCoordinate origin,
+            HexCoordinate destination
+    ) {
     }
 }

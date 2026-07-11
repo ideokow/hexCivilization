@@ -54,11 +54,17 @@ public class RoutingSystem {
     private void handleRoute(Route thisRoute, Unit thisUnit, List<Route> finishedRoutes, GameController gameController) {
         boolean canContinue = true;
         while (canContinue) {
-            MoveResult moveResult = movementSystem.move(thisUnit, thisRoute.getNextStep());
+            HexCoordinate origin = thisUnit.getPosition();
+            HexCoordinate destination = thisRoute.getNextStep();
+            MoveResult moveResult = movementSystem.move(thisUnit, destination);
 
             if (moveResult == MoveResult.SUCCESS) {
                 thisRoute.nextStep();
-                // TODO: #UI movement animation
+                gameController.animateUnitMovement(
+                        thisUnit,
+                        origin,
+                        destination
+                );
 
                 if (thisRoute.isDone()) {
                     gameController.toastAlert(thisUnit.getType().getName() + " unit has arrived!");

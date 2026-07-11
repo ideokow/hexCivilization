@@ -115,6 +115,14 @@ public class GameController {
         unitsWithRoutes.add(unit);
     }
 
+    public void animateUnitMovement(
+            Unit unit,
+            HexCoordinate origin,
+            HexCoordinate destination
+    ) {
+        view.animateUnitMovement(unit, origin, destination);
+    }
+
     /* Route cancellation hook for the Clear Route button. */
     public void clearRoute(Unit unit) {
         if (unit != null) {
