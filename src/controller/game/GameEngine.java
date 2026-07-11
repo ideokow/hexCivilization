@@ -2,6 +2,7 @@ package controller.game;
 
 import controller.game.system.*;
 import model.game.building.*;
+import model.game.hex.Hex;
 import model.game.hex.HexCoordinate;
 import model.game.hex.HexGrid;
 import model.game.hex.Resource;
@@ -153,8 +154,19 @@ public class GameEngine {
     /*
     unit station caller and alert handler
      */
-    public void  stationTrigger(Unit unit, HexCoordinate hexCoordinate) {
-        Building building = hexGrid.get(hexCoordinate).getBuilding();
+    public void stationTrigger(Unit unit, HexCoordinate hexCoordinate) {
+        if (hexCoordinate == null) {
+            gameController.toastAlert(StationResult.WRONG_HEX.getMessage());
+            return;
+        };
+
+        Hex hex = hexGrid.get(hexCoordinate);
+        if (hex == null) {
+            gameController.toastAlert(StationResult.WRONG_HEX.getMessage());
+            return;
+        };
+
+        Building building = hex.getBuilding();
 
         if (!(building instanceof ProductionBuilding)) {
             gameController.toastAlert(StationResult.NOT_PRODUCTION_BUILDING.getMessage());

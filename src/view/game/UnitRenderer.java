@@ -34,6 +34,14 @@ final class UnitRenderer extends DefaultListCellRenderer {
             );
         }
 
+        setForeground(new Color(234, 238, 245));
+        setBackground(
+                isSelected
+                        ? new Color(62, 83, 108)
+                        : new Color(35, 45, 61)
+        );
+        setBorder(BorderFactory.createEmptyBorder(4, 6, 4, 6));
+
         return component;
     }
 }

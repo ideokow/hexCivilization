@@ -18,7 +18,9 @@ public enum StationResult {
     NOT_A_WORKER
             ("Only Worker units can be stationed in buildings."),
     NOT_PRODUCTION_BUILDING
-            ("The selected building is not a production building.");
+            ("The selected building is not a production building."),
+    WRONG_HEX
+            ("Please select a valid hex for station worker operation.");
 
     private final String message;
 

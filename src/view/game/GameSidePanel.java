@@ -14,6 +14,15 @@ import java.awt.*;
 
 final class GameSidePanel extends JPanel {
 
+    private static final Color PANEL_BACKGROUND = new Color(17, 23, 33);
+    private static final Color CARD_BACKGROUND = new Color(27, 35, 49);
+    private static final Color CONTROL_BACKGROUND = new Color(35, 45, 61);
+    private static final Color TEXT_PRIMARY = new Color(234, 238, 245);
+    private static final Color TEXT_MUTED = new Color(157, 171, 191);
+    private static final Color ACCENT = new Color(238, 190, 78);
+    private static final Color ACTION_BLUE = new Color(52, 91, 132);
+    private static final Color ACTION_GREEN = new Color(52, 111, 89);
+
     private final GameViewModel viewModel;
     private final GameViewState viewState;
     private final Runnable unitSelectionChangedHandler;
@@ -82,11 +91,20 @@ final class GameSidePanel extends JPanel {
 
     private void configurePanel() {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        setPreferredSize(new Dimension(292, 100));
+        setPreferredSize(new Dimension(310, 100));
         setBorder(
-                BorderFactory.createEmptyBorder(12, 12, 12, 12)
+                BorderFactory.createCompoundBorder(
+                        BorderFactory.createMatteBorder(
+                                0,
+                                1,
+                                0,
+                                0,
+                                new Color(54, 67, 86)
+                        ),
+                        BorderFactory.createEmptyBorder(16, 16, 16, 16)
+                )
         );
-        setBackground(new Color(236, 239, 244));
+        setBackground(PANEL_BACKGROUND);
     }
 
     private void buildContent() {
@@ -156,23 +174,40 @@ final class GameSidePanel extends JPanel {
 
     private JLabel createTitle(String text) {
         JLabel label = new JLabel(text);
-        label.setFont(new Font("SansSerif", Font.BOLD, 18));
+        label.setFont(new Font("SansSerif", Font.BOLD, 16));
+        label.setForeground(ACCENT);
+        label.setBorder(
+                BorderFactory.createCompoundBorder(
+                        BorderFactory.createMatteBorder(
+                                0, 0, 1, 0, new Color(67, 78, 95)
+                        ),
+                        BorderFactory.createEmptyBorder(0, 0, 6, 0)
+                )
+        );
         label.setAlignmentX(Component.LEFT_ALIGNMENT);
         return label;
     }
 
     private JLabel createSectionLabel(String text) {
         JLabel label = new JLabel(text);
-        label.setFont(new Font("SansSerif", Font.BOLD, 13));
+        label.setFont(new Font("SansSerif", Font.BOLD, 11));
+        label.setForeground(TEXT_MUTED);
         label.setAlignmentX(Component.LEFT_ALIGNMENT);
         return label;
     }
 
     private void configureSelectedInfoArea() {
         selectedInfoArea.setEditable(false);
-        selectedInfoArea.setOpaque(false);
-        selectedInfoArea.setFont(
-                new Font("Monospaced", Font.PLAIN, 12)
+        selectedInfoArea.setOpaque(true);
+        selectedInfoArea.setBackground(CARD_BACKGROUND);
+        selectedInfoArea.setForeground(TEXT_PRIMARY);
+        selectedInfoArea.setCaretColor(TEXT_PRIMARY);
+        selectedInfoArea.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        selectedInfoArea.setBorder(
+                BorderFactory.createCompoundBorder(
+                        BorderFactory.createLineBorder(new Color(47, 61, 80)),
+                        BorderFactory.createEmptyBorder(9, 10, 9, 10)
+                )
         );
         selectedInfoArea.setLineWrap(true);
         selectedInfoArea.setWrapStyleWord(true);
@@ -180,34 +215,108 @@ final class GameSidePanel extends JPanel {
     }
 
     private void configureUnitCombo() {
-        selectedUnitCombo.setMaximumSize(
-                new Dimension(Integer.MAX_VALUE, 30)
-        );
+        styleComboBox(selectedUnitCombo);
         selectedUnitCombo.setRenderer(new UnitRenderer());
     }
 
     private void configureTownHallQueueArea() {
         townHallQueueArea.setEditable(false);
-        townHallQueueArea.setOpaque(false);
-        townHallQueueArea.setFont(new Font("Monospaced", Font.PLAIN, 12));
+        townHallQueueArea.setOpaque(true);
+        townHallQueueArea.setBackground(CARD_BACKGROUND);
+        townHallQueueArea.setForeground(TEXT_PRIMARY);
+        townHallQueueArea.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        townHallQueueArea.setBorder(
+                BorderFactory.createCompoundBorder(
+                        BorderFactory.createLineBorder(new Color(47, 61, 80)),
+                        BorderFactory.createEmptyBorder(9, 10, 9, 10)
+                )
+        );
         townHallQueueArea.setLineWrap(true);
         townHallQueueArea.setWrapStyleWord(true);
         townHallQueueArea.setAlignmentX(Component.LEFT_ALIGNMENT);
     }
 
     private void configureUpgradeCombo() {
-        upgradeCombo.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
+        styleComboBox(upgradeCombo);
     }
 
     private void configureUnitTypeCombo() {
-        unitTypeCombo.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
+        styleComboBox(unitTypeCombo);
     }
 
     private void configureBuildingCombo() {
-        buildingCombo.setMaximumSize(
-                new Dimension(Integer.MAX_VALUE, 30)
-        );
+        styleComboBox(buildingCombo);
     }
+
+    private void styleComboBox(JComboBox<?> comboBox) {
+        comboBox.setUI(new DarkComboBoxUI());
+
+        comboBox.setAlignmentX(Component.LEFT_ALIGNMENT);
+        comboBox.setMaximumSize(
+                new Dimension(Integer.MAX_VALUE, 32)
+        );
+        comboBox.setPreferredSize(
+                new Dimension(280, 32)
+        );
+
+        comboBox.setBackground(CONTROL_BACKGROUND);
+        comboBox.setForeground(TEXT_PRIMARY);
+        comboBox.setFont(
+                new Font("SansSerif", Font.PLAIN, 12)
+        );
+
+        comboBox.setOpaque(true);
+        comboBox.setFocusable(false);
+
+        comboBox.setBorder(
+                BorderFactory.createLineBorder(
+                        new Color(67, 83, 105)
+                )
+        );
+
+        comboBox.setRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(
+                    JList<?> list,
+                    Object value,
+                    int index,
+                    boolean isSelected,
+                    boolean cellHasFocus
+            ) {
+                JLabel label =
+                        (JLabel) super.getListCellRendererComponent(
+                                list,
+                                value,
+                                index,
+                                isSelected,
+                                false
+                        );
+
+                label.setOpaque(true);
+                label.setForeground(
+                        comboBox.isEnabled()
+                                ? TEXT_PRIMARY
+                                : TEXT_MUTED
+                );
+                label.setBackground(
+                        isSelected
+                                ? new Color(62, 83, 108)
+                                : CONTROL_BACKGROUND
+                );
+                label.setBorder(
+                        BorderFactory.createEmptyBorder(
+                                4,
+                                10,
+                                4,
+                                8
+                        )
+                );
+
+                return label;
+            }
+        });
+    }
+
 
     private void addActionButton(
             JButton button,
@@ -217,6 +326,21 @@ final class GameSidePanel extends JPanel {
         button.setMaximumSize(
                 new Dimension(Integer.MAX_VALUE, height)
         );
+        button.setForeground(TEXT_PRIMARY);
+        button.setBackground(
+                button == endTurnButton ? ACTION_GREEN : ACTION_BLUE
+        );
+        button.setFont(new Font("SansSerif", Font.BOLD, 12));
+        button.setFocusPainted(false);
+        button.setBorder(
+                BorderFactory.createCompoundBorder(
+                        BorderFactory.createLineBorder(
+                                new Color(91, 118, 145)
+                        ),
+                        BorderFactory.createEmptyBorder(4, 10, 4, 10)
+                )
+        );
+        button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         add(button);
     }
 
@@ -231,9 +355,15 @@ final class GameSidePanel extends JPanel {
                 """);
 
         legendArea.setEditable(false);
-        legendArea.setOpaque(false);
-        legendArea.setFont(
-                new Font("SansSerif", Font.PLAIN, 12)
+        legendArea.setOpaque(true);
+        legendArea.setBackground(CARD_BACKGROUND);
+        legendArea.setForeground(TEXT_MUTED);
+        legendArea.setFont(new Font("SansSerif", Font.PLAIN, 11));
+        legendArea.setBorder(
+                BorderFactory.createCompoundBorder(
+                        BorderFactory.createLineBorder(new Color(47, 61, 80)),
+                        BorderFactory.createEmptyBorder(9, 10, 9, 10)
+                )
         );
         legendArea.setAlignmentX(Component.LEFT_ALIGNMENT);
 
