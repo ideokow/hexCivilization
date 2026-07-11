@@ -1,10 +1,8 @@
 package view.game;
 
-import model.game.building.BuildingType;
 import model.game.hex.Hex;
 import model.game.hex.HexCoordinate;
 import model.game.hex.Resource;
-import model.game.hex.TerrainType;
 import model.game.unit.Unit;
 import model.game.unit.UnitType;
 
@@ -14,13 +12,12 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.geom.Point2D;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.ArrayDeque;
 import java.util.Deque;
-import java.util.EnumMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 final class HexMapPanel extends JPanel {
@@ -44,19 +41,10 @@ final class HexMapPanel extends JPanel {
 
     private static final Color BACKGROUND_TOP = new Color(24, 31, 43);
     private static final Color BACKGROUND_BOTTOM = new Color(12, 15, 21);
-    private static final Color FOG_FILL = new Color(29, 33, 43);
-    private static final Color FOG_OVERLAY = new Color(7, 9, 13, 95);
-    private static final Color FOG_TEXT = new Color(95, 103, 118, 90);
-    private static final Color TERRAIN_TEXT = new Color(25, 30, 37, 180);
-    private static final Color RESOURCE_BACKGROUND = new Color(255, 255, 255, 215);
-    private static final Color RESOURCE_TEXT = new Color(54, 58, 64);
-    private static final Color BUILDING_BACKGROUND = new Color(30, 34, 42, 220);
     private static final Color UNIT_TEXT = new Color(25, 30, 36);
     private static final Color UNIT_SHADOW = new Color(0, 0, 0, 100);
     private static final Color INSTRUCTION_BACKGROUND = new Color(0, 0, 0, 110);
     private static final Color INSTRUCTION_TEXT = new Color(230, 235, 244);
-    private static final Color HEX_BORDER = new Color(70, 80, 92);
-    private static final Color FOG_BORDER = new Color(43, 48, 58);
     private static final Color TERRITORY_BORDER = new Color(231, 184, 77);
     private static final Color SELECTION_BORDER = new Color(255, 255, 255, 180);
     private static final Color EXPLORER_COLOR = new Color(64, 156, 255);
@@ -70,15 +58,11 @@ final class HexMapPanel extends JPanel {
     private static final BasicStroke UNIT_STROKE = new BasicStroke(1.4f);
     private static final BasicStroke HIGHLIGHTED_UNIT_STROKE = new BasicStroke(3.0f);
 
-    private static final Font FOG_FONT = new Font("SansSerif", Font.BOLD, 14);
     private static final Font INSTRUCTION_FONT = new Font("SansSerif", Font.PLAIN, 12);
-    private static final Font[] TERRAIN_FONTS = createFonts(Font.BOLD, 11, 10);
-    private static final Font[] SMALL_BOLD_FONTS = createFonts(Font.BOLD, 10, 9);
+    private static final Font[] UNIT_FONTS = createUnitFonts();
 
     private static final double[] HEX_COSINES = new double[6];
     private static final double[] HEX_SINES = new double[6];
-    private static final Map<TerrainType, Color> TERRAIN_COLORS = createTerrainColors();
-    private static final Map<TerrainType, Color> RESOURCE_TERRAIN_COLORS = createResourceTerrainColors();
 
     static {
         for (int vertexIndex = 0; vertexIndex < 6; vertexIndex++) {
@@ -88,47 +72,21 @@ final class HexMapPanel extends JPanel {
         }
     }
 
-    private static Font[] createFonts(int style, int normalSize, int minimumSize) {
+    private static Font[] createUnitFonts() {
         Font[] fonts = new Font[ZOOM_LEVELS.length];
         for (int index = 0; index < ZOOM_LEVELS.length; index++) {
             fonts[index] = new Font(
                     "SansSerif",
-                    style,
-                    Math.max(minimumSize, (int) (normalSize * ZOOM_LEVELS[index]))
+                    Font.BOLD,
+                    Math.max(9, (int) (10 * ZOOM_LEVELS[index]))
             );
         }
         return fonts;
     }
 
-    private static Map<TerrainType, Color> createTerrainColors() {
-        Map<TerrainType, Color> colors = new EnumMap<>(TerrainType.class);
-        colors.put(TerrainType.TOWN_HALL, new Color(132, 111, 82));
-        colors.put(TerrainType.PLAINS, new Color(204, 179, 106));
-        colors.put(TerrainType.GRASSLAND, new Color(99, 165, 94));
-        colors.put(TerrainType.FOREST, new Color(59, 126, 76));
-        colors.put(TerrainType.MOUNTAIN, new Color(124, 128, 132));
-        return colors;
-    }
-
-    private static Map<TerrainType, Color> createResourceTerrainColors() {
-        Map<TerrainType, Color> colors = new EnumMap<>(TerrainType.class);
-        for (Map.Entry<TerrainType, Color> entry : TERRAIN_COLORS.entrySet()) {
-            Color color = entry.getValue();
-            colors.put(
-                    entry.getKey(),
-                    new Color(
-                            Math.min(255, color.getRed() + 20),
-                            Math.min(255, color.getGreen() + 20),
-                            Math.min(255, color.getBlue() + 20)
-                    )
-            );
-        }
-        return colors;
-    }
-
     private final GameViewModel viewModel;
     private final GameViewState viewState;
-    private final Map<Integer, String> resourceLabels = new java.util.HashMap<>();
+    private final HexTileRenderer tileRenderer = new HexTileRenderer();
 
     private long lastDragRepaintTime;
     private int zoomIndex = DEFAULT_ZOOM_INDEX;
@@ -558,52 +516,47 @@ final class HexMapPanel extends JPanel {
             Hex hex
     ) {
         HexCoordinate coordinate = hex.getCoordinate();
-        Polygon polygon = createHexPolygon(coordinate);
         boolean discovered =
                 viewModel.isDiscovered(coordinate);
 
         Set<Resource> resources = discovered
                 ? hex.getAvailableResources()
                 : Set.of();
-        Color fillColor = discovered
-                ? terrainColor(hex.getTerrain(), resources)
-                : FOG_FILL;
-
-        graphics2D.setColor(fillColor);
-        graphics2D.fillPolygon(polygon);
-
-        drawHexBorder(
-                graphics2D,
-                coordinate,
-                polygon,
-                discovered
+        Point2D.Double center = centerOf(coordinate);
+        BufferedImage tileSprite = tileRenderer.spriteFor(
+                hex,
+                discovered,
+                resources,
+                zoomIndex
         );
 
-        if (coordinate.equals(viewState.getSelectedHex())) {
-            drawSelectionBorder(graphics2D, polygon);
+        graphics2D.drawImage(
+                tileSprite,
+                (int) Math.round(center.x - tileSprite.getWidth() / 2.0),
+                (int) Math.round(center.y - tileSprite.getHeight() / 2.0),
+                null
+        );
+
+        Polygon polygon = null;
+        if (viewModel.ownsTerritory(coordinate)) {
+            polygon = createHexPolygon(coordinate);
+            drawTerritoryBorder(graphics2D, polygon);
         }
 
-        if (discovered) {
-            drawHexContent(graphics2D, hex, resources);
-        } else {
-            drawFogMark(graphics2D, polygon);
+        if (coordinate.equals(viewState.getSelectedHex())) {
+            if (polygon == null) {
+                polygon = createHexPolygon(coordinate);
+            }
+            drawSelectionBorder(graphics2D, polygon);
         }
     }
 
-    private void drawHexBorder(
+    private void drawTerritoryBorder(
             Graphics2D graphics2D,
-            HexCoordinate coordinate,
-            Polygon polygon,
-            boolean discovered
+            Polygon polygon
     ) {
-        if (viewModel.ownsTerritory(coordinate)) {
-            graphics2D.setColor(TERRITORY_BORDER);
-            graphics2D.setStroke(TERRITORY_STROKE);
-        } else {
-            graphics2D.setColor(discovered ? HEX_BORDER : FOG_BORDER);
-            graphics2D.setStroke(HEX_STROKE);
-        }
-
+        graphics2D.setColor(TERRITORY_BORDER);
+        graphics2D.setStroke(TERRITORY_STROKE);
         graphics2D.drawPolygon(polygon);
     }
 
@@ -614,132 +567,6 @@ final class HexMapPanel extends JPanel {
         graphics2D.setColor(SELECTION_BORDER);
         graphics2D.setStroke(SELECTION_STROKE);
         graphics2D.drawPolygon(polygon);
-    }
-
-    private void drawHexContent(
-            Graphics2D graphics2D,
-            Hex hex,
-            Set<Resource> resources
-    ) {
-        Point2D.Double center =
-                centerOf(hex.getCoordinate());
-        double hexSize = currentHexSize();
-
-        drawTerrainLabel(
-                graphics2D,
-                hex,
-                center,
-                hexSize
-        );
-
-        if (!resources.isEmpty()) {
-            drawResources(
-                    graphics2D,
-                    resources,
-                    center,
-                    hexSize
-            );
-        }
-
-        if (hex.getBuilding() != null) {
-            drawBuilding(
-                    graphics2D,
-                    hex.getBuilding().getType(),
-                    center,
-                    hexSize
-            );
-        }
-    }
-
-    private void drawTerrainLabel(
-            Graphics2D graphics2D,
-            Hex hex,
-            Point2D.Double center,
-            double hexSize
-    ) {
-        graphics2D.setFont(TERRAIN_FONTS[zoomIndex]);
-        graphics2D.setColor(TERRAIN_TEXT);
-
-        drawCenteredString(
-                graphics2D,
-                terrainShortName(hex.getTerrain()),
-                center.x,
-                center.y - hexSize * 0.15
-        );
-    }
-
-    private void drawResources(
-            Graphics2D graphics2D,
-            Set<Resource> resources,
-            Point2D.Double center,
-            double hexSize
-    ) {
-        graphics2D.setColor(RESOURCE_BACKGROUND);
-
-        graphics2D.fillRoundRect(
-                (int) (center.x - hexSize * 0.48),
-                (int) (center.y + hexSize * 0.12),
-                (int) (hexSize * 0.96),
-                (int) (hexSize * 0.34),
-                12,
-                12
-        );
-
-        graphics2D.setColor(RESOURCE_TEXT);
-        graphics2D.setFont(SMALL_BOLD_FONTS[zoomIndex]);
-
-        drawCenteredString(
-                graphics2D,
-                resourcesShortName(resources),
-                center.x,
-                center.y + hexSize * 0.36
-        );
-    }
-
-    private void drawBuilding(
-            Graphics2D graphics2D,
-            BuildingType buildingType,
-            Point2D.Double center,
-            double hexSize
-    ) {
-        graphics2D.setColor(BUILDING_BACKGROUND);
-
-        graphics2D.fillOval(
-                (int) (center.x - hexSize * 0.28),
-                (int) (center.y - hexSize * 0.92),
-                (int) (hexSize * 0.56),
-                (int) (hexSize * 0.36)
-        );
-
-        graphics2D.setColor(Color.WHITE);
-        graphics2D.setFont(SMALL_BOLD_FONTS[zoomIndex]);
-
-        drawCenteredString(
-                graphics2D,
-                buildingShortName(buildingType),
-                center.x,
-                center.y - hexSize * 0.66
-        );
-    }
-
-    private void drawFogMark(
-            Graphics2D graphics2D,
-            Polygon polygon
-    ) {
-        Rectangle bounds = polygon.getBounds();
-
-        graphics2D.setColor(FOG_OVERLAY);
-        graphics2D.fillPolygon(polygon);
-
-        graphics2D.setColor(FOG_TEXT);
-        graphics2D.setFont(FOG_FONT);
-
-        drawCenteredString(
-                graphics2D,
-                "?",
-                bounds.getCenterX(),
-                bounds.getCenterY() + 5
-        );
     }
 
     private void drawUnits(
@@ -915,7 +742,7 @@ final class HexMapPanel extends JPanel {
         );
 
         graphics2D.setColor(Color.WHITE);
-        graphics2D.setFont(SMALL_BOLD_FONTS[zoomIndex]);
+        graphics2D.setFont(UNIT_FONTS[zoomIndex]);
 
         drawCenteredString(
                 graphics2D,
@@ -968,9 +795,16 @@ final class HexMapPanel extends JPanel {
             HexCoordinate coordinate
     ) {
         Point2D.Double center = centerOf(coordinate);
+        return createHexPolygonAt(center.x, center.y, currentHexSize());
+    }
+
+    private Polygon createHexPolygonAt(
+            double centerX,
+            double centerY,
+            double hexSize
+    ) {
         int[] pointXs = new int[6];
         int[] pointYs = new int[6];
-        double hexSize = currentHexSize();
 
         for (
                 int vertexIndex = 0;
@@ -978,11 +812,11 @@ final class HexMapPanel extends JPanel {
                 vertexIndex++
         ) {
             pointXs[vertexIndex] = (int) Math.round(
-                    center.x + hexSize * HEX_COSINES[vertexIndex]
+                    centerX + hexSize * HEX_COSINES[vertexIndex]
             );
 
             pointYs[vertexIndex] = (int) Math.round(
-                    center.y + hexSize * HEX_SINES[vertexIndex]
+                    centerY + hexSize * HEX_SINES[vertexIndex]
             );
         }
 
@@ -1022,69 +856,12 @@ final class HexMapPanel extends JPanel {
         return ZOOM_LEVELS[zoomIndex];
     }
 
-    private Color terrainColor(TerrainType terrain, Set<Resource> resources) {
-        return resources.isEmpty()
-                ? TERRAIN_COLORS.get(terrain)
-                : RESOURCE_TERRAIN_COLORS.get(terrain);
-    }
-
     private Color unitColor(UnitType unitType) {
         return switch (unitType) {
             case EXPLORER -> EXPLORER_COLOR;
             case WORKER -> WORKER_COLOR;
             case BUILDER -> BUILDER_COLOR;
             case BORDER_EXPANDER -> BORDER_EXPANDER_COLOR;
-        };
-    }
-
-    private String terrainShortName(
-            TerrainType terrainType
-    ) {
-        return switch (terrainType) {
-            case TOWN_HALL -> "Capital";
-            case PLAINS -> "Plains";
-            case GRASSLAND -> "Grass";
-            case FOREST -> "Forest";
-            case MOUNTAIN -> "Mount";
-        };
-    }
-
-    private String resourcesShortName(
-            Set<Resource> resources
-    ) {
-        int mask = 0;
-        for (Resource resource : resources) {
-            mask |= 1 << resource.ordinal();
-        }
-
-        String cachedLabel = resourceLabels.get(mask);
-        if (cachedLabel != null) {
-            return cachedLabel;
-        }
-
-        List<String> labels = new ArrayList<>(resources.size());
-        if ((mask & (1 << Resource.WOOD.ordinal())) != 0) labels.add("Wood");
-        if ((mask & (1 << Resource.STONE.ordinal())) != 0) labels.add("Stone");
-        if ((mask & (1 << Resource.IRON.ordinal())) != 0) labels.add("Iron");
-        if ((mask & (1 << Resource.FOOD.ordinal())) != 0) labels.add("Food");
-
-        cachedLabel = String.join("/", labels);
-        resourceLabels.put(mask, cachedLabel);
-        return cachedLabel;
-    }
-
-    private String buildingShortName(
-            BuildingType buildingType
-    ) {
-        return switch (buildingType) {
-            case TOWN_HALL -> "TH";
-            case LUMBER_MILL -> "LM";
-            case STONE_MINE -> "SM";
-            case IRON_MINE -> "IM";
-            case FARM -> "FM";
-            case STABLE -> "ST";
-            case VILLAGE -> "VG";
-            case TOWN -> "TN";
         };
     }
 
@@ -1127,4 +904,5 @@ final class HexMapPanel extends JPanel {
             HexCoordinate destination
     ) {
     }
+
 }
