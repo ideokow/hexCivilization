@@ -2,7 +2,7 @@ package controller.game.system;
 
 import model.game.building.Building;
 import model.game.building.ProductionBuilding;
-import model.game.building.TownHall;
+import model.game.townhall.TownHall;
 import model.game.hex.Resource;
 import model.game.registry.BuildingRegistry;
 import model.game.registry.UnitRegistry;

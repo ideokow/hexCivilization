@@ -1,6 +1,7 @@
-package model.game.building;
+package model.game.townhall;
 
-import controller.game.system.StarvationSystem;
+import model.game.building.Building;
+import model.game.building.BuildingType;
 import model.game.hex.HexCoordinate;
 import model.game.hex.HexGrid;
 import model.game.player.Player;
@@ -18,10 +19,8 @@ public class TownHall extends Building {
 
     private final Map<Resource, Integer> resourceStorage;
 
-    private final TownHallUpgrade upgrades;
-
-    private int resourceCap;
-    private final int baseResourceCap = 100;
+    private final Technologies technologies;
+    private final Level level;
 
     private int unitCap;
     private final int baseUnitCap = 10;
@@ -38,30 +37,25 @@ public class TownHall extends Building {
         resourceStorage.put(Resource.FOOD, 10);
         resourceStorage.put(Resource.WOOD, 10);
 
-        resourceCap = baseResourceCap;
         unitCap = baseUnitCap;
 
-        upgrades = new TownHallUpgrade(this);
+        level = Level.LEVEL_1;
+
+        technologies = new Technologies(this);
     }
 
-    // --- upgrade ---
+    // --- Getters ---
 
-    public TownHallUpgrade getUpgrades() {
-        return upgrades;
+    public int getHP(){
+        return level.getBaseMaximumHP() + (technologies.isAcquired(Technology.DEFENCE) ? 50 : 0);
     }
 
-    // --- resource cap ---
-
-    public int getBaseResourceCap() {
-        return baseResourceCap;
+    public Technologies getTechnologies() {
+        return technologies;
     }
 
     public int getResourceCap() {
-        return resourceCap;
-    }
-
-    public void setResourceCap(int resourceCap) {
-        this.resourceCap = resourceCap;
+        return level.getResourceCap();
     }
 
     // --- unit cap ---
@@ -105,29 +99,29 @@ public class TownHall extends Building {
 
     public void addStoneToStorage(int amount) {
         resourceStorage.put(Resource.STONE, resourceStorage.get(Resource.STONE) + amount);
-        if (resourceStorage.get(Resource.STONE) > resourceCap) {
-            resourceStorage.put(Resource.STONE, resourceCap);
+        if (resourceStorage.get(Resource.STONE) > level.getResourceCap()) {
+            resourceStorage.put(Resource.STONE, level.getResourceCap());
         }
     }
 
     public void addIronToStorage(int amount) {
         resourceStorage.put(Resource.IRON, resourceStorage.get(Resource.IRON) + amount);
-        if (resourceStorage.get(Resource.IRON) > resourceCap) {
-            resourceStorage.put(Resource.IRON, resourceCap);
+        if (resourceStorage.get(Resource.IRON) > level.getResourceCap()) {
+            resourceStorage.put(Resource.IRON, level.getResourceCap());
         }
     }
 
     public void addFoodToStorage(int amount) {
         resourceStorage.put(Resource.FOOD, resourceStorage.get(Resource.FOOD) + amount);
-        if (resourceStorage.get(Resource.FOOD) > resourceCap) {
-            resourceStorage.put(Resource.FOOD, resourceCap);
+        if (resourceStorage.get(Resource.FOOD) > level.getResourceCap()) {
+            resourceStorage.put(Resource.FOOD, level.getResourceCap());
         }
     }
 
     public void addWoodToStorage(int amount) {
         resourceStorage.put(Resource.WOOD, resourceStorage.get(Resource.WOOD) + amount);
-        if (resourceStorage.get(Resource.WOOD) > resourceCap) {
-            resourceStorage.put(Resource.WOOD, resourceCap);
+        if (resourceStorage.get(Resource.WOOD) > level.getResourceCap()) {
+            resourceStorage.put(Resource.WOOD, level.getResourceCap());
         }
     }
 

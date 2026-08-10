@@ -1,10 +1,9 @@
 package view.game;
 
-import model.game.building.TownHall;
+import model.game.townhall.TownHall;
 import model.game.hex.Hex;
 import model.game.hex.HexCoordinate;
 import model.game.hex.Resource;
-import model.game.building.Upgrade;
 import model.game.unit.Unit;
 import model.game.unit.UnitType;
 
@@ -37,10 +36,6 @@ public interface GameViewModel {
     );
 
     int getNetResource(Resource resource);
-
-    Upgrade getInQueueUpgrade();
-
-    int getUpgradeRemainingTurns();
 
     UnitType getInQueueUnitType();
 

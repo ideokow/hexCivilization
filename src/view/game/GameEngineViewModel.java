@@ -1,8 +1,7 @@
 package view.game;
 
 import controller.game.GameEngine;
-import model.game.building.TownHall;
-import model.game.building.Upgrade;
+import model.game.townhall.TownHall;
 import model.game.hex.Hex;
 import model.game.hex.HexCoordinate;
 import model.game.hex.Resource;
@@ -85,16 +84,6 @@ final class GameEngineViewModel implements GameViewModel {
                 resource,
                 engine.getTownHall()
         );
-    }
-
-    @Override
-    public Upgrade getInQueueUpgrade() {
-        return engine.getInQueueUpgrade();
-    }
-
-    @Override
-    public int getUpgradeRemainingTurns() {
-        return engine.getUpgradeRemainingTurns();
     }
 
     @Override

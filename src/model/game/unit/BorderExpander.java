@@ -1,6 +1,6 @@
 package model.game.unit;
 
-import model.game.building.TownHall;
+import model.game.townhall.TownHall;
 import model.game.hex.Hex;
 import model.game.hex.HexCoordinate;
 import model.game.hex.HexGrid;

@@ -11,6 +11,7 @@ import model.game.registry.BuildingRegistry;
 import model.game.registry.UnitRegistry;
 import model.game.registry.UpKeepStatus;
 import model.game.route.Route;
+import model.game.townhall.TownHall;
 import model.game.unit.*;
 
 import java.io.IOException;
@@ -36,7 +37,7 @@ public class GameEngine {
     private final ConstructionSystem constructionSystem;
     private final RoutingSystem routingSystem;
     private final StarvationSystem starvationSystem;
-    private final TownHallWaiterSystem townHallWaiterSystem;
+//    private final TownHallWaiterSystem townHallWaiterSystem;
     private final MovementSystem movementSystem;
     private GameController gameController;
 
@@ -70,7 +71,7 @@ public class GameEngine {
         movementSystem = new MovementSystem(hexGrid);
         routingSystem = new RoutingSystem(movementSystem);
         starvationSystem = new StarvationSystem(townHall);
-        townHallWaiterSystem = new TownHallWaiterSystem(townHall);
+//        townHallWaiterSystem = new TownHallWaiterSystem(townHall);
 
         inQueueRoutes = new HashMap<>();
         turnNumber = 1;
@@ -122,16 +123,14 @@ public class GameEngine {
         boolean starvation = starvationSystem.checkStarvationStatus();
         gameController.starvationAlert(starvation);
 
-        // refresh upgrade queue
-        Upgrade doneUpgrade = townHallWaiterSystem.checkUpgrades();
-
-        // refresh generator queue
-        UnitType generatedUnitType = townHallWaiterSystem.checkGeneratorQueue();
-
-        // town hall waiter alert
-        gameController.townHallAlert(doneUpgrade, generatedUnitType);
-
-        // TODO: #UI user listener
+//        // refresh upgrade queue
+//        Upgrade doneUpgrade = townHallWaiterSystem.checkUpgrades();
+//
+//        // refresh generator queue
+//        UnitType generatedUnitType = townHallWaiterSystem.checkGeneratorQueue();
+//
+//        // town hall waiter alert
+//        gameController.townHallAlert(doneUpgrade, generatedUnitType);
     }
 
     /*
@@ -195,29 +194,29 @@ public class GameEngine {
         }
     }
 
-    /*
-    upgrade trigger
-     */
-    public void upgradeTrigger(Upgrade upgrade) {
-        UpgradeStatus upgradeStatus = townHallWaiterSystem.reserveUpgrade(upgrade);
-        gameController.toastAlert(upgradeStatus.getMessage());
-    }
+//    /*
+//    upgrade trigger
+//     */
+//    public void upgradeTrigger(Upgrade upgrade) {
+//        UpgradeStatus upgradeStatus = townHallWaiterSystem.reserveUpgrade(upgrade);
+//        gameController.toastAlert(upgradeStatus.getMessage());
+//    }
 
-    /*
-    generate units
-     */
-    public void generateTrigger(UnitType unitType) {
-        GenerationReserveStatus generationReserveStatus = townHallWaiterSystem.reserveGeneration(unitType);
-        if (generationReserveStatus == GenerationReserveStatus.SUCCESS) {
-            gameController.toastAlert("Generation goes in queue successfully.");
-        }
-        else if (generationReserveStatus == GenerationReserveStatus.GENERATION_IN_QUEUE) {
-            gameController.toastAlert("A generation is in queue already.");
-        }
-        else if (generationReserveStatus == GenerationReserveStatus.STARVATION) {
-            gameController.toastAlert(("You can't generate unit in a crisis."));
-        }
-    }
+//    /*
+//    generate units
+//     */
+//    public void generateTrigger(UnitType unitType) {
+//        GenerationReserveStatus generationReserveStatus = townHallWaiterSystem.reserveGeneration(unitType);
+//        if (generationReserveStatus == GenerationReserveStatus.SUCCESS) {
+//            gameController.toastAlert("Generation goes in queue successfully.");
+//        }
+//        else if (generationReserveStatus == GenerationReserveStatus.GENERATION_IN_QUEUE) {
+//            gameController.toastAlert("A generation is in queue already.");
+//        }
+//        else if (generationReserveStatus == GenerationReserveStatus.STARVATION) {
+//            gameController.toastAlert(("You can't generate unit in a crisis."));
+//        }
+//    }
 
     /*
     expand trigger
@@ -255,20 +254,14 @@ public class GameEngine {
         return turnNumber;
     }
 
-    public Upgrade getInQueueUpgrade() {
-        return townHallWaiterSystem.getInQueueUpgrade();
-    }
-
-    public int getUpgradeRemainingTurns() {
-        return townHallWaiterSystem.getUpgradeRemainingTurns();
-    }
-
     public UnitType getInQueueUnitType() {
-        return townHallWaiterSystem.getInQueueUnitType();
+//        return townHallWaiterSystem.getInQueueUnitType();
+        return null;
     }
 
     public int getGenerationRemainingTurns() {
-        return townHallWaiterSystem.getGenerationRemainingTurns();
+//        return townHallWaiterSystem.getGenerationRemainingTurns();
+        return 0;
     }
 
     public Map<String, Unit> getUnits() {

@@ -1,7 +1,6 @@
 package view.game;
 
 import model.game.building.BuildingType;
-import model.game.building.Upgrade;
 import model.game.hex.Hex;
 import model.game.hex.HexCoordinate;
 import model.game.unit.Builder;
@@ -32,10 +31,8 @@ final class GameSidePanel extends JPanel {
     private final DefaultComboBoxModel<Unit> selectedUnitModel;
     private final JComboBox<Unit> selectedUnitCombo;
     private final JComboBox<BuildingType> buildingCombo;
-    private final JComboBox<Upgrade> upgradeCombo;
     private final JComboBox<UnitType> unitTypeCombo;
     private final JButton buildButton;
-    private final JButton upgradeButton;
     private final JButton generateUnitButton;
     private final JButton stationButton;
     private final JButton expandButton;
@@ -73,11 +70,9 @@ final class GameSidePanel extends JPanel {
                         BuildingType.TOWN
                 }
         );
-        this.upgradeCombo = new JComboBox<>(Upgrade.values());
         this.unitTypeCombo = new JComboBox<>(UnitType.values());
 
         this.buildButton = new JButton("Build");
-        this.upgradeButton = new JButton("Start Upgrade");
         this.generateUnitButton = new JButton("Generate Unit");
         this.stationButton = new JButton("Station Worker");
         this.expandButton = new JButton("Expand Territory");
@@ -123,10 +118,7 @@ final class GameSidePanel extends JPanel {
         add(townHallQueueArea);
         add(Box.createVerticalStrut(8));
 
-        configureUpgradeCombo();
-        add(upgradeCombo);
         add(Box.createVerticalStrut(6));
-        addActionButton(upgradeButton, 34);
         add(Box.createVerticalStrut(6));
 
         configureUnitTypeCombo();
@@ -239,10 +231,6 @@ final class GameSidePanel extends JPanel {
         townHallQueueArea.setLineWrap(true);
         townHallQueueArea.setWrapStyleWord(true);
         townHallQueueArea.setAlignmentX(Component.LEFT_ALIGNMENT);
-    }
-
-    private void configureUpgradeCombo() {
-        styleComboBox(upgradeCombo);
     }
 
     private void configureUnitTypeCombo() {
@@ -479,19 +467,9 @@ final class GameSidePanel extends JPanel {
     }
 
     void refreshTownHallQueue() {
-        Upgrade upgrade = viewModel.getInQueueUpgrade();
         UnitType unitType = viewModel.getInQueueUnitType();
 
         StringBuilder text = new StringBuilder();
-        text.append("Upgrade: ");
-        if (upgrade == null) {
-            text.append("Empty");
-        } else {
-            text.append(upgrade.getName())
-                    .append(" (")
-                    .append(viewModel.getUpgradeRemainingTurns())
-                    .append(" turns)");
-        }
 
         text.append('\n').append("Unit: ");
         if (unitType == null) {
@@ -504,7 +482,6 @@ final class GameSidePanel extends JPanel {
         }
 
         townHallQueueArea.setText(text.toString());
-        upgradeButton.setEnabled(upgrade == null);
         generateUnitButton.setEnabled(unitType == null);
     }
 
@@ -651,14 +628,6 @@ final class GameSidePanel extends JPanel {
         return buildButton;
     }
 
-    JButton getUpgradeButton() {
-        return upgradeButton;
-    }
-
-    JButton getGenerateUnitButton() {
-        return generateUnitButton;
-    }
-
     JButton getStationButton() {
         return stationButton;
     }
@@ -685,10 +654,6 @@ final class GameSidePanel extends JPanel {
 
     BuildingType getSelectedBuildingType() {
         return (BuildingType) buildingCombo.getSelectedItem();
-    }
-
-    Upgrade getSelectedUpgrade() {
-        return (Upgrade) upgradeCombo.getSelectedItem();
     }
 
     UnitType getSelectedUnitType() {

@@ -1,4 +1,4 @@
-package model.game.building;
+package model.game.townhall;
 
 public enum Upgrade {
     RESOURCE(5, "Resource"),

@@ -1,9 +1,6 @@
 package controller.game.system;
 
-import model.game.building.TownHall;
-import model.game.building.TownHallUpgrade;
-import model.game.building.Upgrade;
-import model.game.building.UpgradeStatus;
+import model.game.townhall.*;
 import model.game.unit.UnitType;
 
 /*
@@ -12,11 +9,11 @@ this class manages town hall queues such as upgrade queue and unit generator
 public class TownHallWaiterSystem {
 
     private final TownHall townHall;
-    private final TownHallUpgrade townHallUpgrade;
+    private final Technologies technologies;
 
     public TownHallWaiterSystem(TownHall townHall) {
         this.townHall = townHall;
-        townHallUpgrade = townHall.getUpgrades();
+        technologies = townHall.getTechnologies();
     }
 
     // upgrade queue
@@ -46,55 +43,45 @@ public class TownHallWaiterSystem {
         return null;
     }
 
-    public UpgradeStatus reserveUpgrade(Upgrade upgrade) {
+    public TechnologyAcquireStatus reserveUpgrade(Upgrade upgrade) {
 
-        if (inQueueUpgrade != null) return UpgradeStatus.UPGRADING;
-
-        if (upgrade == Upgrade.RESOURCE) {
-            UpgradeStatus upgradeStatus = townHallUpgrade.canUpgradeResourceStorage();
-
-            if (upgradeStatus == UpgradeStatus.SUCCESS) {
-                townHallUpgrade.upgradeResourceStorage();
-            } else {
-                return upgradeStatus;
-            }
-        }
+        if (inQueueUpgrade != null) return TechnologyAcquireStatus.UPGRADING;
 
         else if (upgrade == Upgrade.STONE) {
-            UpgradeStatus upgradeStatus = townHallUpgrade.canUpgradeStone();
+            TechnologyAcquireStatus upgradeStatus = technologies.canAcquire(Technology.STONE);
 
-            if (townHallUpgrade.canUpgradeStone() == UpgradeStatus.SUCCESS) {
-                townHallUpgrade.upgradeStone();
+            if (technologies.canAcquire(Technology.STONE) == TechnologyAcquireStatus.SUCCESS) {
+                technologies.acquire(Technology.STONE);
             } else {
                 return upgradeStatus;
             }
         }
 
         else if (upgrade == Upgrade.IRON) {
-            UpgradeStatus upgradeStatus = townHallUpgrade.canUpgradeIron();
+            TechnologyAcquireStatus upgradeStatus = technologies.canAcquire(Technology.IRON);
 
-            if (townHallUpgrade.canUpgradeIron() == UpgradeStatus.SUCCESS) {
-                townHallUpgrade.upgradeIron();
+            if (technologies.canAcquire(Technology.IRON) == TechnologyAcquireStatus.SUCCESS) {
+                technologies.acquire(Technology.IRON);
             } else {
                 return upgradeStatus;
             }
         }
 
         else if (upgrade == Upgrade.TOOLS) {
-            UpgradeStatus upgradeStatus = townHallUpgrade.canUpgradeTools();
+            TechnologyAcquireStatus upgradeStatus = technologies.canAcquire(Technology.GOOD_TOOLS);
 
-            if (townHallUpgrade.canUpgradeTools() == UpgradeStatus.SUCCESS) {
-                townHallUpgrade.upgradeTools();
+            if (technologies.canAcquire(Technology.GOOD_TOOLS) == TechnologyAcquireStatus.SUCCESS) {
+                technologies.acquire(Technology.GOOD_TOOLS);
             } else {
                 return upgradeStatus;
             }
         }
 
         else if (upgrade == Upgrade.TOWN) {
-            UpgradeStatus upgradeStatus = townHallUpgrade.canUpgradeTown();
+            TechnologyAcquireStatus upgradeStatus = technologies.canAcquire(Technology.URBANIZATION);
 
-            if (townHallUpgrade.canUpgradeTown() == UpgradeStatus.SUCCESS) {
-                townHallUpgrade.upgradeTown();
+            if (technologies.canAcquire(Technology.URBANIZATION) == TechnologyAcquireStatus.SUCCESS) {
+                technologies.acquire(Technology.URBANIZATION);
             } else {
                 return upgradeStatus;
             }
@@ -103,7 +90,7 @@ public class TownHallWaiterSystem {
         inQueueUpgrade = upgrade;
         upgradeQueueTurns = upgrade.getUpgradeQueueTurns();
 
-        return UpgradeStatus.SUCCESS;
+        return TechnologyAcquireStatus.SUCCESS;
     }
 
     public Upgrade getInQueueUpgrade() {

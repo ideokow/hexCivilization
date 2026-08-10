@@ -3,6 +3,7 @@ package model.game.registry;
 import model.game.building.*;
 import model.game.hex.HexGrid;
 import model.game.hex.Resource;
+import model.game.townhall.TownHall;
 import model.game.unit.Worker;
 
 import java.util.ArrayList;

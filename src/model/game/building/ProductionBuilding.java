@@ -3,6 +3,8 @@ package model.game.building;
 import model.game.hex.HexCoordinate;
 import model.game.hex.Resource;
 import model.game.player.Player;
+import model.game.townhall.Technology;
+import model.game.townhall.TownHall;
 import model.game.unit.Worker;
 
 import java.util.ArrayList;
@@ -92,7 +94,7 @@ public class ProductionBuilding extends Building {
     public int getProductionAmount(TownHall townHall) {
         int baseRate = productionType.getProductionRate();
         int workerN = stationedWorkers.size();
-        double techCoefficient = townHall.getUpgrades().isToolsUpgrade() ? 1.5 : 1.0;
+        double techCoefficient = townHall.getTechnologies().isAcquired(Technology.GOOD_TOOLS) ? 1.5 : 1.0;
         return ((int)(((double) (baseRate * workerN)) * techCoefficient));
     }
 

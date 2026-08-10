@@ -3,6 +3,7 @@ package model.game.building;
 import model.game.hex.HexCoordinate;
 import model.game.hex.Resource;
 import model.game.player.Player;
+import model.game.townhall.TownHall;
 
 import java.util.Map;
 

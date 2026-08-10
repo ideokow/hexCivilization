@@ -9,6 +9,8 @@ import model.game.hex.TerrainType;
 import model.game.player.Player;
 import model.game.registry.BuildingRegistry;
 import model.game.registry.UnitRegistry;
+import model.game.townhall.Technology;
+import model.game.townhall.TownHall;
 import model.game.unit.Builder;
 import model.game.unit.Unit;
 
@@ -74,16 +76,16 @@ public class ConstructionSystem {
     }
 
     private boolean upgradeCheck(BuildingType buildingType) {
-        if (buildingType == BuildingType.STONE_MINE && !townHall.getUpgrades().isStoneUpgrade()) {
+        if (buildingType == BuildingType.STONE_MINE && !townHall.getTechnologies().isAcquired(Technology.STONE)) {
             return false;
         }
-        if (buildingType == BuildingType.IRON_MINE && !townHall.getUpgrades().isIronUpgrade()) {
+        if (buildingType == BuildingType.IRON_MINE && !townHall.getTechnologies().isAcquired(Technology.IRON)) {
             return false;
         }
-        if (buildingType == BuildingType.TOWN && !townHall.getUpgrades().isTownUpgrade()) {
+        if (buildingType == BuildingType.TOWN && !townHall.getTechnologies().isAcquired(Technology.URBANIZATION)) {
             return false;
         }
-        if (buildingType == BuildingType.VILLAGE && !townHall.getUpgrades().isTownUpgrade()) {
+        if (buildingType == BuildingType.VILLAGE && !townHall.getTechnologies().isAcquired(Technology.URBANIZATION)) {
             return false;
         }
         return true;

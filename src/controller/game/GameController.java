@@ -1,6 +1,5 @@
 package controller.game;
 
-import model.game.building.Upgrade;
 import model.game.hex.HexCoordinate;
 import model.game.hex.Resource;
 import model.game.registry.UpKeepStatus;
@@ -34,8 +33,8 @@ public class GameController {
         view.setHexClickHandler(this::handleHexClick);
         view.getEndTurnButton().addActionListener(e -> handleEndTurn());
         view.getBuildButton().addActionListener(e -> handleBuild());
-        view.getUpgradeButton().addActionListener(e -> handleUpgrade());
-        view.getGenerateUnitButton().addActionListener(e -> handleGenerateUnit());
+//        view.getUpgradeButton().addActionListener(e -> handleUpgrade());
+//        view.getGenerateUnitButton().addActionListener(e -> handleGenerateUnit());
         view.getStationButton().addActionListener(e -> handleStationWorker());
         view.getExpandButton().addActionListener(e -> handleExpand());
         view.getRouteButton().addActionListener(e -> beginRouteSelection());
@@ -191,19 +190,12 @@ public class GameController {
         view.refresh();
     }
 
-    private void handleUpgrade() {
-        exitSelectionMode();
-
-        engine.upgradeTrigger(view.getSelectedUpgrade());
-        view.refresh();
-    }
-
-    private void handleGenerateUnit() {
-        exitSelectionMode();
-
-        engine.generateTrigger(view.getSelectedUnitType());
-        view.refresh();
-    }
+//    private void handleGenerateUnit() {
+//        exitSelectionMode();
+//
+//        engine.generateTrigger(view.getSelectedUnitType());
+//        view.refresh();
+//    }
 
     // --- alert triggers ---
 
@@ -224,14 +216,14 @@ public class GameController {
         }
     }
 
-    public void townHallAlert(Upgrade upgrade, UnitType unitType) {
-        if (upgrade != null) {
-            toastAlert(MessageFormat.formatUpgradeAlert(upgrade));
-        }
-        if (unitType != null) {
-            toastAlert(MessageFormat.formatGeneratedAlert(unitType));
-        }
-    }
+//    public void townHallAlert(Upgrade upgrade, UnitType unitType) {
+//        if (upgrade != null) {
+//            toastAlert(MessageFormat.formatUpgradeAlert(upgrade));
+//        }
+//        if (unitType != null) {
+//            toastAlert(MessageFormat.formatGeneratedAlert(unitType));
+//        }
+//    }
 
     public void toastAlert(String message) {
         view.showToast(message);
