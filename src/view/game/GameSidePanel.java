@@ -467,7 +467,7 @@ final class GameSidePanel extends JPanel {
     }
 
     void refreshTownHallQueue() {
-        UnitType unitType = viewModel.getInQueueUnitType();
+        UnitType unitType = null; //viewModel.getInQueueUnitType();
 
         StringBuilder text = new StringBuilder();
 
@@ -477,7 +477,7 @@ final class GameSidePanel extends JPanel {
         } else {
             text.append(unitType.getName())
                     .append(" (")
-                    .append(viewModel.getGenerationRemainingTurns())
+//                    .append(viewModel.getGenerationRemainingTurns())
                     .append(" turns)");
         }
 

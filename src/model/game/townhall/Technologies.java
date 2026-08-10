@@ -27,7 +27,6 @@ public class Technologies {
     }
 
     public void acquire(Technology toAcquire) {
-        if (!canAcquire(toAcquire).equals(TechnologyAcquireStatus.SUCCESS)) return;
         acquiredTechnologies.add(toAcquire);
     }
 

@@ -20,7 +20,7 @@ public class TownHall extends Building {
     private final Map<Resource, Integer> resourceStorage;
 
     private final Technologies technologies;
-    private final Level level;
+    private Level level;
 
     private int unitCap;
     private final int baseUnitCap = 10;
@@ -38,10 +38,10 @@ public class TownHall extends Building {
         resourceStorage.put(Resource.WOOD, 10);
 
         unitCap = baseUnitCap;
-
         level = Level.LEVEL_1;
-
         technologies = new Technologies(this);
+
+        generateInitialUnits();
     }
 
     // --- Getters ---
@@ -58,19 +58,14 @@ public class TownHall extends Building {
         return level.getResourceCap();
     }
 
-    // --- unit cap ---
+    // --- Level Getter/Setter ---
 
-    public int getUnitCap() {
-        return unitCap;
+    public Level getLevel() {
+        return level;
     }
 
-    public int getUnitNumber() {
-        return unitNumber;
-    }
-
-    public void setUnitCap(int townsNumber, int villageNumber) {
-        unitCap = (int) (((double) baseUnitCap) * (((double) townsNumber * 1) + ((double) villageNumber * 0.5) + 1.0));
-        if (unitCap < unitNumber) unitCap = unitNumber;
+    public void setLevel(Level level) {
+        this.level = level;
     }
 
     // --- storage getter ---
@@ -151,13 +146,6 @@ public class TownHall extends Building {
         }
     }
 
-    // Safeguard resource generator
-
-    public void safeGuardGenerator() {
-        addWoodToStorage(SAFE_GUARD_VALUE);
-        addFoodToStorage(SAFE_GUARD_VALUE);
-    }
-
     // --- storage execution ---
 
     public boolean canAfford(Map<Resource, Integer> cost) {
@@ -178,9 +166,9 @@ public class TownHall extends Building {
         return true;
     }
 
-    public boolean spendResources(Map<Resource, Integer> cost) {
+    public void spendResources(Map<Resource, Integer> cost) {
         if (!canAfford(cost)) {
-            return false;
+            return;
         }
         if (cost.containsKey(Resource.STONE)) {
             deductStoneStorage(cost.get(Resource.STONE));
@@ -194,10 +182,9 @@ public class TownHall extends Building {
         if (cost.containsKey(Resource.WOOD)) {
             deductWoodStorage(cost.get(Resource.WOOD));
         }
-        return true;
     }
 
-    public boolean addResources(Map<Resource, Integer> resources) {
+    public void addResources(Map<Resource, Integer> resources) {
         if (resources.containsKey(Resource.STONE)) {
             addStoneToStorage(resources.get(Resource.STONE));
         }
@@ -210,20 +197,43 @@ public class TownHall extends Building {
         if (resources.containsKey(Resource.WOOD)) {
             addWoodToStorage(resources.get(Resource.WOOD));
         }
-        return true;
+    }
+
+    // --- unit cap ---
+
+    public boolean canGenerateUnit() {
+        return unitNumber < unitCap;
+    }
+
+    public int getUnitCap() {
+        return unitCap;
+    }
+
+    public int getUnitNumber() {
+        return unitNumber;
+    }
+
+    public void setUnitCap(int townsNumber, int villageNumber) {
+        unitCap = (int) (((double) baseUnitCap) * (((double) townsNumber * 1) + ((double) villageNumber * 0.5) + 1.0));
+        if (unitCap < unitNumber) unitCap = unitNumber;
     }
 
     // --- unit generation ---
 
-    public boolean generateUnit(UnitType unitType) {
+    private void generateInitialUnits() {
+        generateUnit(UnitType.BUILDER);
+        generateUnit(UnitType.BUILDER);
+        generateUnit(UnitType.WORKER);
+        generateUnit(UnitType.WORKER);
+        generateUnit(UnitType.EXPLORER);
+    }
 
-        if (unitNumber >= unitCap) {
-            return false;
-        }
+    public void generateUnit(UnitType unitType) {
 
-        Unit unit;
+        if (!canGenerateUnit()) return;
 
         // make unit
+        Unit unit;
         if (unitType == UnitType.WORKER) {
             unit = new Worker(getOwner(), getPosition());
         }
@@ -249,8 +259,6 @@ public class TownHall extends Building {
         // place unit on hex
         grid.get(new HexCoordinate(0, 0)).addUnit(unit);
         unitNumber++;
-
-        return true;
     }
 
     public void decreaseUnitNumber() {

@@ -11,7 +11,11 @@ import model.game.registry.BuildingRegistry;
 import model.game.registry.UnitRegistry;
 import model.game.registry.UpKeepStatus;
 import model.game.route.Route;
+import model.game.townhall.Level;
+import model.game.townhall.Technology;
+import model.game.townhall.TechnologyAcquireStatus;
 import model.game.townhall.TownHall;
+import model.game.townhall.opration.*;
 import model.game.unit.*;
 
 import java.io.IOException;
@@ -37,7 +41,7 @@ public class GameEngine {
     private final ConstructionSystem constructionSystem;
     private final RoutingSystem routingSystem;
     private final StarvationSystem starvationSystem;
-//    private final TownHallWaiterSystem townHallWaiterSystem;
+    private final OperationQueue operationQueue;
     private final MovementSystem movementSystem;
     private GameController gameController;
 
@@ -59,19 +63,12 @@ public class GameEngine {
         hexGrid.get(zero).setBuilding(townHall);
         BuildingRegistry.getInstance().addBuilding(townHall);
 
-        // initial units
-        townHall.generateUnit(UnitType.BUILDER);
-        townHall.generateUnit(UnitType.BUILDER);
-        townHall.generateUnit(UnitType.WORKER);
-        townHall.generateUnit(UnitType.WORKER);
-        townHall.generateUnit(UnitType.EXPLORER);
-
         // essential systems
         constructionSystem = new ConstructionSystem(hexGrid, townHall);
+        operationQueue = new OperationQueue(townHall);
         movementSystem = new MovementSystem(hexGrid);
         routingSystem = new RoutingSystem(movementSystem);
         starvationSystem = new StarvationSystem(townHall);
-//        townHallWaiterSystem = new TownHallWaiterSystem(townHall);
 
         inQueueRoutes = new HashMap<>();
         turnNumber = 1;
@@ -123,14 +120,8 @@ public class GameEngine {
         boolean starvation = starvationSystem.checkStarvationStatus();
         gameController.starvationAlert(starvation);
 
-//        // refresh upgrade queue
-//        Upgrade doneUpgrade = townHallWaiterSystem.checkUpgrades();
-//
-//        // refresh generator queue
-//        UnitType generatedUnitType = townHallWaiterSystem.checkGeneratorQueue();
-//
-//        // town hall waiter alert
-//        gameController.townHallAlert(doneUpgrade, generatedUnitType);
+        // operation queue
+        operationQueue.handleTurn();
     }
 
     /*
@@ -194,29 +185,50 @@ public class GameEngine {
         }
     }
 
-//    /*
-//    upgrade trigger
-//     */
-//    public void upgradeTrigger(Upgrade upgrade) {
-//        UpgradeStatus upgradeStatus = townHallWaiterSystem.reserveUpgrade(upgrade);
-//        gameController.toastAlert(upgradeStatus.getMessage());
-//    }
+    /*
+    acquire technology trigger
+     */
+    public void acquireTechnologyTrigger(Technology technology) {
+        TownHallOperation operation = new AcquireTechnologyOperation(technology, operationQueue);
+        OperationCheckResult result = operationQueue.reserveOperation(operation);
+        String message;
+        if (!result.getStatus().equals(OperationStatus.POSSIBLE)) {
+            message = result.getMessage();
+        } else {
+            message = TechnologyAcquireStatus.SUCCESS.getMessage();
+        }
+        gameController.toastAlert(message);
+    }
 
-//    /*
-//    generate units
-//     */
-//    public void generateTrigger(UnitType unitType) {
-//        GenerationReserveStatus generationReserveStatus = townHallWaiterSystem.reserveGeneration(unitType);
-//        if (generationReserveStatus == GenerationReserveStatus.SUCCESS) {
-//            gameController.toastAlert("Generation goes in queue successfully.");
-//        }
-//        else if (generationReserveStatus == GenerationReserveStatus.GENERATION_IN_QUEUE) {
-//            gameController.toastAlert("A generation is in queue already.");
-//        }
-//        else if (generationReserveStatus == GenerationReserveStatus.STARVATION) {
-//            gameController.toastAlert(("You can't generate unit in a crisis."));
-//        }
-//    }
+    /*
+    generate unit trigger
+     */
+    public void generateUnitTrigger(UnitType unitType) {
+        TownHallOperation operation = new GenerateUnitOperation(unitType, operationQueue);
+        OperationCheckResult result = operationQueue.reserveOperation(operation);
+        String message;
+        if (!result.getStatus().equals(OperationStatus.POSSIBLE)) {
+            message = result.getMessage();
+        } else {
+            message = "Unit generation process started.";
+        }
+        gameController.toastAlert(message);
+    }
+
+    /*
+    level up trigger
+     */
+    public void levelUpTrigger(Level level) {
+        TownHallOperation operation = new LevelUpOperation(level, operationQueue);
+        OperationCheckResult result = operationQueue.reserveOperation(operation);
+        String message;
+        if (!result.getStatus().equals(OperationStatus.POSSIBLE)) {
+            message = result.getMessage();
+        } else {
+            message = "Level Up process started.";
+        }
+        gameController.toastAlert(message);
+    }
 
     /*
     expand trigger
@@ -252,16 +264,6 @@ public class GameEngine {
 
     public int getTurnNumber() {
         return turnNumber;
-    }
-
-    public UnitType getInQueueUnitType() {
-//        return townHallWaiterSystem.getInQueueUnitType();
-        return null;
-    }
-
-    public int getGenerationRemainingTurns() {
-//        return townHallWaiterSystem.getGenerationRemainingTurns();
-        return 0;
     }
 
     public Map<String, Unit> getUnits() {

@@ -8,9 +8,7 @@ public enum TechnologyAcquireStatus {
     BAD_HIERARCHY
             ("The required previous technology has not been acquired."),
     TECHNOLOGY_ACQUIRED
-            ("TownHall has acquired."),
-    UPGRADING
-            ("A technology acquire is in queue.");
+            ("TownHall has acquired.");
 
     private final String message;
 

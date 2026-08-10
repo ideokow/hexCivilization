@@ -7,7 +7,6 @@ import model.game.hex.HexCoordinate;
 import model.game.hex.Resource;
 import model.game.registry.BuildingRegistry;
 import model.game.unit.Unit;
-import model.game.unit.UnitType;
 
 import java.util.Collection;
 import java.util.List;
@@ -84,15 +83,5 @@ final class GameEngineViewModel implements GameViewModel {
                 resource,
                 engine.getTownHall()
         );
-    }
-
-    @Override
-    public UnitType getInQueueUnitType() {
-        return engine.getInQueueUnitType();
-    }
-
-    @Override
-    public int getGenerationRemainingTurns() {
-        return engine.getGenerationRemainingTurns();
     }
 }
