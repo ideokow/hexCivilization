@@ -3,6 +3,8 @@ package controller.game;
 import model.game.hex.HexCoordinate;
 import model.game.hex.Resource;
 import model.game.registry.UpKeepStatus;
+import model.game.townhall.Level;
+import model.game.townhall.Technology;
 import model.game.unit.Unit;
 import model.game.unit.UnitType;
 import view.game.GameView;
@@ -33,8 +35,9 @@ public class GameController {
         view.setHexClickHandler(this::handleHexClick);
         view.getEndTurnButton().addActionListener(e -> handleEndTurn());
         view.getBuildButton().addActionListener(e -> handleBuild());
-//        view.getUpgradeButton().addActionListener(e -> handleUpgrade());
-//        view.getGenerateUnitButton().addActionListener(e -> handleGenerateUnit());
+        view.getLevelUpButton().addActionListener(e -> handleLevelUp());
+        view.getAcquireTechnologyButton().addActionListener(e -> handleAcquireTechnology());
+        view.getGenerateUnitButton().addActionListener(e -> handleGenerateUnit());
         view.getStationButton().addActionListener(e -> handleStationWorker());
         view.getExpandButton().addActionListener(e -> handleExpand());
         view.getRouteButton().addActionListener(e -> beginRouteSelection());
@@ -190,12 +193,35 @@ public class GameController {
         view.refresh();
     }
 
-//    private void handleGenerateUnit() {
-//        exitSelectionMode();
-//
-//        engine.generateTrigger(view.getSelectedUnitType());
-//        view.refresh();
-//    }
+    private void handleLevelUp() {
+        exitSelectionMode();
+
+        Level level = view.getSelectedLevel();
+        if (level != null) {
+            engine.levelUpTrigger(level);
+        }
+        view.refresh();
+    }
+
+    private void handleAcquireTechnology() {
+        exitSelectionMode();
+
+        Technology technology = view.getSelectedTechnology();
+        if (technology != null) {
+            engine.acquireTechnologyTrigger(technology);
+        }
+        view.refresh();
+    }
+
+    private void handleGenerateUnit() {
+        exitSelectionMode();
+
+        UnitType unitType = view.getSelectedUnitType();
+        if (unitType != null) {
+            engine.generateUnitTrigger(unitType);
+        }
+        view.refresh();
+    }
 
     // --- alert triggers ---
 

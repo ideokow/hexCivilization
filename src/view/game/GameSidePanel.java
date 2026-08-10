@@ -3,6 +3,12 @@ package view.game;
 import model.game.building.BuildingType;
 import model.game.hex.Hex;
 import model.game.hex.HexCoordinate;
+import model.game.townhall.Level;
+import model.game.townhall.Technology;
+import model.game.townhall.opration.AcquireTechnologyOperation;
+import model.game.townhall.opration.GenerateUnitOperation;
+import model.game.townhall.opration.LevelUpOperation;
+import model.game.townhall.opration.TownHallOperation;
 import model.game.unit.Builder;
 import model.game.unit.Unit;
 import model.game.unit.Worker;
@@ -31,8 +37,12 @@ final class GameSidePanel extends JPanel {
     private final DefaultComboBoxModel<Unit> selectedUnitModel;
     private final JComboBox<Unit> selectedUnitCombo;
     private final JComboBox<BuildingType> buildingCombo;
+    private final JComboBox<Level> levelCombo;
+    private final JComboBox<Technology> technologyCombo;
     private final JComboBox<UnitType> unitTypeCombo;
     private final JButton buildButton;
+    private final JButton levelUpButton;
+    private final JButton acquireTechnologyButton;
     private final JButton generateUnitButton;
     private final JButton stationButton;
     private final JButton expandButton;
@@ -70,9 +80,15 @@ final class GameSidePanel extends JPanel {
                         BuildingType.TOWN
                 }
         );
+        this.levelCombo = new JComboBox<>(
+                new Level[]{Level.LEVEL_2, Level.LEVEL_3}
+        );
+        this.technologyCombo = new JComboBox<>(Technology.values());
         this.unitTypeCombo = new JComboBox<>(UnitType.values());
 
         this.buildButton = new JButton("Build");
+        this.levelUpButton = new JButton("Upgrade Town Hall");
+        this.acquireTechnologyButton = new JButton("Research Technology");
         this.generateUnitButton = new JButton("Generate Unit");
         this.stationButton = new JButton("Station Worker");
         this.expandButton = new JButton("Expand Territory");
@@ -118,7 +134,16 @@ final class GameSidePanel extends JPanel {
         add(townHallQueueArea);
         add(Box.createVerticalStrut(8));
 
+        configureLevelCombo();
+        add(levelCombo);
         add(Box.createVerticalStrut(6));
+        addActionButton(levelUpButton, 34);
+        add(Box.createVerticalStrut(6));
+
+        configureTechnologyCombo();
+        add(technologyCombo);
+        add(Box.createVerticalStrut(6));
+        addActionButton(acquireTechnologyButton, 34);
         add(Box.createVerticalStrut(6));
 
         configureUnitTypeCombo();
@@ -237,6 +262,14 @@ final class GameSidePanel extends JPanel {
         styleComboBox(unitTypeCombo);
     }
 
+    private void configureLevelCombo() {
+        styleComboBox(levelCombo);
+    }
+
+    private void configureTechnologyCombo() {
+        styleComboBox(technologyCombo);
+    }
+
     private void configureBuildingCombo() {
         styleComboBox(buildingCombo);
     }
@@ -284,6 +317,10 @@ final class GameSidePanel extends JPanel {
                                 isSelected,
                                 false
                         );
+
+                if (value instanceof Enum<?> enumValue) {
+                    label.setText(ViewTextFormatter.pretty(enumValue));
+                }
 
                 label.setOpaque(true);
                 label.setForeground(
@@ -467,22 +504,39 @@ final class GameSidePanel extends JPanel {
     }
 
     void refreshTownHallQueue() {
-        UnitType unitType = null; //viewModel.getInQueueUnitType();
+        TownHallOperation operation = viewModel.getInQueueOperation();
+        boolean queueAvailable = operation == null;
 
-        StringBuilder text = new StringBuilder();
-
-        text.append('\n').append("Unit: ");
-        if (unitType == null) {
-            text.append("Empty");
+        if (operation == null) {
+            townHallQueueArea.setText("Empty");
         } else {
-            text.append(unitType.getName())
-                    .append(" (")
-//                    .append(viewModel.getGenerationRemainingTurns())
-                    .append(" turns)");
+            townHallQueueArea.setText(buildOperationText(operation));
         }
 
-        townHallQueueArea.setText(text.toString());
-        generateUnitButton.setEnabled(unitType == null);
+        levelUpButton.setEnabled(queueAvailable);
+        acquireTechnologyButton.setEnabled(queueAvailable);
+        generateUnitButton.setEnabled(queueAvailable);
+    }
+
+    private String buildOperationText(TownHallOperation operation) {
+        String operationName;
+
+        if (operation instanceof GenerateUnitOperation generate) {
+            operationName = "Generating "
+                    + ViewTextFormatter.pretty(generate.getUnitType());
+        } else if (operation instanceof AcquireTechnologyOperation acquire) {
+            operationName = "Researching "
+                    + ViewTextFormatter.pretty(acquire.getTechnology());
+        } else if (operation instanceof LevelUpOperation levelUp) {
+            operationName = "Upgrading to Town Hall level "
+                    + levelUp.getLevel().getLevelN();
+        } else {
+            operationName = ViewTextFormatter.pretty(operation.getType());
+        }
+
+        return operationName
+                + "\nRemaining turns: "
+                + operation.getTurnsRemaining();
     }
 
     void setRouteControls(boolean unitSelected, boolean routeExists) {
@@ -628,6 +682,18 @@ final class GameSidePanel extends JPanel {
         return buildButton;
     }
 
+    JButton getLevelUpButton() {
+        return levelUpButton;
+    }
+
+    JButton getAcquireTechnologyButton() {
+        return acquireTechnologyButton;
+    }
+
+    JButton getGenerateUnitButton() {
+        return generateUnitButton;
+    }
+
     JButton getStationButton() {
         return stationButton;
     }
@@ -654,6 +720,14 @@ final class GameSidePanel extends JPanel {
 
     BuildingType getSelectedBuildingType() {
         return (BuildingType) buildingCombo.getSelectedItem();
+    }
+
+    Level getSelectedLevel() {
+        return (Level) levelCombo.getSelectedItem();
+    }
+
+    Technology getSelectedTechnology() {
+        return (Technology) technologyCombo.getSelectedItem();
     }
 
     UnitType getSelectedUnitType() {

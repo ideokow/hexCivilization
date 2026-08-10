@@ -17,8 +17,14 @@ public class Technologies {
         if (acquiredTechnologies.contains(toAcquire)) {
             return TechnologyAcquireStatus.TECHNOLOGY_ACQUIRED;
         }
-        if (!acquiredTechnologies.contains(toAcquire.getTechnologyDependency())) {
+        if (toAcquire.getTechnologyDependency() != null
+                && !acquiredTechnologies.contains(toAcquire.getTechnologyDependency())) {
             return TechnologyAcquireStatus.BAD_HIERARCHY;
+        }
+        if (toAcquire.getLevelDependency() != null
+                && townHall.getLevel().getLevelN()
+                < toAcquire.getLevelDependency().getLevelN()) {
+            return TechnologyAcquireStatus.TOWN_HALL_LEVEL_TOO_LOW;
         }
         if (!townHall.canAfford(toAcquire.getAcquireCost())) {
             return TechnologyAcquireStatus.NOT_ENOUGH_RESOURCE;

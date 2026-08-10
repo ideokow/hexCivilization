@@ -3,6 +3,8 @@ package view.game;
 import controller.game.GameEngine;
 import model.game.building.BuildingType;
 import model.game.hex.HexCoordinate;
+import model.game.townhall.Level;
+import model.game.townhall.Technology;
 import model.game.unit.Unit;
 import model.game.unit.UnitType;
 
@@ -50,7 +52,13 @@ public class GameView extends JFrame {
     private void assembleView() {
         add(hudPanel, BorderLayout.NORTH);
         add(mapPanel, BorderLayout.CENTER);
-        add(sidePanel, BorderLayout.EAST);
+        JScrollPane sidePanelScroll = new JScrollPane(sidePanel);
+        sidePanelScroll.setBorder(null);
+        sidePanelScroll.setHorizontalScrollBarPolicy(
+                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER
+        );
+        sidePanelScroll.getVerticalScrollBar().setUnitIncrement(16);
+        add(sidePanelScroll, BorderLayout.EAST);
         add(statusPanel, BorderLayout.SOUTH);
     }
 
@@ -80,6 +88,18 @@ public class GameView extends JFrame {
 
     public JButton getStationButton() {
         return sidePanel.getStationButton();
+    }
+
+    public JButton getLevelUpButton() {
+        return sidePanel.getLevelUpButton();
+    }
+
+    public JButton getAcquireTechnologyButton() {
+        return sidePanel.getAcquireTechnologyButton();
+    }
+
+    public JButton getGenerateUnitButton() {
+        return sidePanel.getGenerateUnitButton();
     }
 
     public JButton getExpandButton() {
@@ -131,6 +151,14 @@ public class GameView extends JFrame {
 
     public BuildingType getSelectedBuildingType() {
         return sidePanel.getSelectedBuildingType();
+    }
+
+    public Level getSelectedLevel() {
+        return sidePanel.getSelectedLevel();
+    }
+
+    public Technology getSelectedTechnology() {
+        return sidePanel.getSelectedTechnology();
     }
 
     public UnitType getSelectedUnitType() {

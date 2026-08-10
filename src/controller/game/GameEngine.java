@@ -230,6 +230,10 @@ public class GameEngine {
         gameController.toastAlert(message);
     }
 
+    public TownHallOperation getInQueueOperation() {
+        return operationQueue.getInQueueOperation();
+    }
+
     /*
     expand trigger
      */

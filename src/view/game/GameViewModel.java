@@ -4,6 +4,7 @@ import model.game.townhall.TownHall;
 import model.game.hex.Hex;
 import model.game.hex.HexCoordinate;
 import model.game.hex.Resource;
+import model.game.townhall.opration.TownHallOperation;
 import model.game.unit.Unit;
 
 import java.util.Collection;
@@ -35,4 +36,6 @@ public interface GameViewModel {
     );
 
     int getNetResource(Resource resource);
+
+    TownHallOperation getInQueueOperation();
 }

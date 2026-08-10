@@ -12,6 +12,10 @@ public class AcquireTechnologyOperation extends TownHallOperation {
         this.technology = technology;
     }
 
+    public Technology getTechnology() {
+        return technology;
+    }
+
     @Override
     protected void onReserve() {
         if (!canOperate().isPossible()) return;
@@ -22,13 +26,13 @@ public class AcquireTechnologyOperation extends TownHallOperation {
     protected void onComplete() {
         TechnologyAcquireStatus canAcquire = getQueue().getTownHall().getTechnologies().canAcquire(technology);
         if (
-            canAcquire.equals(TechnologyAcquireStatus.TECHNOLOGY_ACQUIRED) ||
-            canAcquire.equals(TechnologyAcquireStatus.BAD_HIERARCHY)
+            canAcquire.equals(TechnologyAcquireStatus.SUCCESS) ||
+            canAcquire.equals(TechnologyAcquireStatus.NOT_ENOUGH_RESOURCE)
         ) {
-            onCancel();
+            getQueue().getTownHall().getTechnologies().acquire(technology);
             return;
         }
-        getQueue().getTownHall().getTechnologies().acquire(technology);
+        onCancel();
     }
 
     @Override
@@ -44,7 +48,6 @@ public class AcquireTechnologyOperation extends TownHallOperation {
             return OperationCheckResult.possible();
         }
         else {
-            cancel();
             return OperationCheckResult.impossible(canAcquire.getMessage());
         }
     }

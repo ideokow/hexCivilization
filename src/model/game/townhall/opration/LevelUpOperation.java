@@ -11,6 +11,10 @@ public class LevelUpOperation extends TownHallOperation {
         this.level = level;
     }
 
+    public Level getLevel() {
+        return level;
+    }
+
     @Override
     protected void onReserve() {
         if (!canOperate().isPossible()) return;
@@ -41,7 +45,6 @@ public class LevelUpOperation extends TownHallOperation {
             return OperationCheckResult.possible();
         }
         else {
-            cancel();
             return OperationCheckResult.impossible("You can't upgrade to this level!");
         }
     }

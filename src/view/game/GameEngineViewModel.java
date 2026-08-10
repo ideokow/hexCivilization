@@ -6,6 +6,7 @@ import model.game.hex.Hex;
 import model.game.hex.HexCoordinate;
 import model.game.hex.Resource;
 import model.game.registry.BuildingRegistry;
+import model.game.townhall.opration.TownHallOperation;
 import model.game.unit.Unit;
 
 import java.util.Collection;
@@ -83,5 +84,10 @@ final class GameEngineViewModel implements GameViewModel {
                 resource,
                 engine.getTownHall()
         );
+    }
+
+    @Override
+    public TownHallOperation getInQueueOperation() {
+        return engine.getInQueueOperation();
     }
 }

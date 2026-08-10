@@ -13,6 +13,10 @@ public class GenerateUnitOperation extends TownHallOperation {
         this.unitType = unitType;
     }
 
+    public UnitType getUnitType() {
+        return unitType;
+    }
+
     @Override
     protected void onReserve() {}
 

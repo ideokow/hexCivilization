@@ -19,15 +19,15 @@ public abstract class TownHallOperation {
     public void tick() {
         turnsRemaining -= 1;
         if (turnsRemaining == 0) {
-            leaveQueue();
             onComplete();
+            leaveQueue();
         }
     }
 
     public void cancel() {
-        leaveQueue();
         cancelled = true;
         onCancel();
+        leaveQueue();
     }
 
     protected void leaveQueue() {
