@@ -16,6 +16,7 @@ import model.game.unit.UnitType;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
 
 final class GameSidePanel extends JPanel {
 
@@ -34,7 +35,9 @@ final class GameSidePanel extends JPanel {
 
     private final JTextArea selectedInfoArea;
     private final JTextArea townHallQueueArea;
+    private final JTextArea acquiredTechnologiesArea;
     private final DefaultComboBoxModel<Unit> selectedUnitModel;
+    private final DefaultComboBoxModel<Technology> technologyModel;
     private final JComboBox<Unit> selectedUnitCombo;
     private final JComboBox<BuildingType> buildingCombo;
     private final JComboBox<Level> levelCombo;
@@ -65,7 +68,9 @@ final class GameSidePanel extends JPanel {
 
         this.selectedInfoArea = new JTextArea();
         this.townHallQueueArea = new JTextArea();
+        this.acquiredTechnologiesArea = new JTextArea();
         this.selectedUnitModel = new DefaultComboBoxModel<>();
+        this.technologyModel = new DefaultComboBoxModel<>();
         this.selectedUnitCombo =
                 new JComboBox<>(selectedUnitModel);
 
@@ -83,7 +88,7 @@ final class GameSidePanel extends JPanel {
         this.levelCombo = new JComboBox<>(
                 new Level[]{Level.LEVEL_2, Level.LEVEL_3}
         );
-        this.technologyCombo = new JComboBox<>(Technology.values());
+        this.technologyCombo = new JComboBox<>(technologyModel);
         this.unitTypeCombo = new JComboBox<>(UnitType.values());
 
         this.buildButton = new JButton("Build");
@@ -132,6 +137,12 @@ final class GameSidePanel extends JPanel {
         add(Box.createVerticalStrut(8));
         configureTownHallQueueArea();
         add(townHallQueueArea);
+        add(Box.createVerticalStrut(8));
+
+        add(createSectionLabel("Acquired technologies"));
+        add(Box.createVerticalStrut(4));
+        configureAcquiredTechnologiesArea();
+        add(acquiredTechnologiesArea);
         add(Box.createVerticalStrut(8));
 
         configureLevelCombo();
@@ -260,6 +271,24 @@ final class GameSidePanel extends JPanel {
 
     private void configureUnitTypeCombo() {
         styleComboBox(unitTypeCombo);
+    }
+
+    private void configureAcquiredTechnologiesArea() {
+        acquiredTechnologiesArea.setEditable(false);
+        acquiredTechnologiesArea.setOpaque(true);
+        acquiredTechnologiesArea.setBackground(CARD_BACKGROUND);
+        acquiredTechnologiesArea.setForeground(TEXT_PRIMARY);
+        acquiredTechnologiesArea.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        acquiredTechnologiesArea.setBorder(
+                BorderFactory.createCompoundBorder(
+                        BorderFactory.createLineBorder(new Color(47, 61, 80)),
+                        BorderFactory.createEmptyBorder(7, 10, 7, 10)
+                )
+        );
+        acquiredTechnologiesArea.setLineWrap(true);
+        acquiredTechnologiesArea.setWrapStyleWord(true);
+        acquiredTechnologiesArea.setRows(2);
+        acquiredTechnologiesArea.setAlignmentX(Component.LEFT_ALIGNMENT);
     }
 
     private void configureLevelCombo() {
@@ -504,6 +533,8 @@ final class GameSidePanel extends JPanel {
     }
 
     void refreshTownHallQueue() {
+        refreshTechnologyDisplay();
+
         TownHallOperation operation = viewModel.getInQueueOperation();
         boolean queueAvailable = operation == null;
 
@@ -516,6 +547,44 @@ final class GameSidePanel extends JPanel {
         levelUpButton.setEnabled(queueAvailable);
         acquireTechnologyButton.setEnabled(queueAvailable);
         generateUnitButton.setEnabled(queueAvailable);
+    }
+
+    private void refreshTechnologyDisplay() {
+        List<Technology> acquired =
+                viewModel.getAcquiredTechnologies();
+
+        if (acquired.isEmpty()) {
+            acquiredTechnologiesArea.setText("None");
+        } else {
+            StringBuilder text = new StringBuilder();
+            for (Technology technology : acquired) {
+                if (text.length() > 0) {
+                    text.append('\n');
+                }
+                text.append(ViewTextFormatter.pretty(technology));
+            }
+            acquiredTechnologiesArea.setText(text.toString());
+        }
+
+        Technology selected =
+                (Technology) technologyCombo.getSelectedItem();
+        boolean selectedStillAvailable =
+                selected != null && !acquired.contains(selected);
+
+        technologyModel.removeAllElements();
+        for (Technology technology : Technology.values()) {
+            if (!acquired.contains(technology)) {
+                technologyModel.addElement(technology);
+            }
+        }
+
+        if (selectedStillAvailable) {
+            technologyCombo.setSelectedItem(selected);
+        } else if (technologyModel.getSize() > 0) {
+            technologyCombo.setSelectedIndex(0);
+        }
+
+        technologyCombo.setEnabled(technologyModel.getSize() > 0);
     }
 
     private String buildOperationText(TownHallOperation operation) {

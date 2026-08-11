@@ -39,4 +39,8 @@ public class Technologies {
     public boolean isAcquired(Technology technology) {
         return acquiredTechnologies.contains(technology);
     }
+
+    public List<Technology> getAcquiredTechnologies() {
+        return new ArrayList<>(acquiredTechnologies);
+    }
 }
