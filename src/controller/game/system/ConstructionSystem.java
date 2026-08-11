@@ -191,6 +191,10 @@ public class ConstructionSystem {
 
     private int getBuildApCost(BuildingType type) {
 
+        if (type.equals(BuildingType.MILITARY_STABLE)) {
+            return MilitaryStable.getConstructionAPCost();
+        }
+
         if (type.equals(BuildingType.MONUMENT)) {
             return Monument.getConstructionAPCost();
         }
@@ -213,6 +217,10 @@ public class ConstructionSystem {
     }
 
     private Map<Resource, Integer> getConstructionCost(BuildingType type) {
+
+        if (type.equals(BuildingType.MILITARY_STABLE)) {
+            return MilitaryStable.getConstructionCost();
+        }
 
         if (type.equals(BuildingType.MONUMENT)) {
             return Monument.getConstructionCost();
@@ -243,6 +251,10 @@ public class ConstructionSystem {
             case FARM -> new ProductionBuilding(owner, ProductionType.FARM, coordinate);
             case STABLE -> new ProductionBuilding(owner, ProductionType.STABLE, coordinate);
             case VILLAGE, TOWN -> new PopulationBuilding(owner, type, coordinate);
+            case MONUMENT -> new Monument(owner, coordinate);
+            case DOCK -> new Dock(owner, coordinate);
+            case ROAD -> new Road(owner, coordinate);
+            case MILITARY_STABLE -> new MilitaryStable(owner, coordinate);
             default -> throw new IllegalArgumentException("Unsupported building type: " + type);
         };
     }

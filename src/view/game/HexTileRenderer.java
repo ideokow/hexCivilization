@@ -288,6 +288,8 @@ final class HexTileRenderer {
             case TOWN -> "TN";
             case MONUMENT -> "MN";
             case DOCK -> "DC";
+            case ROAD -> "RD";
+            case MILITARY_STABLE -> "MS";
         };
     }
 

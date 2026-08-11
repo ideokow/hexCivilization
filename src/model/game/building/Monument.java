@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Monument extends Building {
-    protected Monument(Player owner, HexCoordinate position) {
+    public Monument(Player owner, HexCoordinate position) {
         super(BuildingType.MONUMENT, owner, position);
     }
 

@@ -83,7 +83,11 @@ final class GameSidePanel extends JPanel {
                         BuildingType.FARM,
                         BuildingType.STABLE,
                         BuildingType.VILLAGE,
-                        BuildingType.TOWN
+                        BuildingType.TOWN,
+                        BuildingType.MONUMENT,
+                        BuildingType.DOCK,
+                        BuildingType.ROAD,
+                        BuildingType.MILITARY_STABLE
                 }
         );
         this.levelCombo = new JComboBox<>(
