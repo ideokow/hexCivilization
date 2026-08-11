@@ -11,5 +11,6 @@ public enum BuildingType {
     TOWN,
     MONUMENT,
     DOCK,
-    ROAD;
+    ROAD,
+    MILITARY_STABLE;
 }
