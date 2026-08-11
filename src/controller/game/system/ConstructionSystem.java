@@ -142,15 +142,16 @@ public class ConstructionSystem {
     check there's space for building
      */
     private BuildResult checkPlacement(Hex hex, BuildingType type) {
+        // check hex requirements
         TerrainType requiredTerrain = getRequiredTerrain(type);
         if (requiredTerrain != null && hex.getTerrain() != requiredTerrain) {
             return BuildResult.WRONG_TERRAIN;
         }
-
         Resource requiredResource = getRequiredResource(type);
         if (requiredResource != null && !hex.isAvailable(requiredResource)) {
             return BuildResult.MISSING_HEX_RESOURCE;
         }
+
         if (type == BuildingType.FARM && !hex.isAvailable(Resource.FOOD)) {
             return BuildResult.MISSING_HEX_RESOURCE;
         }

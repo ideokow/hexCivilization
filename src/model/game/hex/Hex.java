@@ -1,6 +1,7 @@
 package model.game.hex;
 
 import model.game.building.Building;
+import model.game.building.BuildingType;
 import model.game.unit.Unit;
 
 import java.util.*;
@@ -40,6 +41,10 @@ public class Hex {
 
     public Set<Resource> getAvailableResources() {
         return new HashSet<>(availableResources);
+    }
+
+    public boolean isThereRoad() {
+        return building != null && building.getType().equals(BuildingType.ROAD);
     }
 
     // building
