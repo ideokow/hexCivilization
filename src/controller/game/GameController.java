@@ -1,6 +1,7 @@
 package controller.game;
 
 import model.game.hex.HexCoordinate;
+import model.game.hex.Hex;
 import model.game.hex.Resource;
 import model.game.registry.UpKeepStatus;
 import model.game.townhall.Level;
@@ -35,6 +36,7 @@ public class GameController {
         view.setHexClickHandler(this::handleHexClick);
         view.getEndTurnButton().addActionListener(e -> handleEndTurn());
         view.getBuildButton().addActionListener(e -> handleBuild());
+        view.getRuinButton().addActionListener(e -> handleRuin());
         view.getLevelUpButton().addActionListener(e -> handleLevelUp());
         view.getAcquireTechnologyButton().addActionListener(e -> handleAcquireTechnology());
         view.getGenerateUnitButton().addActionListener(e -> handleGenerateUnit());
@@ -174,6 +176,19 @@ public class GameController {
                 view.getSelectedBuildingType(),
                 view.getSelectedHex()
         );
+        view.refresh();
+    }
+
+    private void handleRuin() {
+        exitSelectionMode();
+
+        HexCoordinate selectedHex = view.getSelectedHex();
+        if (selectedHex == null) return;
+
+        Hex hex = engine.getHexGrid().get(selectedHex);
+        if (hex == null || hex.getBuilding() == null) return;
+
+        engine.ruinTrigger(view.getSelectedUnit(), hex.getBuilding());
         view.refresh();
     }
 

@@ -44,6 +44,7 @@ final class GameSidePanel extends JPanel {
     private final JComboBox<Technology> technologyCombo;
     private final JComboBox<UnitType> unitTypeCombo;
     private final JButton buildButton;
+    private final JButton ruinButton;
     private final JButton levelUpButton;
     private final JButton acquireTechnologyButton;
     private final JButton generateUnitButton;
@@ -92,6 +93,7 @@ final class GameSidePanel extends JPanel {
         this.unitTypeCombo = new JComboBox<>(UnitType.values());
 
         this.buildButton = new JButton("Build");
+        this.ruinButton = new JButton("Ruin");
         this.levelUpButton = new JButton("Upgrade Town Hall");
         this.acquireTechnologyButton = new JButton("Research Technology");
         this.generateUnitButton = new JButton("Generate Unit");
@@ -178,6 +180,9 @@ final class GameSidePanel extends JPanel {
         add(Box.createVerticalStrut(6));
 
         addActionButton(buildButton, 34);
+        add(Box.createVerticalStrut(6));
+
+        addActionButton(ruinButton, 34);
         add(Box.createVerticalStrut(6));
 
         addActionButton(stationButton, 34);
@@ -749,6 +754,10 @@ final class GameSidePanel extends JPanel {
 
     JButton getBuildButton() {
         return buildButton;
+    }
+
+    JButton getRuinButton() {
+        return ruinButton;
     }
 
     JButton getLevelUpButton() {

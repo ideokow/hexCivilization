@@ -270,6 +270,9 @@ final class HexTileRenderer {
             case GRASSLAND -> "Grass";
             case FOREST -> "Forest";
             case MOUNTAIN -> "Mount";
+            case SEA -> "Sea";
+            case RIVER -> "River";
+            case MOUNTAIN_RANGE -> "Range";
         };
     }
 
@@ -283,6 +286,7 @@ final class HexTileRenderer {
             case STABLE -> "ST";
             case VILLAGE -> "VG";
             case TOWN -> "TN";
+            case MONUMENT -> "MN";
         };
     }
 

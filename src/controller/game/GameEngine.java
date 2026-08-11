@@ -122,6 +122,9 @@ public class GameEngine {
 
         // operation queue
         operationQueue.handleTurn();
+
+        // check is there monuments
+        townHall.getHappiness().checkMonuments();
     }
 
     /*

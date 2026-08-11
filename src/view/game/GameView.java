@@ -86,6 +86,10 @@ public class GameView extends JFrame {
         return sidePanel.getBuildButton();
     }
 
+    public JButton getRuinButton() {
+        return sidePanel.getRuinButton();
+    }
+
     public JButton getStationButton() {
         return sidePanel.getStationButton();
     }
