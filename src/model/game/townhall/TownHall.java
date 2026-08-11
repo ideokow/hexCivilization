@@ -65,6 +65,10 @@ public class TownHall extends Building {
         return happiness;
     }
 
+    public HexGrid getGrid() {
+        return grid;
+    }
+
     // --- Level Getter/Setter ---
 
     public Level getLevel() {

@@ -77,6 +77,11 @@ public class ConstructionSystem {
             return BuildResult.NOT_ENOUGH_CHARGE;
         }
 
+        // check specifically docks
+        if (type.equals(BuildingType.DOCK) && !Dock.canBuildDock(grid, coordinate)) {
+            return BuildResult.NO_WATER_FOR_DOCK;
+        }
+
         return BuildResult.SUCCESS;
     }
 
@@ -265,18 +270,11 @@ public class ConstructionSystem {
             townHall.decreaseUnitNumber();
         }
 
-        building.ruin();
+        BuildingRegistry.getInstance().ruinBuilding(grid, building);
+        if (building.getType() == BuildingType.VILLAGE || building.getType() == BuildingType.TOWN) {
+            BuildingRegistry.getInstance().refreshUnitCap(townHall);
+        }
 
         return RuinStatus.SUCCESS;
     }
 }
-
-//    Hex hex = grid.get(coordinate);
-//
-//    Building building = createBuilding(player, type, coordinate);
-//
-
-//
-//                if (type == BuildingType.VILLAGE || type == BuildingType.TOWN) {
-//                BuildingRegistry.getInstance().refreshUnitCap(townHall);
-//                }

@@ -8,5 +8,7 @@ public enum BuildingType {
     FARM,
     STABLE,
     VILLAGE,
-    TOWN
+    TOWN,
+    MONUMENT,
+    DOCK;
 }

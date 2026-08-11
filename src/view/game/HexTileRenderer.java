@@ -287,6 +287,7 @@ final class HexTileRenderer {
             case VILLAGE -> "VG";
             case TOWN -> "TN";
             case MONUMENT -> "MN";
+            case DOCK -> "DC";
         };
     }
 

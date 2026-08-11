@@ -1,5 +1,11 @@
 package model.game.happiness;
 
+import model.game.building.Building;
+import model.game.building.Monument;
+import model.game.registry.BuildingRegistry;
+
+import java.util.Collection;
+
 public class Happiness {
 
     private int value;
@@ -10,6 +16,15 @@ public class Happiness {
 
     public void addHappiness(int amount) {
         value += amount;
+    }
+
+    public void checkMonuments() {
+        Collection<Building> allBuildings = BuildingRegistry.getInstance().getBuildingMap().values();
+        for (Building building: allBuildings) {
+            if (building instanceof Monument) {
+                addHappiness(2);
+            }
+        }
     }
 
     public Era getEra() {

@@ -98,7 +98,7 @@ public class ProductionBuilding extends Building {
 
         double coefficient = 1.0;
 
-        if ((productionType.equals(ProductionType.IRON_MINE) || productionType.equals(ProductionType.STONE_MINE))) {
+        if (productionType.equals(ProductionType.IRON_MINE) || productionType.equals(ProductionType.STONE_MINE)) {
             if (townHall.getTechnologies().isAcquired(Technology.GOOD_TOOLS)) coefficient *= 1.5;
             if (townHall.getTechnologies().isAcquired(Technology.METALWORKING_TOOLS)) coefficient *= 1.5;
         }

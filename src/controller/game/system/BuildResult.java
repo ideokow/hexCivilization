@@ -30,7 +30,9 @@ public enum BuildResult {
     CANT_BUILD_TOWN_HALL
             ("A Town Hall cannot be constructed directly."),
     UNIT_NOT_ON_MAP
-            ("The Builder is not currently on the map.");
+            ("The Builder is not currently on the map."),
+    NO_WATER_FOR_DOCK
+            ("You should build Dock across water.");
 
     private final String message;
 
