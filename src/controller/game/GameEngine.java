@@ -11,6 +11,8 @@ import model.game.registry.BuildingRegistry;
 import model.game.registry.UnitRegistry;
 import model.game.registry.UpKeepStatus;
 import model.game.route.Route;
+import model.game.season.Season;
+import model.game.season.SeasonName;
 import model.game.townhall.Level;
 import model.game.townhall.Technology;
 import model.game.townhall.TechnologyAcquireStatus;
@@ -102,7 +104,7 @@ public class GameEngine {
         UnitRegistry.getInstance().renewUnitAPs(townHall.getHappiness().getEra());
 
         // generate resources
-        Map<Resource, Integer> generatedResources = BuildingRegistry.getInstance().generateResources(townHall);
+        Map<Resource, Integer> generatedResources = BuildingRegistry.getInstance().generateResources(townHall, getSeason());
 
         // pay upkeep
         UpKeepStatus upkeepStatus = BuildingRegistry.getInstance().payUpKeeps(townHall, hexGrid);
@@ -297,5 +299,9 @@ public class GameEngine {
 
     public boolean isThereRoute(Unit unit) {
         return inQueueRoutes.containsValue(unit);
+    }
+
+    public SeasonName getSeason() {
+        return Season.getSeason(turnNumber);
     }
 }

@@ -3,6 +3,7 @@ package model.game.registry;
 import model.game.building.*;
 import model.game.hex.HexGrid;
 import model.game.hex.Resource;
+import model.game.season.SeasonName;
 import model.game.townhall.TownHall;
 import model.game.unit.Worker;
 
@@ -82,19 +83,25 @@ public class BuildingRegistry {
         buildingMap.remove(building.getBuildingID());
     }
 
-    public Map<Resource, Integer> generateResources(TownHall townHall) {
+    public Map<Resource, Integer> generateResources(TownHall townHall, SeasonName season) {
 
         Map<Resource, Integer> generatedResources = new HashMap<>();
-        generatedResources.put(Resource.STONE, getGenerateResource(Resource.STONE, townHall));
-        generatedResources.put(Resource.IRON, getGenerateResource(Resource.IRON, townHall));
-        generatedResources.put(Resource.FOOD, getGenerateResource(Resource.FOOD, townHall));
-        generatedResources.put(Resource.WOOD, getGenerateResource(Resource.WOOD, townHall));
+        generatedResources.put(Resource.STONE, getGenerateResource(Resource.STONE, townHall, season));
+        generatedResources.put(Resource.IRON,  getGenerateResource(Resource.IRON,  townHall, season));
+        generatedResources.put(Resource.FOOD,  getGenerateResource(Resource.FOOD,  townHall, season));
+        generatedResources.put(Resource.WOOD,  getGenerateResource(Resource.WOOD,  townHall, season));
 
         townHall.addResources(generatedResources);
         return generatedResources;
     }
 
-    public int getGenerateResource(Resource resource, TownHall townHall) {
+    public int getGenerateResource(Resource resource, TownHall townHall, SeasonName season) {
+        int seasonBonus = 0;
+        if (resource.equals(Resource.FOOD)) {
+            if (season.equals(SeasonName.SPRING)) seasonBonus =  1;
+            if (season.equals(SeasonName.WINTER)) seasonBonus = -1;
+        }
+
         int amount = 0;
 
         for (Building building : buildingMap.values()) {
@@ -104,13 +111,13 @@ public class BuildingRegistry {
 
                 if (resource == productionResource){
                     int productionAmount = ((ProductionBuilding) building).getProductionAmount(townHall);
-                    amount += productionAmount;
+                    amount += productionAmount + seasonBonus;
                 }
             }
             else if (!building.isRuined() && building instanceof TownHall) {
                 // safeguard
                 if (resource == Resource.FOOD || resource == Resource.WOOD) {
-                    amount += TownHall.SAFE_GUARD_VALUE;
+                    amount += TownHall.SAFE_GUARD_VALUE + seasonBonus;
                 }
             }
         }
@@ -118,8 +125,8 @@ public class BuildingRegistry {
         return amount;
     }
 
-    public int getNetResource(Resource resource, TownHall townHall) {
-        int amount = getGenerateResource(resource, townHall);
+    public int getNetResource(Resource resource, TownHall townHall, SeasonName season) {
+        int amount = getGenerateResource(resource, townHall, season);
 
         // unit foods
         if (resource == Resource.FOOD) {
