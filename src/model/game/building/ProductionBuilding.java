@@ -94,7 +94,13 @@ public class ProductionBuilding extends Building {
     public int getProductionAmount(TownHall townHall) {
         int baseRate = productionType.getProductionRate();
         int workerN = stationedWorkers.size();
-        double techCoefficient = townHall.getTechnologies().isAcquired(Technology.GOOD_TOOLS) ? 1.5 : 1.0;
+
+        double techCoefficient = 1.0;
+        if ((productionType.equals(ProductionType.IRON_MINE) || productionType.equals(ProductionType.STONE_MINE))) {
+            if (townHall.getTechnologies().isAcquired(Technology.GOOD_TOOLS)) techCoefficient *= 1.5;
+            if (townHall.getTechnologies().isAcquired(Technology.METALWORKING_TOOLS)) techCoefficient *= 1.5;
+        }
+
         return ((int)(((double) (baseRate * workerN)) * techCoefficient));
     }
 
