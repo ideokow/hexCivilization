@@ -9,7 +9,10 @@ public enum TerrainType {
     PLAINS(1),
     GRASSLAND(1),
     FOREST(2),
-    MOUNTAIN(4);
+    MOUNTAIN(4),
+    SEA(1),
+    RIVER(5),
+    MOUNTAIN_RANGE(-1); // impossible to go through
 
     private final int movementCost;
 
