@@ -28,6 +28,11 @@ public class ConstructionSystem {
         this.townHall = Objects.requireNonNull(townHall, "town hall is null");
     }
 
+    // --- functions for building things ---
+
+    /*
+    check building possibility
+     */
     private BuildResult canBuild(Player player, Unit unit, BuildingType type, HexCoordinate coordinate) {
         if (player == null || type == null || coordinate == null) {
             return BuildResult.UNIT_NOT_ON_MAP;
@@ -75,6 +80,9 @@ public class ConstructionSystem {
         return BuildResult.SUCCESS;
     }
 
+    /*
+    check user's technology is ok for a specific building type
+     */
     private boolean upgradeCheck(BuildingType buildingType) {
         if (buildingType == BuildingType.STONE_MINE && !townHall.getTechnologies().isAcquired(Technology.STONE)) {
             return false;
@@ -91,6 +99,9 @@ public class ConstructionSystem {
         return true;
     }
 
+    /*
+    build buildings!
+     */
     public BuildResult build(Player player, Unit unit, BuildingType type, HexCoordinate coordinate) {
         BuildResult result = canBuild(player, unit, type, coordinate);
         if (result != BuildResult.SUCCESS) {
@@ -122,6 +133,9 @@ public class ConstructionSystem {
         return BuildResult.SUCCESS;
     }
 
+    /*
+    check there's space for building
+     */
     private BuildResult checkPlacement(Hex hex, BuildingType type) {
         TerrainType requiredTerrain = getRequiredTerrain(type);
         if (requiredTerrain != null && hex.getTerrain() != requiredTerrain) {
@@ -149,6 +163,9 @@ public class ConstructionSystem {
         return BuildResult.SUCCESS;
     }
 
+    /*
+    other useful things for building
+     */
     private TerrainType getRequiredTerrain(BuildingType type) {
         ProductionType productionType = ProductionType.fromBuildingType(type);
         if (productionType == null) {
@@ -176,7 +193,8 @@ public class ConstructionSystem {
             return populationType.getBuildApCost();
         }
 
-        return 0;
+        // for rest of types!
+        return 1;
     }
 
     private Map<Resource, Integer> getConstructionCost(BuildingType type) {
@@ -204,4 +222,61 @@ public class ConstructionSystem {
             default -> throw new IllegalArgumentException("Unsupported building type: " + type);
         };
     }
+
+    // --- functions for ruining ---
+
+    private RuinStatus canRuin(Unit unit, Building building) {
+        if (unit == null || building == null) {
+            return RuinStatus.NULL_ERR;
+        }
+        if (building.isRuined()) {
+            return RuinStatus.BUILDING_RUINED_ALREADY;
+        }
+        if (building.getType().equals(BuildingType.TOWN_HALL)) {
+            return RuinStatus.CANT_RUIN_TOWN_HALL;
+        }
+        if (!unit.getPosition().equals(building.getPosition())) {
+            return RuinStatus.BUILDER_IS_NOT_HERE;
+        }
+        if (!(unit instanceof Builder)) {
+            return RuinStatus.NOT_A_BUILDER;
+        }
+        if (unit.getCurrentAP() < getBuildApCost(building.getType())) {
+            return RuinStatus.LOW_AP;
+        }
+        if (!((Builder) unit).hasCharges()) {
+            return RuinStatus.NOT_ENOUGH_CHARGE;
+        }
+
+        return RuinStatus.SUCCESS;
+    }
+
+    public RuinStatus ruin(Unit unit, Building building) {
+        RuinStatus ruinStatus = canRuin(unit, building);
+        if (!ruinStatus.equals(RuinStatus.SUCCESS)) return ruinStatus;
+
+        Builder builder = (Builder) unit;
+        builder.spendAP(getBuildApCost(building.getType()));
+        builder.consumeCharge();
+
+        if (!builder.hasCharges()) {
+            UnitRegistry.getInstance().removeUnit(builder);
+            grid.get(building.getPosition()).removeUnit(builder);
+            townHall.decreaseUnitNumber();
+        }
+
+        building.ruin();
+
+        return RuinStatus.SUCCESS;
+    }
 }
+
+//    Hex hex = grid.get(coordinate);
+//
+//    Building building = createBuilding(player, type, coordinate);
+//
+
+//
+//                if (type == BuildingType.VILLAGE || type == BuildingType.TOWN) {
+//                BuildingRegistry.getInstance().refreshUnitCap(townHall);
+//                }

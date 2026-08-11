@@ -70,6 +70,10 @@ public abstract class Building {
         return state == BuildingState.RUINED;
     }
 
+    public void ruin() {
+        state = BuildingState.RUINED;
+    }
+
     // ---------
 
     @Override

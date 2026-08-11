@@ -50,19 +50,7 @@ public class BuildingRegistry {
 
         // remove ruined buildings
         for (Building building : finishedBuildings) {
-            // remove from hex
-            hexGrid.get(building.getPosition()).setBuilding(null);
-
-            // remove isWorking units
-            if (building instanceof ProductionBuilding){
-                List<Worker> workers = ((ProductionBuilding) building).getUnits();
-                for (Worker worker : workers) {
-                    worker.setInBuilding(false);
-                }
-            }
-
-            // remove from registry
-            buildingMap.remove(building.getBuildingID());
+            ruinBuilding(hexGrid, building);
         }
 
         // return status
@@ -73,6 +61,25 @@ public class BuildingRegistry {
         } else {
             return UpKeepStatus.UP_KEEP_PAYMENT_FAILED;
         }
+    }
+
+    public void ruinBuilding(HexGrid hexGrid, Building building) {
+        // remove from hex data
+        hexGrid.get(building.getPosition()).setBuilding(null);
+
+        // remove isWorking units
+        if (building instanceof ProductionBuilding){
+            List<Worker> workers = ((ProductionBuilding) building).getUnits();
+            for (Worker worker : workers) {
+                ((ProductionBuilding) building).removeWorker(worker);
+            }
+        }
+
+        // set ruined
+        building.ruin();
+
+        // remove from registry
+        buildingMap.remove(building.getBuildingID());
     }
 
     public Map<Resource, Integer> generateResources(TownHall townHall) {

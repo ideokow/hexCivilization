@@ -128,9 +128,9 @@ public class GameEngine {
     build caller and alert handler
      */
     public void buildTrigger(
-            Unit unit,
-            BuildingType buildingType,
-            HexCoordinate hexCoordinate
+        Unit unit,
+        BuildingType buildingType,
+        HexCoordinate hexCoordinate
     ) {
         BuildResult buildResult = constructionSystem.build(
                 player,
@@ -139,6 +139,20 @@ public class GameEngine {
                 hexCoordinate
         );
         gameController.toastAlert(buildResult.getMessage());
+    }
+
+    /*
+    destroy building trigger
+     */
+    public void ruinTrigger(
+        Unit unit,
+        Building building
+    ) {
+        RuinStatus ruinStatus = constructionSystem.ruin(
+                unit,
+                building
+        );
+        gameController.toastAlert(ruinStatus.getMessage());
     }
 
     /*
