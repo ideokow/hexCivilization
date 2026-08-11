@@ -5,6 +5,7 @@ import model.game.townhall.TownHall;
 import model.game.hex.Hex;
 import model.game.hex.HexCoordinate;
 import model.game.hex.Resource;
+import model.game.season.SeasonName;
 import model.game.registry.BuildingRegistry;
 import model.game.townhall.Technology;
 import model.game.townhall.opration.TownHallOperation;
@@ -98,5 +99,10 @@ final class GameEngineViewModel implements GameViewModel {
         return engine.getTownHall()
                 .getTechnologies()
                 .getAcquiredTechnologies();
+    }
+
+    @Override
+    public SeasonName getSeason() {
+        return engine.getSeason();
     }
 }

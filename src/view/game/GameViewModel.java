@@ -4,6 +4,7 @@ import model.game.townhall.TownHall;
 import model.game.hex.Hex;
 import model.game.hex.HexCoordinate;
 import model.game.hex.Resource;
+import model.game.season.SeasonName;
 import model.game.townhall.Technology;
 import model.game.townhall.opration.TownHallOperation;
 import model.game.unit.Unit;
@@ -41,4 +42,6 @@ public interface GameViewModel {
     TownHallOperation getInQueueOperation();
 
     List<Technology> getAcquiredTechnologies();
+
+    SeasonName getSeason();
 }

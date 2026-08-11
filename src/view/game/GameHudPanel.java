@@ -1,5 +1,6 @@
 package view.game;
 
+import model.game.season.SeasonName;
 import model.game.townhall.TownHall;
 import model.game.hex.Resource;
 import model.game.unit.Unit;
@@ -28,8 +29,16 @@ final class GameHudPanel extends JPanel {
             "\uD83D\uDD25"   // Rebellion
     };
 
+    private static final String[] SEASON_EMOJIS = {
+            "\uD83C\uDF38",   // SPRING
+            "\u2600\uFE0F",   // SUMMER
+            "\uD83C\uDF42",   // FALL
+            "\u2744\uFE0F"    // WINTER
+    };
+
     private final GameViewModel viewModel;
     private final JLabel turnLabel;
+    private final JLabel seasonLabel;
     private final JLabel unitsLabel;
     private final JLabel unitBreakdownLabel;
     private final JLabel happinessLabel;
@@ -39,6 +48,7 @@ final class GameHudPanel extends JPanel {
     GameHudPanel(GameViewModel viewModel) {
         this.viewModel = viewModel;
         this.turnLabel = new JLabel();
+        this.seasonLabel = new JLabel();
         this.unitsLabel = new JLabel();
         this.unitBreakdownLabel = new JLabel();
         this.happinessLabel = new JLabel();
@@ -73,6 +83,12 @@ final class GameHudPanel extends JPanel {
                 16
         );
         configureLabel(
+                seasonLabel,
+                new Color(238, 241, 247),
+                Font.BOLD,
+                14
+        );
+        configureLabel(
                 unitsLabel,
                 new Color(238, 241, 247),
                 Font.BOLD,
@@ -98,6 +114,7 @@ final class GameHudPanel extends JPanel {
         );
 
         panel.add(turnLabel);
+        panel.add(seasonLabel);
         panel.add(happinessLabel);
         panel.add(eraLabel);
         panel.add(unitsLabel);
@@ -139,6 +156,9 @@ final class GameHudPanel extends JPanel {
         TownHall townHall = viewModel.getTownHall();
 
         turnLabel.setText("Turn " + viewModel.getTurnNumber());
+        seasonLabel.setText(
+                seasonLabelText(viewModel.getSeason())
+        );
         happinessLabel.setText(
                 "Happiness " + townHall.getHappiness().getValue()
         );
@@ -160,6 +180,11 @@ final class GameHudPanel extends JPanel {
         model.game.happiness.Era era = townHall.getHappiness().getEra();
         String emoji = HAPPINESS_EMOJIS[era.ordinal()];
         return emoji + " " + ViewTextFormatter.pretty(era);
+    }
+
+    private String seasonLabelText(SeasonName season) {
+        String emoji = SEASON_EMOJIS[season.ordinal()];
+        return emoji + " " + ViewTextFormatter.pretty(season);
     }
 
     private void refreshResources(TownHall townHall) {
