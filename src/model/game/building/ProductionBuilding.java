@@ -1,5 +1,6 @@
 package model.game.building;
 
+import model.game.happiness.Era;
 import model.game.hex.HexCoordinate;
 import model.game.hex.Resource;
 import model.game.player.Player;
@@ -95,13 +96,17 @@ public class ProductionBuilding extends Building {
         int baseRate = productionType.getProductionRate();
         int workerN = stationedWorkers.size();
 
-        double techCoefficient = 1.0;
+        double coefficient = 1.0;
+
         if ((productionType.equals(ProductionType.IRON_MINE) || productionType.equals(ProductionType.STONE_MINE))) {
-            if (townHall.getTechnologies().isAcquired(Technology.GOOD_TOOLS)) techCoefficient *= 1.5;
-            if (townHall.getTechnologies().isAcquired(Technology.METALWORKING_TOOLS)) techCoefficient *= 1.5;
+            if (townHall.getTechnologies().isAcquired(Technology.GOOD_TOOLS)) coefficient *= 1.5;
+            if (townHall.getTechnologies().isAcquired(Technology.METALWORKING_TOOLS)) coefficient *= 1.5;
         }
 
-        return ((int)(((double) (baseRate * workerN)) * techCoefficient));
+        if (townHall.getHappiness().getEra().equals(Era.GOLDEN_ERA)) coefficient *= 1.1;
+        else if (townHall.getHappiness().getEra().equals(Era.DISCONTENT_ERA)) coefficient *= 0.9;
+
+        return ((int)(((double) (baseRate * workerN)) * coefficient));
     }
 
     @Override

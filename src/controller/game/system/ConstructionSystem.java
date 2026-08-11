@@ -117,6 +117,8 @@ public class ConstructionSystem {
         if (type == BuildingType.VILLAGE || type == BuildingType.TOWN) {
             BuildingRegistry.getInstance().refreshUnitCap(townHall);
         }
+
+        townHall.getHappiness().addHappiness(-1);
         return BuildResult.SUCCESS;
     }
 

@@ -2,6 +2,7 @@ package model.game.townhall;
 
 import model.game.building.Building;
 import model.game.building.BuildingType;
+import model.game.happiness.Happiness;
 import model.game.hex.HexCoordinate;
 import model.game.hex.HexGrid;
 import model.game.player.Player;
@@ -21,6 +22,8 @@ public class TownHall extends Building {
 
     private final Technologies technologies;
     private Level level;
+
+    private final Happiness happiness = new Happiness();
 
     private int unitCap;
     private final int baseUnitCap = 10;
@@ -56,6 +59,10 @@ public class TownHall extends Building {
 
     public int getResourceCap() {
         return level.getResourceCap();
+    }
+
+    public Happiness getHappiness() {
+        return happiness;
     }
 
     // --- Level Getter/Setter ---
@@ -251,7 +258,7 @@ public class TownHall extends Building {
         }
 
         // full ap
-        unit.resetAP();
+        unit.resetAP(happiness.getEra());
 
         // add to registry
         UnitRegistry.getInstance().addUnit(unit);

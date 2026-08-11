@@ -1,5 +1,6 @@
 package model.game.registry;
 
+import model.game.happiness.Era;
 import model.game.unit.Unit;
 
 import java.util.HashMap;
@@ -27,9 +28,9 @@ public class UnitRegistry {
         unitMap.put(unit.getUnitID(), unit);
     }
 
-    public void renewUnitAPs() {
+    public void renewUnitAPs(Era era) {
         for (Unit unit : unitMap.values()) {
-            unit.resetAP();
+            unit.resetAP(era);
         }
     }
 

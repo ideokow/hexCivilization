@@ -99,7 +99,7 @@ public class GameEngine {
         turnNumber++;
 
         // renew AP
-        UnitRegistry.getInstance().renewUnitAPs();
+        UnitRegistry.getInstance().renewUnitAPs(townHall.getHappiness().getEra());
 
         // generate resources
         Map<Resource, Integer> generatedResources = BuildingRegistry.getInstance().generateResources(townHall);

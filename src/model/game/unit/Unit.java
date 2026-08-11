@@ -1,5 +1,6 @@
 package model.game.unit;
 
+import model.game.happiness.Era;
 import model.game.hex.Hex;
 import model.game.hex.HexCoordinate;
 import model.game.player.Player;
@@ -39,6 +40,13 @@ public abstract class Unit {
 
     public void resetAP() {
         currentAP = getType().getEachTurnAP();
+    }
+
+    public void resetAP(Era era) {
+        resetAP();
+        if (era.equals(Era.REBELLION_ERA)) {
+            currentAP -= 1;
+        }
     }
 
     public int getCurrentAP() {
