@@ -21,10 +21,19 @@ final class GameHudPanel extends JPanel {
             Resource.IRON
     };
 
+    private static final String[] HAPPINESS_EMOJIS = {
+            "\uD83D\uDC4D",  // Golden Age
+            "\uD83D\uDE10",  // Normal
+            "\uD83D\uDE1E",  // Discontent
+            "\uD83D\uDD25"   // Rebellion
+    };
+
     private final GameViewModel viewModel;
     private final JLabel turnLabel;
     private final JLabel unitsLabel;
     private final JLabel unitBreakdownLabel;
+    private final JLabel happinessLabel;
+    private final JLabel eraLabel;
     private final Map<Resource, JLabel> resourceLabels;
 
     GameHudPanel(GameViewModel viewModel) {
@@ -32,6 +41,8 @@ final class GameHudPanel extends JPanel {
         this.turnLabel = new JLabel();
         this.unitsLabel = new JLabel();
         this.unitBreakdownLabel = new JLabel();
+        this.happinessLabel = new JLabel();
+        this.eraLabel = new JLabel();
         this.resourceLabels = new EnumMap<>(Resource.class);
 
         configurePanel();
@@ -73,8 +84,22 @@ final class GameHudPanel extends JPanel {
                 Font.PLAIN,
                 12
         );
+        configureLabel(
+                happinessLabel,
+                new Color(238, 241, 247),
+                Font.BOLD,
+                14
+        );
+        configureLabel(
+                eraLabel,
+                new Color(188, 198, 215),
+                Font.PLAIN,
+                12
+        );
 
         panel.add(turnLabel);
+        panel.add(happinessLabel);
+        panel.add(eraLabel);
         panel.add(unitsLabel);
         panel.add(unitBreakdownLabel);
 
@@ -114,6 +139,12 @@ final class GameHudPanel extends JPanel {
         TownHall townHall = viewModel.getTownHall();
 
         turnLabel.setText("Turn " + viewModel.getTurnNumber());
+        happinessLabel.setText(
+                "Happiness " + townHall.getHappiness().getValue()
+        );
+        eraLabel.setText(
+                eraLabelText(townHall)
+        );
         unitsLabel.setText(
                 "Units "
                         + townHall.getUnitNumber()
@@ -123,6 +154,12 @@ final class GameHudPanel extends JPanel {
         unitBreakdownLabel.setText(buildUnitBreakdown());
 
         refreshResources(townHall);
+    }
+
+    private String eraLabelText(TownHall townHall) {
+        model.game.happiness.Era era = townHall.getHappiness().getEra();
+        String emoji = HAPPINESS_EMOJIS[era.ordinal()];
+        return emoji + " " + ViewTextFormatter.pretty(era);
     }
 
     private void refreshResources(TownHall townHall) {
