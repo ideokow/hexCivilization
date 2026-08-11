@@ -13,6 +13,17 @@ public class Monument extends Building {
         super(BuildingType.MONUMENT, owner, position);
     }
 
+    public static Map<Resource, Integer> getConstructionCost() {
+        Map<Resource, Integer> cost = new HashMap<>();
+        cost.put(Resource.STONE, 10);
+        cost.put(Resource.WOOD, 5);
+        return cost;
+    }
+
+    public static int getConstructionAPCost() {
+        return 5;
+    }
+
     @Override
     public boolean payUpkeep(TownHall townHall) {
         if (isRuined()) {
@@ -20,8 +31,8 @@ public class Monument extends Building {
         }
 
         Map<Resource, Integer> cost = new HashMap<>();
-        cost.put(Resource.STONE, 10);
-        cost.put(Resource.WOOD, 5);
+        cost.put(Resource.STONE, 1);
+        cost.put(Resource.WOOD, 1);
 
         if (townHall.canAfford(cost)) {
             townHall.spendResources(cost);

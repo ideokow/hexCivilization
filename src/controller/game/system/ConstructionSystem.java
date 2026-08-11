@@ -15,6 +15,7 @@ import model.game.unit.Builder;
 import model.game.unit.Unit;
 
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -189,6 +190,15 @@ public class ConstructionSystem {
     }
 
     private int getBuildApCost(BuildingType type) {
+
+        if (type.equals(BuildingType.MONUMENT)) {
+            return Monument.getConstructionAPCost();
+        }
+
+        if (type.equals(BuildingType.ROAD)) {
+            return Road.getConstructionAPCost();
+        }
+
         ProductionType productionType = ProductionType.fromBuildingType(type);
         if (productionType != null) {
             return productionType.getBuildApCost();
@@ -199,11 +209,19 @@ public class ConstructionSystem {
             return populationType.getBuildApCost();
         }
 
-        // for rest of types!
-        return 1;
+        return 0;
     }
 
     private Map<Resource, Integer> getConstructionCost(BuildingType type) {
+
+        if (type.equals(BuildingType.MONUMENT)) {
+            return Monument.getConstructionCost();
+        }
+
+        if (type.equals(BuildingType.ROAD)) {
+            return Road.getConstructionCost();
+        }
+
         ProductionType productionType = ProductionType.fromBuildingType(type);
         if (productionType != null) {
             return productionType.getConstructionCost();

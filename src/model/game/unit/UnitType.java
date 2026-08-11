@@ -3,7 +3,7 @@ package model.game.unit;
 public enum UnitType {
     EXPLORER(8, 3, "Explorer"),
     WORKER(4, 1, "Worker"),
-    BUILDER(4, 1, "Builder"),
+    BUILDER(5, 1, "Builder"),
     BORDER_EXPANDER(6, 1, "Border Expander");
 
     private final int eachTurnAP;
