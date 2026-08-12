@@ -4,6 +4,7 @@ import controller.game.GameController;
 import model.game.hex.HexCoordinate;
 import model.game.hex.HexGrid;
 import model.game.route.Route;
+import model.game.season.SeasonName;
 import model.game.unit.Unit;
 
 import javax.swing.*;
@@ -19,10 +20,11 @@ public class RoutingSystem {
         this.movementSystem = movementSystem;
     }
 
-    // game controller needed for alerts
-    public Route route(HexCoordinate origin, HexCoordinate destination, HexGrid hexGrid, GameController gameController) {
+    // game controller needed for alerts; season and canSail shape the path
+    public Route route(HexCoordinate origin, HexCoordinate destination, HexGrid hexGrid,
+                       GameController gameController, SeasonName season, boolean canSail) {
         try {
-            return new Route(origin, destination, hexGrid);
+            return new Route(origin, destination, hexGrid, season, canSail);
         } catch (IllegalArgumentException e) {
             gameController.toastAlert(e.getMessage());
             return null;
@@ -33,13 +35,14 @@ public class RoutingSystem {
     a function for update routes in each turn
     game controller needed for alert trigger
      */
-    public void moveUnits(Map<Route, Unit> inQueueRoutes, GameController gameController) {
+    public void moveUnits(Map<Route, Unit> inQueueRoutes, GameController gameController,
+                          SeasonName season, boolean canSail) {
         // store finished ones (blocked or arrived)
         List<Route> finishedRoutes = new ArrayList<>();
         try {
             for (Route thisRoute : inQueueRoutes.keySet()) {
                 Unit thisUnit = inQueueRoutes.get(thisRoute);
-                handleRoute(thisRoute, thisUnit, finishedRoutes, gameController);
+                handleRoute(thisRoute, thisUnit, finishedRoutes, gameController, season, canSail);
             }
         } catch (IllegalStateException exception) {
             gameController.toastAlert(exception.getMessage());
@@ -51,12 +54,13 @@ public class RoutingSystem {
     }
 
     // game controller needed for alert trigger
-    private void handleRoute(Route thisRoute, Unit thisUnit, List<Route> finishedRoutes, GameController gameController) {
+    private void handleRoute(Route thisRoute, Unit thisUnit, List<Route> finishedRoutes,
+                             GameController gameController, SeasonName season, boolean canSail) {
         boolean canContinue = true;
         while (canContinue) {
             HexCoordinate origin = thisUnit.getPosition();
             HexCoordinate destination = thisRoute.getNextStep();
-            MoveResult moveResult = movementSystem.move(thisUnit, destination);
+            MoveResult moveResult = movementSystem.move(thisUnit, destination, season, canSail);
 
             if (moveResult == MoveResult.SUCCESS) {
                 thisRoute.nextStep();
@@ -78,6 +82,7 @@ public class RoutingSystem {
                     moveResult == MoveResult.UNIT_NOT_ON_MAP ||
                     moveResult == MoveResult.HEX_NOT_DISCOVERED ||
                     moveResult == MoveResult.NOT_NEIGHBOR ||
+                    moveResult == MoveResult.TERRAIN_IMPASSABLE ||
                     moveResult == MoveResult.UNIT_IS_IN_BUILDING
                 ) {
                     finishedRoutes.add(thisRoute);

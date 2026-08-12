@@ -110,7 +110,7 @@ public class GameEngine {
         UpKeepStatus upkeepStatus = BuildingRegistry.getInstance().payUpKeeps(townHall, hexGrid);
 
         // move in-way units
-        routingSystem.moveUnits(inQueueRoutes, gameController);
+        routingSystem.moveUnits(inQueueRoutes, gameController, getSeason(), canSail());
 
         // feed units
         boolean feedStatus = starvationSystem.feedUnits();
@@ -197,11 +197,16 @@ public class GameEngine {
             return;
         }
 
-        Route route = routingSystem.route(unit.getPosition(), destination, hexGrid, gameController);
+        Route route = routingSystem.route(unit.getPosition(), destination, hexGrid, gameController,
+                getSeason(), canSail());
         if (route != null) {
             inQueueRoutes.entrySet().removeIf(entry -> entry.getValue().equals(unit));
             inQueueRoutes.put(route, unit);
         }
+    }
+
+    private boolean canSail() {
+        return townHall.getTechnologies().isAcquired(Technology.BOAT_SAILING);
     }
 
     /*

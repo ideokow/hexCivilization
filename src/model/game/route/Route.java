@@ -1,8 +1,10 @@
 package model.game.route;
 
+import controller.game.system.MovementSystem;
 import model.game.hex.Hex;
 import model.game.hex.HexCoordinate;
 import model.game.hex.HexGrid;
+import model.game.season.SeasonName;
 
 import java.util.*;
 
@@ -19,6 +21,11 @@ public class Route {
     private List<HexCoordinate> steps;
 
     public Route(HexCoordinate origin, HexCoordinate destination, HexGrid hexGrid) {
+        this(origin, destination, hexGrid, null, false);
+    }
+
+    public Route(HexCoordinate origin, HexCoordinate destination, HexGrid hexGrid,
+                 SeasonName season, boolean canSail) {
 
         routeID = "route-id-" + routesN;
         routesN ++;
@@ -26,7 +33,7 @@ public class Route {
         this.origin = origin;
         this.destination = destination;
 
-        generateSteps(hexGrid);
+        generateSteps(hexGrid, season, canSail);
         if (steps.size() == 0) {
             throw new IllegalArgumentException("Can't find any routes!");
         }
@@ -48,7 +55,7 @@ public class Route {
 
     // --- path generation ---
 
-    private void generateSteps(HexGrid hexGrid) {
+    private void generateSteps(HexGrid hexGrid, SeasonName season, boolean canSail) {
         steps = new ArrayList<>();
 
         if (origin.equals(destination)) {
@@ -91,8 +98,11 @@ public class Route {
                 if (closed.contains(neighbor)) {
                     continue;
                 }
+                if (!MovementSystem.canEnter(neighborHex, canSail)) {
+                    continue; // mountain ranges and forbidden seas are impassable
+                }
 
-                int enterCost = neighborHex.getTerrain().getMovementCost();
+                int enterCost = MovementSystem.enterCost(neighborHex, season);
                 int tentativeG = currentG + enterCost;
 
                 Integer knownG = gScore.get(neighbor);
