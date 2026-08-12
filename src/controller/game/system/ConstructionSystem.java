@@ -15,7 +15,6 @@ import model.game.unit.Builder;
 import model.game.unit.Unit;
 
 import java.util.EnumMap;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -232,7 +231,17 @@ public class ConstructionSystem {
 
         ProductionType productionType = ProductionType.fromBuildingType(type);
         if (productionType != null) {
-            return productionType.getConstructionCost();
+            Map<Resource, Integer> cost = productionType.getConstructionCost();
+            if (
+                productionType.equals(ProductionType.DOCK)
+                & townHall.hasDockBuildingBonus()
+            ) {
+                townHall.useDockBuildingBonus();
+                for (Resource resource: cost.keySet()) {
+                    cost.put(resource, Math.max(0, cost.get(resource) - 1));
+                }
+            }
+            return cost;
         }
 
         PopulationType populationType = PopulationType.fromBuildingType(type);

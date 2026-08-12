@@ -3,6 +3,7 @@ package model.game.tribe;
 import model.game.happiness.Happiness;
 import model.game.hex.HexCoordinate;
 import model.game.hex.Resource;
+import model.game.townhall.TownHall;
 
 import java.util.Map;
 
@@ -17,7 +18,9 @@ public class Tribe {
     private final TribeType tribeType;
     private final HexCoordinate location;
 
+    private final TownHall relatedTownHall;
     private int relation;
+
     private boolean atWar;
     private boolean allianceActive;
 
@@ -28,9 +31,12 @@ public class Tribe {
     private int lastFailedMissionTurn = -1;
     private int lastProcessedTurn = -1;
 
-    public Tribe(TribeType tribeType, HexCoordinate location) {
+    private boolean hadTradeRouteMission = false;
+
+    public Tribe(TribeType tribeType, HexCoordinate location, TownHall relatedTownHall) {
         this.tribeType = tribeType;
         this.location = location;
+        this.relatedTownHall = relatedTownHall;
 
         relation = 0;
         atWar = false;
@@ -252,5 +258,17 @@ public class Tribe {
 
     public boolean canTrade() {
         return !isEnemy() && relation >= 20;
+    }
+
+    public TownHall getRelatedTownHall() {
+        return relatedTownHall;
+    }
+
+    public boolean isHadTradeRouteMission() {
+        return hadTradeRouteMission;
+    }
+
+    public void setHadTradeRouteMission() {
+        hadTradeRouteMission = true;
     }
 }

@@ -1,21 +1,22 @@
 package model.game.tribe.mission;
 
-import model.game.townhall.TownHall;
 import model.game.tribe.Tribe;
 
 public class FighterMission extends Mission {
 
     public FighterMission(Tribe tribe) {
-        super(tribe, MissionType.MILITARY_ASSISTANCE, MissionType.MILITARY_ASSISTANCE.getDeadLine());
+        super(tribe, MissionType.MILITARY_ASSISTANCE);
     }
 
     @Override
-    public void payReward(TownHall townHall) {
-
+    public void payReward() {
+        getTribe().increaseRelation(20);
+        // TODO : give townHall 3 Swordsman
     }
 
     @Override
     public boolean checkRequirements() {
         return false;
+        // TODO : check requirement
     }
 }

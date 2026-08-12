@@ -29,6 +29,8 @@ public class TownHall extends Building {
     private final int baseUnitCap = 10;
     private int unitNumber = 0;
 
+    private boolean dockBuildingBonus = false;
+
     public TownHall(HexGrid grid, Player owner) {
 
         super(BuildingType.TOWN_HALL, owner, new HexCoordinate(0, 0));
@@ -67,6 +69,18 @@ public class TownHall extends Building {
 
     public HexGrid getGrid() {
         return grid;
+    }
+
+    public boolean hasDockBuildingBonus() {
+        return dockBuildingBonus;
+    }
+
+    public void giveDockBuildingBonus() {
+        dockBuildingBonus = true;
+    }
+
+    public void useDockBuildingBonus() {
+        dockBuildingBonus = false;
     }
 
     // --- Level Getter/Setter ---

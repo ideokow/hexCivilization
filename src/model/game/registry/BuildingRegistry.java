@@ -84,7 +84,6 @@ public class BuildingRegistry {
     }
 
     public Map<Resource, Integer> generateResources(TownHall townHall, SeasonName season) {
-
         Map<Resource, Integer> generatedResources = new HashMap<>();
         generatedResources.put(Resource.STONE, getGenerateResource(Resource.STONE, townHall, season));
         generatedResources.put(Resource.IRON,  getGenerateResource(Resource.IRON,  townHall, season));
@@ -148,7 +147,6 @@ public class BuildingRegistry {
     }
 
     public void refreshUnitCap(TownHall townHall) {
-
         int towns = 0;
         int villages = 0;
 
