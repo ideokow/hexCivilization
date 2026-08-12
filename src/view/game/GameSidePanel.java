@@ -415,7 +415,7 @@ final class GameSidePanel extends JPanel {
     private JTextArea createLegendArea() {
         JTextArea legendArea = new JTextArea("""
                 Drag: pan camera
-                Mouse wheel: discrete zoom
+                Mouse wheel: smooth zoom
                 Gold border: territory
                 Dark hex: fog of war
                 Colored dots: units

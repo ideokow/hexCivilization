@@ -85,7 +85,7 @@ public class GameEngine {
 
     private void loadMap() {
         try {
-            hexGrid = (new MapLoader()).loadMap02();
+            hexGrid = (new MapLoader()).loadMapX(3);
         } catch (IOException e) {
             e.printStackTrace();
         }

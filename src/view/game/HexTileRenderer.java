@@ -24,8 +24,12 @@ import java.util.Set;
 final class HexTileRenderer {
 
     private static final int BASE_HEX_SIZE = 32;
-    private static final double[] ZOOM_LEVELS = {
-            0.70, 0.85, 1.0, 1.20, 1.45, 1.75, 2.10
+
+    // sprites are rendered at this base size and bucketed by zoom for caching;
+    // HexMapPanel scales them smoothly to the current continuous zoom
+    static final int BASE_SPRITE_HEX_SIZE = 64;
+    private static final double[] ZOOM_BUCKETS = {
+            0.50, 0.75, 1.0, 1.50, 2.0, 3.0, 4.0
     };
 
     private static final Color FOG_FILL = new Color(29, 33, 43);
@@ -40,8 +44,8 @@ final class HexTileRenderer {
 
     private static final BasicStroke HEX_STROKE = new BasicStroke(1.0f);
     private static final Font FOG_FONT = new Font("SansSerif", Font.BOLD, 14);
-    private static final Font[] TERRAIN_FONTS = createFonts(Font.BOLD, 11, 10);
-    private static final Font[] SMALL_BOLD_FONTS = createFonts(Font.BOLD, 10, 9);
+    private static final Font TERRAIN_FONT = new Font("SansSerif", Font.BOLD, 20);
+    private static final Font SMALL_BOLD_FONT = new Font("SansSerif", Font.BOLD, 18);
     private static final double[] HEX_COSINES = new double[6];
     private static final double[] HEX_SINES = new double[6];
     private static final Map<TerrainType, Color> TERRAIN_COLORS = createTerrainColors();
@@ -59,12 +63,15 @@ final class HexTileRenderer {
     private final Map<Integer, Map<TileKey, BufferedImage>> spriteCaches = new HashMap<>();
     private final Map<Integer, String> resourceLabels = new HashMap<>();
 
-    BufferedImage spriteFor(
+    record CachedSprite(BufferedImage image, double bucketZoom) {}
+
+    CachedSprite spriteFor(
             Hex hex,
             boolean discovered,
             Set<Resource> resources,
-            int zoomIndex
+            double zoomFactor
     ) {
+        int zoomBucket = zoomBucketFor(zoomFactor);
         TileKey key = new TileKey(
                 discovered,
                 hex.getTerrain(),
@@ -73,17 +80,29 @@ final class HexTileRenderer {
         );
 
         Map<TileKey, BufferedImage> cache = spriteCaches.computeIfAbsent(
-                zoomIndex,
+                zoomBucket,
                 ignored -> new HashMap<>()
         );
-        return cache.computeIfAbsent(
+        BufferedImage image = cache.computeIfAbsent(
                 key,
-                ignored -> createTileSprite(key, zoomIndex)
+                ignored -> createTileSprite(key, zoomBucket)
         );
+        return new CachedSprite(image, ZOOM_BUCKETS[zoomBucket]);
     }
 
-    private BufferedImage createTileSprite(TileKey key, int zoomIndex) {
-        double hexSize = BASE_HEX_SIZE * ZOOM_LEVELS[zoomIndex];
+    // smallest bucket that still covers the requested zoom (keeps text sharp)
+    private int zoomBucketFor(double zoomFactor) {
+        double scaledZoom = zoomFactor * BASE_HEX_SIZE / (double) BASE_SPRITE_HEX_SIZE;
+        for (int index = 0; index < ZOOM_BUCKETS.length; index++) {
+            if (scaledZoom <= ZOOM_BUCKETS[index]) {
+                return index;
+            }
+        }
+        return ZOOM_BUCKETS.length - 1;
+    }
+
+    private BufferedImage createTileSprite(TileKey key, int zoomBucket) {
+        double hexSize = BASE_SPRITE_HEX_SIZE * ZOOM_BUCKETS[zoomBucket];
         int imageSize = (int) Math.ceil(hexSize * 2.0) + 4;
         BufferedImage image = new BufferedImage(
                 imageSize,
@@ -110,11 +129,10 @@ final class HexTileRenderer {
                         key,
                         resources,
                         center,
-                        hexSize,
-                        zoomIndex
+                        hexSize
                 );
             } else {
-                drawFogMark(graphics, polygon);
+                drawFogMark(graphics, polygon, hexSize);
             }
         } finally {
             graphics.dispose();
@@ -127,10 +145,9 @@ final class HexTileRenderer {
             TileKey key,
             Set<Resource> resources,
             double center,
-            double hexSize,
-            int zoomIndex
+            double hexSize
     ) {
-        graphics.setFont(TERRAIN_FONTS[zoomIndex]);
+        graphics.setFont(deriveTileFont(TERRAIN_FONT, hexSize));
         graphics.setColor(TERRAIN_TEXT);
         drawCenteredString(
                 graphics,
@@ -150,7 +167,7 @@ final class HexTileRenderer {
                     12
             );
             graphics.setColor(RESOURCE_TEXT);
-            graphics.setFont(SMALL_BOLD_FONTS[zoomIndex]);
+            graphics.setFont(deriveTileFont(SMALL_BOLD_FONT, hexSize));
             drawCenteredString(
                     graphics,
                     resourcesShortName(resources),
@@ -168,7 +185,7 @@ final class HexTileRenderer {
                     (int) (hexSize * 0.36)
             );
             graphics.setColor(Color.WHITE);
-            graphics.setFont(SMALL_BOLD_FONTS[zoomIndex]);
+            graphics.setFont(deriveTileFont(SMALL_BOLD_FONT, hexSize));
             drawCenteredString(
                     graphics,
                     buildingShortName(key.buildingType()),
@@ -178,18 +195,24 @@ final class HexTileRenderer {
         }
     }
 
+    // fonts stay proportional to the sprite's hex size
+    private Font deriveTileFont(Font base, double hexSize) {
+        float size = (float) (base.getSize2D() * hexSize / BASE_SPRITE_HEX_SIZE);
+        return base.deriveFont(Math.max(8f, size));
+    }
+
     private void drawBorder(Graphics2D graphics, Polygon polygon, boolean discovered) {
         graphics.setColor(discovered ? HEX_BORDER : FOG_BORDER);
         graphics.setStroke(HEX_STROKE);
         graphics.drawPolygon(polygon);
     }
 
-    private void drawFogMark(Graphics2D graphics, Polygon polygon) {
+    private void drawFogMark(Graphics2D graphics, Polygon polygon, double hexSize) {
         Rectangle bounds = polygon.getBounds();
         graphics.setColor(FOG_OVERLAY);
         graphics.fillPolygon(polygon);
         graphics.setColor(FOG_TEXT);
-        graphics.setFont(FOG_FONT);
+        graphics.setFont(deriveTileFont(FOG_FONT, hexSize));
         drawCenteredString(graphics, "?", bounds.getCenterX(), bounds.getCenterY() + 5);
     }
 
@@ -298,18 +321,6 @@ final class HexTileRenderer {
         graphics.drawString(text, (int) Math.round(x - metrics.stringWidth(text) / 2.0), (int) Math.round(y));
     }
 
-    private static Font[] createFonts(int style, int normalSize, int minimumSize) {
-        Font[] fonts = new Font[ZOOM_LEVELS.length];
-        for (int index = 0; index < ZOOM_LEVELS.length; index++) {
-            fonts[index] = new Font(
-                    "SansSerif",
-                    style,
-                    Math.max(minimumSize, (int) (normalSize * ZOOM_LEVELS[index]))
-            );
-        }
-        return fonts;
-    }
-
     private static Map<TerrainType, Color> createTerrainColors() {
         Map<TerrainType, Color> colors = new EnumMap<>(TerrainType.class);
         colors.put(TerrainType.TOWN_HALL, new Color(132, 111, 82));
@@ -317,6 +328,9 @@ final class HexTileRenderer {
         colors.put(TerrainType.GRASSLAND, new Color(99, 165, 94));
         colors.put(TerrainType.FOREST, new Color(59, 126, 76));
         colors.put(TerrainType.MOUNTAIN, new Color(124, 128, 132));
+        colors.put(TerrainType.SEA, new Color(48, 120, 190));
+        colors.put(TerrainType.RIVER, new Color(88, 160, 210));
+        colors.put(TerrainType.MOUNTAIN_RANGE, new Color(60, 64, 70));
         return colors;
     }
 

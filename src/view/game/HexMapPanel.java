@@ -27,17 +27,12 @@ final class HexMapPanel extends JPanel {
     private static final int BASE_HEX_SIZE = 32;
     private static final int UNIT_ANIMATION_FRAMES = 1;
     private static final int UNIT_ANIMATION_DELAY_MS = 24;
-    private static final int DEFAULT_ZOOM_INDEX = 2;
 
-    private static final double[] ZOOM_LEVELS = {
-            0.70,
-            0.85,
-            1.0,
-            1.20,
-            1.45,
-            1.75,
-            2.10
-    };
+    // continuous zoom: see much further out or in without steps
+    private static final double MIN_ZOOM = 0.25;
+    private static final double MAX_ZOOM = 2.50;
+    private static final double DEFAULT_ZOOM = 1.0;
+    private static final double ZOOM_STEP_FACTOR = 1.12;
 
     private static final Color BACKGROUND_TOP = new Color(24, 31, 43);
     private static final Color BACKGROUND_BOTTOM = new Color(12, 15, 21);
@@ -59,7 +54,7 @@ final class HexMapPanel extends JPanel {
     private static final BasicStroke HIGHLIGHTED_UNIT_STROKE = new BasicStroke(3.0f);
 
     private static final Font INSTRUCTION_FONT = new Font("SansSerif", Font.PLAIN, 12);
-    private static final Font[] UNIT_FONTS = createUnitFonts();
+    private static final Font UNIT_FONT = new Font("SansSerif", Font.BOLD, 10);
 
     private static final double[] HEX_COSINES = new double[6];
     private static final double[] HEX_SINES = new double[6];
@@ -72,24 +67,12 @@ final class HexMapPanel extends JPanel {
         }
     }
 
-    private static Font[] createUnitFonts() {
-        Font[] fonts = new Font[ZOOM_LEVELS.length];
-        for (int index = 0; index < ZOOM_LEVELS.length; index++) {
-            fonts[index] = new Font(
-                    "SansSerif",
-                    Font.BOLD,
-                    Math.max(9, (int) (10 * ZOOM_LEVELS[index]))
-            );
-        }
-        return fonts;
-    }
-
     private final GameViewModel viewModel;
     private final GameViewState viewState;
     private final HexTileRenderer tileRenderer = new HexTileRenderer();
 
     private long lastDragRepaintTime;
-    private int zoomIndex = DEFAULT_ZOOM_INDEX;
+    private double zoomFactor = DEFAULT_ZOOM;
     private int panOffsetX;
     private int panOffsetY;
     private Point lastDragPoint;
@@ -146,7 +129,7 @@ final class HexMapPanel extends JPanel {
                 int direction =
                         event.getWheelRotation() < 0 ? 1 : -1;
 
-                zoomBy(direction);
+                zoomBy(direction, event.getPoint());
             }
         };
 
@@ -194,7 +177,7 @@ final class HexMapPanel extends JPanel {
     void resetCamera() {
         panOffsetX = 0;
         panOffsetY = 0;
-        zoomIndex = DEFAULT_ZOOM_INDEX;
+        zoomFactor = DEFAULT_ZOOM;
         repaint();
     }
 
@@ -262,19 +245,28 @@ final class HexMapPanel extends JPanel {
         repaint();
     }
 
-    private void zoomBy(int direction) {
-        int nextZoomIndex = Math.max(
-                0,
+    // smooth zoom anchored at the cursor position
+    private void zoomBy(int direction, Point anchor) {
+        double nextZoom = Math.max(
+                MIN_ZOOM,
                 Math.min(
-                        ZOOM_LEVELS.length - 1,
-                        zoomIndex + direction
+                        MAX_ZOOM,
+                        zoomFactor * Math.pow(ZOOM_STEP_FACTOR, direction)
                 )
         );
 
-        if (nextZoomIndex != zoomIndex) {
-            zoomIndex = nextZoomIndex;
-            repaint();
+        if (nextZoom == zoomFactor) {
+            return;
         }
+
+        double centerX = getWidth() / 2.0 + panOffsetX;
+        double centerY = getHeight() / 2.0 + panOffsetY;
+        double ratio = nextZoom / zoomFactor;
+
+        panOffsetX = (int) Math.round(anchor.x - getWidth() / 2.0 - (anchor.x - centerX) * ratio);
+        panOffsetY = (int) Math.round(anchor.y - getHeight() / 2.0 - (anchor.y - centerY) * ratio);
+        zoomFactor = nextZoom;
+        repaint();
     }
 
     private HexCoordinate getCoordinateAt(Point point) {
@@ -523,17 +515,25 @@ final class HexMapPanel extends JPanel {
                 ? hex.getAvailableResources()
                 : Set.of();
         Point2D.Double center = centerOf(coordinate);
-        BufferedImage tileSprite = tileRenderer.spriteFor(
+        HexTileRenderer.CachedSprite cached = tileRenderer.spriteFor(
                 hex,
                 discovered,
                 resources,
-                zoomIndex
+                zoomFactor
         );
+        BufferedImage tileSprite = cached.image();
+
+        // scale the sprite (rendered at bucketZoom) to the current zoom factor
+        double spriteScale = zoomFactor / (2.0 * cached.bucketZoom());
+        int spriteWidth = (int) Math.round(tileSprite.getWidth() * spriteScale);
+        int spriteHeight = (int) Math.round(tileSprite.getHeight() * spriteScale);
 
         graphics2D.drawImage(
                 tileSprite,
-                (int) Math.round(center.x - tileSprite.getWidth() / 2.0),
-                (int) Math.round(center.y - tileSprite.getHeight() / 2.0),
+                (int) Math.round(center.x - spriteWidth / 2.0),
+                (int) Math.round(center.y - spriteHeight / 2.0),
+                spriteWidth,
+                spriteHeight,
                 null
         );
 
@@ -742,7 +742,9 @@ final class HexMapPanel extends JPanel {
         );
 
         graphics2D.setColor(Color.WHITE);
-        graphics2D.setFont(UNIT_FONTS[zoomIndex]);
+        graphics2D.setFont(
+                UNIT_FONT.deriveFont((float) Math.max(7, 10 * zoomFactor))
+        );
 
         drawCenteredString(
                 graphics2D,
@@ -849,11 +851,7 @@ final class HexMapPanel extends JPanel {
     }
 
     private double currentHexSize() {
-        return BASE_HEX_SIZE * currentZoom();
-    }
-
-    private double currentZoom() {
-        return ZOOM_LEVELS[zoomIndex];
+        return BASE_HEX_SIZE * zoomFactor;
     }
 
     private Color unitColor(UnitType unitType) {
