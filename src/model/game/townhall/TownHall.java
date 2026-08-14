@@ -7,6 +7,7 @@ import model.game.hex.HexCoordinate;
 import model.game.hex.HexGrid;
 import model.game.player.Player;
 import model.game.hex.Resource;
+import model.game.registry.MilitaryRegistry;
 import model.game.registry.UnitRegistry;
 import model.game.townhall.opration.GenerationStatus;
 import model.game.unit.*;
@@ -27,7 +28,8 @@ public class TownHall extends Building {
     private final Happiness happiness = new Happiness();
 
     private int unitCap;
-    private final int baseUnitCap = 10;
+    private static final int BASE_MILITARY_UNIT_CAP = 5;
+    private static final int BASE_UNIT_CAP = 10;
     private int unitNumber = 0;
 
     private boolean dockBuildingBonus = false;
@@ -43,7 +45,7 @@ public class TownHall extends Building {
         resourceStorage.put(Resource.FOOD, 10);
         resourceStorage.put(Resource.WOOD, 10);
 
-        unitCap = baseUnitCap;
+        unitCap = BASE_UNIT_CAP;
         level = Level.LEVEL_1;
         technologies = new Technologies(this);
 
@@ -236,8 +238,13 @@ public class TownHall extends Building {
     }
 
     public void setUnitCap(int townsNumber, int villageNumber) {
-        unitCap = (int) (((double) baseUnitCap) * (((double) townsNumber * 1) + ((double) villageNumber * 0.5) + 1.0));
+        unitCap = (int) (((double) BASE_UNIT_CAP) * (((double) townsNumber * 1) + ((double) villageNumber * 0.5) + 1.0));
         if (unitCap < unitNumber) unitCap = unitNumber;
+    }
+
+    public int getMilitaryUnitCap() {
+        return BASE_MILITARY_UNIT_CAP;
+        // TODO : consider another things
     }
 
     public void decreaseUnitNumber() {
@@ -296,7 +303,9 @@ public class TownHall extends Building {
             return GenerationStatus.NOT_ENOUGH_LEVEL;
         if (unitType.equals(UnitType.CAVALRY))
             return GenerationStatus.CANT_BUILD_CAVALRY;
-        // TODO : check military cap
+        if (MilitaryRegistry.getInstance().getMilitaryUnitsNumber() >= getMilitaryUnitCap()) {
+            return GenerationStatus.MILITARY_UNIT_CAP_REACHED;
+        }
         return GenerationStatus.SUCCESS;
     }
 
