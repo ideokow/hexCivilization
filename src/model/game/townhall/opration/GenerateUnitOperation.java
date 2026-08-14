@@ -18,7 +18,9 @@ public class GenerateUnitOperation extends TownHallOperation {
     }
 
     @Override
-    protected void onReserve() {}
+    protected void onReserve() {
+        getQueue().getTownHall().spendResources(unitType.getCost());
+    }
 
     @Override
     protected void onComplete() {
@@ -26,15 +28,18 @@ public class GenerateUnitOperation extends TownHallOperation {
     }
 
     @Override
-    protected void onCancel() {}
+    protected void onCancel() {
+        getQueue().getTownHall().addResources(unitType.getCost());
+    }
 
     @Override
     protected OperationCheckResult canOperate() {
-        if (getQueue().getTownHall().canGenerateUnit()) {
+        GenerationStatus status = getQueue().getTownHall().canGenerateUnit(unitType);
+        if (status.equals(GenerationStatus.SUCCESS)) {
             return OperationCheckResult.possible();
         }
         else {
-            return OperationCheckResult.impossible("Unit cap reached! can't generate new Unit.");
+            return OperationCheckResult.impossible(status.getMessage());
         }
     }
 }

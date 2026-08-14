@@ -8,6 +8,7 @@ import model.game.hex.HexGrid;
 import model.game.player.Player;
 import model.game.hex.Resource;
 import model.game.registry.UnitRegistry;
+import model.game.townhall.opration.GenerationStatus;
 import model.game.unit.*;
 
 import java.util.*;
@@ -226,10 +227,6 @@ public class TownHall extends Building {
 
     // --- unit cap ---
 
-    public boolean canGenerateUnit() {
-        return unitNumber < unitCap;
-    }
-
     public int getUnitCap() {
         return unitCap;
     }
@@ -241,6 +238,10 @@ public class TownHall extends Building {
     public void setUnitCap(int townsNumber, int villageNumber) {
         unitCap = (int) (((double) baseUnitCap) * (((double) townsNumber * 1) + ((double) villageNumber * 0.5) + 1.0));
         if (unitCap < unitNumber) unitCap = unitNumber;
+    }
+
+    public void decreaseUnitNumber() {
+        unitNumber--;
     }
 
     // --- unit generation ---
@@ -255,7 +256,7 @@ public class TownHall extends Building {
 
     public void generateUnit(UnitType unitType) {
 
-        if (!canGenerateUnit()) return;
+        if (!canGenerateUnit(unitType).equals(GenerationStatus.SUCCESS)) return;
 
         // make unit
         Unit unit;
@@ -286,8 +287,17 @@ public class TownHall extends Building {
         unitNumber++;
     }
 
-    public void decreaseUnitNumber() {
-        unitNumber--;
+    public GenerationStatus canGenerateUnit(UnitType unitType) {
+        if (unitNumber >= unitCap)
+            return GenerationStatus.UNIT_CAP_REACHED;
+        if (!canAfford(unitType.getCost()))
+            return GenerationStatus.CANT_AFFORD_COST;
+        if (getLevel().getLevelN() < unitType.getMinimumLevel().getLevelN())
+            return GenerationStatus.NOT_ENOUGH_LEVEL;
+        if (unitType.equals(UnitType.CAVALRY))
+            return GenerationStatus.CANT_BUILD_CAVALRY;
+        // TODO : check military cap
+        return GenerationStatus.SUCCESS;
     }
 
     @Override

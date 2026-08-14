@@ -17,15 +17,15 @@ public abstract class Unit {
     private HexCoordinate position;
 
     private int hp;
-    private final static int MAXIMUM_HP_AMOUNT = 50;
-    private final static int MINIMUM_HP_AMOUNT = 0;
+    private final int BASE_HP;
 
     public Unit(Player owner, HexCoordinate position) {
         this.unitID = "unit-id-" + unitsN;
         unitsN++;
         this.owner = owner;
         this.position = position;
-        hp = MAXIMUM_HP_AMOUNT;
+        BASE_HP = getType().getHP();
+        hp = BASE_HP;
     }
 
     // --- getters and setters ---
@@ -54,8 +54,12 @@ public abstract class Unit {
         return hp;
     }
 
+    public int getHpCap() {
+        return BASE_HP;
+    }
+
     public void increaseHp(int amount) {
-        hp = Math.max(MINIMUM_HP_AMOUNT, Math.min(MAXIMUM_HP_AMOUNT, hp + amount));
+        hp = Math.max(0, Math.min(getHpCap(), hp + amount));
     }
 
     // --- AP things ---
