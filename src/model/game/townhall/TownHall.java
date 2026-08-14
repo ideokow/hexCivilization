@@ -289,6 +289,11 @@ public class TownHall extends Building {
         // add to registry
         UnitRegistry.getInstance().addUnit(unit);
 
+        // military cap reach impact on public contest
+        if (MilitaryRegistry.getInstance().getMilitaryUnitsNumber() == getMilitaryUnitCap()) {
+            happiness.addHappiness(-1);
+        }
+
         // place unit on hex
         grid.get(new HexCoordinate(0, 0)).addUnit(unit);
         unitNumber++;

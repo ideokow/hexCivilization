@@ -125,8 +125,11 @@ public class GameEngine {
         // operation queue
         operationQueue.handleTurn();
 
+        // --- happiness ---
         // check is there monuments
         townHall.getHappiness().checkMonuments();
+        // check is there military in TownHall
+        townHall.getHappiness().checkTownHallMilitary(townHall, hexGrid);
     }
 
     /*

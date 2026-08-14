@@ -1,10 +1,15 @@
 package model.game.happiness;
 
 import model.game.building.Building;
-import model.game.building.Monument;
+import model.game.building.BuildingType;
+import model.game.hex.HexGrid;
 import model.game.registry.BuildingRegistry;
+import model.game.townhall.TownHall;
+import model.game.unit.Unit;
+import model.game.unit.UnitType;
 
 import java.util.Collection;
+import java.util.List;
 
 public class Happiness {
 
@@ -21,8 +26,18 @@ public class Happiness {
     public void checkMonuments() {
         Collection<Building> allBuildings = BuildingRegistry.getInstance().getBuildingMap().values();
         for (Building building: allBuildings) {
-            if (building instanceof Monument) {
+            if (building.getType().equals(BuildingType.MONUMENT)) {
                 addHappiness(2);
+            }
+        }
+    }
+
+    public void checkTownHallMilitary(TownHall townHall, HexGrid grid) {
+        List<Unit> units = grid.get(townHall.getPosition()).getUnits();
+        for (Unit unit : units) {
+            if (UnitType.isMilitary(unit.getType())) {
+                addHappiness(1);
+                return;
             }
         }
     }
