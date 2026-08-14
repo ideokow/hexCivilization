@@ -29,7 +29,7 @@ public class TownHall extends Building {
     private final Happiness happiness = new Happiness();
 
     private int unitCap;
-    private static final int BASE_MILITARY_UNIT_CAP = 5;
+    private static final int BASE_MILITARY_UNIT_CAP = 10;
     private static final int BASE_UNIT_CAP = 10;
     private int unitNumber = 0;
 
@@ -248,8 +248,7 @@ public class TownHall extends Building {
     }
 
     public int getMilitaryUnitCap() {
-        return BASE_MILITARY_UNIT_CAP;
-        // TODO : consider another things
+        return (BASE_MILITARY_UNIT_CAP * level.getLevelN()) + ((int) (0.2 * getUnitCap()));
     }
 
     public void increaseUnitNumber() {
