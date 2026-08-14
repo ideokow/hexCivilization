@@ -23,10 +23,6 @@ public class MilitaryStable extends Building {
         return cost;
     }
 
-    public static int getConstructionAPCost() {
-        return 2;
-    }
-
     @Override
     public boolean payUpkeep(TownHall townHall) {
         if (isRuined()) {

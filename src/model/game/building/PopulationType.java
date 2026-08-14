@@ -6,18 +6,16 @@ import java.util.EnumMap;
 import java.util.Map;
 
 public enum PopulationType {
-    VILLAGE(BuildingType.VILLAGE, 3, 3, cost(4, 3, 1, 0)),
-    TOWN(BuildingType.TOWN, 6, 4, cost(6, 6, 2, 0));
+    VILLAGE(BuildingType.VILLAGE, 0.5, cost(4, 3, 1, 0)),
+    TOWN(BuildingType.TOWN, 1, cost(6, 6, 2, 0));
 
     private final BuildingType buildingType;
-    private final int unitCapIncrease;
-    private final int buildApCost;
+    private final double unitCapIncrease;
     private final Map<Resource, Integer> constructionCost;
 
-    PopulationType(BuildingType buildingType, int unitCapIncrease, int buildApCost, Map<Resource, Integer> constructionCost) {
+    PopulationType(BuildingType buildingType, double unitCapIncrease, Map<Resource, Integer> constructionCost) {
         this.buildingType = buildingType;
         this.unitCapIncrease = unitCapIncrease;
-        this.buildApCost = buildApCost;
         this.constructionCost = constructionCost;
     }
 
@@ -34,12 +32,8 @@ public enum PopulationType {
         return buildingType;
     }
 
-    public int getUnitCapIncrease() {
+    public double getUnitCapIncrease() {
         return unitCapIncrease;
-    }
-
-    public int getBuildApCost() {
-        return buildApCost;
     }
 
     public Map<Resource, Integer> getConstructionCost() {

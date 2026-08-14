@@ -10,41 +10,41 @@ import java.util.Map;
  * Five primary production types in the game
  */
 public enum ProductionType {
-    LUMBER_MILL(BuildingType.LUMBER_MILL, Resource.WOOD, TerrainType.FOREST, Resource.WOOD, 3, 2, 1, 1, cost(2, 0, 0, 0)),
-    STONE_MINE(BuildingType.STONE_MINE, Resource.STONE, TerrainType.MOUNTAIN, Resource.STONE, 2, 2, 2, 2, cost(3, 0, 0, 0)),
-    IRON_MINE(BuildingType.IRON_MINE, Resource.IRON, TerrainType.MOUNTAIN, Resource.IRON, 2, 1, 2, 2, cost(4, 1, 0, 0)),
-    FARM(BuildingType.FARM, Resource.FOOD, TerrainType.GRASSLAND, Resource.FOOD, 3, 3, 1, 1, cost(1, 0, 0, 0)),
-    STABLE(BuildingType.STABLE, Resource.FOOD, TerrainType.PLAINS, Resource.FOOD, 2, 2, 2, 2, cost(3, 1, 0, 0)),
-    DOCK(BuildingType.DOCK, Resource.FOOD, null, null, 3, 1, 3, 1, cost(10, 0, 4, 0));
+    LUMBER_MILL
+            (BuildingType.LUMBER_MILL, Resource.WOOD, Resource.WOOD, 3, 2, 1, cost(2, 0, 0, 0)),
+    STONE_MINE
+            (BuildingType.STONE_MINE, Resource.STONE, Resource.STONE, 2, 2, 2, cost(3, 0, 0, 0)),
+    IRON_MINE
+            (BuildingType.IRON_MINE, Resource.IRON, Resource.IRON, 2, 1, 2, cost(4, 1, 0, 0)),
+    FARM
+            (BuildingType.FARM, Resource.FOOD, Resource.FOOD, 3, 3, 1, cost(1, 0, 0, 0)),
+    STABLE
+            (BuildingType.STABLE, Resource.FOOD, Resource.FOOD, 2, 2, 2, cost(3, 1, 0, 0)),
+    DOCK
+            (BuildingType.DOCK, Resource.FOOD, null, 3, 1, 1, cost(10, 0, 4, 0));
 
     private final BuildingType buildingType;
     private final Resource produceResource;
-    private final TerrainType requiredTerrain;
     private final Resource requiredResource;
     private final int workerCapacity;
     private final int productionRate;
-    private final int buildApCost;
     private final int stationApCost;
     private final Map<Resource, Integer> constructionCost;
 
     ProductionType(
             BuildingType buildingType,
             Resource produceResource,
-            TerrainType requiredTerrain,
             Resource requiredResource,
             int workerCapacity,
             int productionRate,
-            int buildApCost,
             int stationApCost,
             Map<Resource, Integer> constructionCost
     ) {
         this.buildingType = buildingType;
         this.produceResource = produceResource;
-        this.requiredTerrain = requiredTerrain;
         this.requiredResource = requiredResource;
         this.workerCapacity = workerCapacity;
         this.productionRate = productionRate;
-        this.buildApCost = buildApCost;
         this.stationApCost = stationApCost;
         this.constructionCost = constructionCost;
     }
@@ -66,10 +66,6 @@ public enum ProductionType {
         return produceResource;
     }
 
-    public TerrainType getRequiredTerrain() {
-        return requiredTerrain;
-    }
-
     public Resource getRequiredResource() {
         return requiredResource;
     }
@@ -80,10 +76,6 @@ public enum ProductionType {
 
     public int getProductionRate() {
         return productionRate;
-    }
-
-    public int getBuildApCost() {
-        return buildApCost;
     }
 
     public int getStationApCost() {

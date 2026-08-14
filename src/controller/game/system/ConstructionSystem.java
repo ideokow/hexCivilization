@@ -5,7 +5,6 @@ import model.game.hex.Hex;
 import model.game.hex.HexCoordinate;
 import model.game.hex.HexGrid;
 import model.game.hex.Resource;
-import model.game.hex.TerrainType;
 import model.game.player.Player;
 import model.game.registry.BuildingRegistry;
 import model.game.registry.UnitRegistry;
@@ -70,7 +69,7 @@ public class ConstructionSystem {
         if (!townHall.canAfford(getConstructionCost(type))) {
             return BuildResult.NOT_ENOUGH_RESOURCES;
         }
-        if (unit.getCurrentAP() < getBuildApCost(type)) {
+        if (unit.getCurrentAP() < type.getBuildAPCost()) {
             return BuildResult.NOT_ENOUGH_AP;
         }
         if (!((Builder) unit).hasCharges()) {
@@ -119,7 +118,7 @@ public class ConstructionSystem {
         Building building = createBuilding(player, type, coordinate);
 
         townHall.spendResources(getConstructionCost(type));
-        builder.spendAP(getBuildApCost(type));
+        builder.spendAP(type.getBuildAPCost());
         hex.setBuilding(building);
         builder.consumeCharge();
 
@@ -143,76 +142,26 @@ public class ConstructionSystem {
      */
     private BuildResult checkPlacement(Hex hex, BuildingType type) {
         // check hex requirements
-        TerrainType requiredTerrain = getRequiredTerrain(type);
-        if (requiredTerrain != null && hex.getTerrain() != requiredTerrain) {
+        if (!type.isAllowedOn(hex.getTerrain())) {
             return BuildResult.WRONG_TERRAIN;
         }
+        // check required resource
         Resource requiredResource = getRequiredResource(type);
         if (requiredResource != null && !hex.isAvailable(requiredResource)) {
             return BuildResult.MISSING_HEX_RESOURCE;
         }
-
-        if (type == BuildingType.FARM && !hex.isAvailable(Resource.FOOD)) {
-            return BuildResult.MISSING_HEX_RESOURCE;
-        }
-        if (type == BuildingType.STABLE && !hex.isAvailable(Resource.FOOD)) {
-            return BuildResult.MISSING_HEX_RESOURCE;
-        }
-        if (type == BuildingType.IRON_MINE && !hex.isAvailable(Resource.IRON)) {
-            return BuildResult.MISSING_HEX_RESOURCE;
-        }
-
-        if (PopulationType.fromBuildingType(type) != null && !hex.getAvailableResources().isEmpty()) {
-            return BuildResult.HEX_HAS_RESOURCE;
-        }
-
         return BuildResult.SUCCESS;
     }
 
     /*
     other useful things for building
      */
-    private TerrainType getRequiredTerrain(BuildingType type) {
-        ProductionType productionType = ProductionType.fromBuildingType(type);
-        if (productionType == null) {
-            return null;
-        }
-        return productionType.getRequiredTerrain();
-    }
-
     private Resource getRequiredResource(BuildingType type) {
         ProductionType productionType = ProductionType.fromBuildingType(type);
         if (productionType == null) {
             return null;
         }
         return productionType.getRequiredResource();
-    }
-
-    private int getBuildApCost(BuildingType type) {
-
-        if (type.equals(BuildingType.MILITARY_STABLE)) {
-            return MilitaryStable.getConstructionAPCost();
-        }
-
-        if (type.equals(BuildingType.MONUMENT)) {
-            return Monument.getConstructionAPCost();
-        }
-
-        if (type.equals(BuildingType.ROAD)) {
-            return Road.getConstructionAPCost();
-        }
-
-        ProductionType productionType = ProductionType.fromBuildingType(type);
-        if (productionType != null) {
-            return productionType.getBuildApCost();
-        }
-
-        PopulationType populationType = PopulationType.fromBuildingType(type);
-        if (populationType != null) {
-            return populationType.getBuildApCost();
-        }
-
-        return 0;
     }
 
     private Map<Resource, Integer> getConstructionCost(BuildingType type) {
@@ -286,7 +235,7 @@ public class ConstructionSystem {
         if (!(unit instanceof Builder)) {
             return RuinStatus.NOT_A_BUILDER;
         }
-        if (unit.getCurrentAP() < getBuildApCost(building.getType())) {
+        if (unit.getCurrentAP() < building.getType().getBuildAPCost()) {
             return RuinStatus.LOW_AP;
         }
         if (!((Builder) unit).hasCharges()) {
@@ -301,7 +250,7 @@ public class ConstructionSystem {
         if (!ruinStatus.equals(RuinStatus.SUCCESS)) return ruinStatus;
 
         Builder builder = (Builder) unit;
-        builder.spendAP(getBuildApCost(building.getType()));
+        builder.spendAP(building.getType().getBuildAPCost());
         builder.consumeCharge();
 
         if (!builder.hasCharges()) {

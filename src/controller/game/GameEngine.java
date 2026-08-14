@@ -230,6 +230,7 @@ public class GameEngine {
     /*
     generate unit trigger
      */
+    // TODO : add a building selector for this (town hall or which military stable for cavalry)
     public void generateUnitTrigger(UnitType unitType) {
         TownHallOperation operation = new GenerateUnitOperation(unitType, operationQueue);
         OperationCheckResult result = operationQueue.reserveOperation(operation);

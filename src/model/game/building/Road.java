@@ -20,10 +20,6 @@ public class Road extends Building {
         return cost;
     }
 
-    public static int getConstructionAPCost() {
-        return 1;
-    }
-
     @Override
     public boolean payUpkeep(TownHall townHall) {
         return true;

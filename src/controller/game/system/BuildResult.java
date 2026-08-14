@@ -17,8 +17,6 @@ public enum BuildResult {
             ("This building cannot be constructed on the selected terrain."),
     MISSING_HEX_RESOURCE
             ("The target hex does not contain the required resource."),
-    HEX_HAS_RESOURCE
-            ("This building requires a resource-free hex."),
     NOT_ENOUGH_RESOURCES
             ("You do not have enough resources to construct this building."),
     NOT_ENOUGH_AP

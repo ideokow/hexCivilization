@@ -2,6 +2,7 @@ package model.game.townhall;
 
 import model.game.building.Building;
 import model.game.building.BuildingType;
+import model.game.building.PopulationType;
 import model.game.happiness.Happiness;
 import model.game.hex.HexCoordinate;
 import model.game.hex.HexGrid;
@@ -238,7 +239,11 @@ public class TownHall extends Building {
     }
 
     public void setUnitCap(int townsNumber, int villageNumber) {
-        unitCap = (int) (((double) BASE_UNIT_CAP) * (((double) townsNumber * 1) + ((double) villageNumber * 0.5) + 1.0));
+        unitCap = (int) (((double) BASE_UNIT_CAP) *
+                (((double) townsNumber * PopulationType.TOWN.getUnitCapIncrease()) +
+                ((double) villageNumber * PopulationType.VILLAGE.getUnitCapIncrease()) +
+                1.0)
+        );
         if (unitCap < unitNumber) unitCap = unitNumber;
     }
 

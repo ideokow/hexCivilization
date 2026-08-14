@@ -20,10 +20,6 @@ public class Monument extends Building {
         return cost;
     }
 
-    public static int getConstructionAPCost() {
-        return 5;
-    }
-
     @Override
     public boolean payUpkeep(TownHall townHall) {
         if (isRuined()) {
