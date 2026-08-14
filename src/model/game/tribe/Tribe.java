@@ -4,6 +4,9 @@ import model.game.happiness.Happiness;
 import model.game.hex.HexCoordinate;
 import model.game.hex.Resource;
 import model.game.townhall.TownHall;
+import model.game.tribe.mission.Mission;
+import model.game.tribe.mission.MissionState;
+import model.game.tribe.mission.MissionType;
 
 import java.util.Map;
 
@@ -21,6 +24,10 @@ public class Tribe {
     private final TownHall relatedTownHall;
     private int relation;
 
+    private Mission currentMission;
+
+    // --- state parameters
+
     private boolean atWar;
     private boolean allianceActive;
 
@@ -28,7 +35,9 @@ public class Tribe {
     private int peaceRequestedTurn = -1;
     private boolean attackedAfterPeaceRequest;
 
+    private boolean missionFailed = false;
     private int lastFailedMissionTurn = -1;
+
     private int lastProcessedTurn = -1;
 
     private boolean hadTradeRouteMission = false;
@@ -51,16 +60,13 @@ public class Tribe {
         lastProcessedTurn = currentTurn;
 
         processPeaceRequest(currentTurn);
+        updateMissionFail(currentTurn);
+        processMissionDeadLine();
+        currentMission.checkRequirements();
         updateAllianceReward();
+        reward();
 
-        /*
-         * Future turn-based tribe logic can be added here:
-         *
-         * processMission(currentTurn);
-         * processEnemyBehaviour();
-         * produceGuardIfNeeded(currentTurn);
-         * offerMissionIfNeeded(currentTurn);
-         */
+        // turn-based logic
     }
 
     /*
@@ -76,6 +82,10 @@ public class Tribe {
         relationIncrease += (gift.get(Resource.IRON)  /  5) * 3;
 
         increaseRelation(relationIncrease);
+
+        if (currentMission.getMissionState().equals(MissionState.ACTIVE)) {
+            currentMission.addResource(gift);
+        }
     }
 
     /*
@@ -90,7 +100,8 @@ public class Tribe {
         atWar = true;
         allianceActive = false;
 
-        // TODO: cancel mission and trade
+        currentMission.cancelMission();
+        // TODO : cancel trades
 
         cancelPeaceRequest();
 
@@ -190,16 +201,15 @@ public class Tribe {
         return (
             !isEnemy()
             && relation >= 70
-            && !(lastFailedMissionTurn >= 0
-                    && currentTurn - lastFailedMissionTurn < 5)
+            && !(lastFailedMissionTurn >= 0 && currentTurn - lastFailedMissionTurn < 5)
         );
     }
 
     public boolean isAllianceActive() {
         return (
-                allianceActive
-                        && !isEnemy()
-                        && relation >= 70
+            allianceActive
+            && !isEnemy()
+            && relation >= 70
         );
     }
 
@@ -212,9 +222,52 @@ public class Tribe {
         }
     }
 
-    public Map<Resource, Integer> getReward() {
-        if (!allianceActive) return null;
+    public void reward() {
+        if (!allianceActive) return;
+        relatedTownHall.addResources(tribeType.getRelatedReward());
+    }
+
+    public Map<Resource, Integer> getPotentialReward() {
         return tribeType.getRelatedReward();
+    }
+
+    /*
+    Related to mission
+     */
+    public void failMission() {
+        missionFailed = true;
+        increaseRelation(-10);
+    }
+
+    private void updateMissionFail(int turn) {
+        if (missionFailed) {
+            lastFailedMissionTurn = turn;
+            missionFailed = false;
+        }
+    }
+
+    private void processMissionDeadLine() {
+        if (lastProcessedTurn - currentMission.getAcquireTurn() > currentMission.getDeadLine()) {
+            currentMission.failMission();
+        }
+    }
+
+    public boolean canAcquireMission() {
+        return relation >= 20 && !isEnemy();
+    }
+
+    private void resetMission() {
+        boolean condition = (
+            canResetMission() &&
+            currentMission.getMissionState().equals(MissionState.CANCELLED) &&
+            currentMission.getMissionState().equals(MissionState.FAILED) &&
+            currentMission.getMissionState().equals(MissionState.COMPLETED)
+        );
+        if (condition) currentMission = MissionType.getMissionFromTribeType(this);
+    }
+
+    public boolean canResetMission() {
+        return lastFailedMissionTurn > 5 || lastFailedMissionTurn == -1;
     }
 
     /*
@@ -270,5 +323,9 @@ public class Tribe {
 
     public void setHadTradeRouteMission() {
         hadTradeRouteMission = true;
+    }
+
+    public Mission getCurrentMission() {
+        return currentMission;
     }
 }

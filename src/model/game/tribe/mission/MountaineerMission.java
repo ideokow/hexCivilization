@@ -29,6 +29,7 @@ public class MountaineerMission extends Mission {
         ) {
             return false;
         }
+        setIsReady();
         return true;
     }
 }

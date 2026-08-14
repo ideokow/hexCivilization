@@ -18,5 +18,6 @@ public class FighterMission extends Mission {
     public boolean checkRequirements() {
         return false;
         // TODO : check requirement
+        // if its ok don't forget return true and setIsReady()
     }
 }

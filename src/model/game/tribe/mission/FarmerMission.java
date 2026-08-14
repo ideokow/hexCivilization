@@ -29,6 +29,7 @@ public class FarmerMission extends Mission {
         ) {
             return false;
         }
+        setIsReady();
         return true;
     }
 }

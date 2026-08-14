@@ -24,10 +24,14 @@ public class CoastalMission extends Mission {
 
     @Override
     public boolean checkRequirements() {
-        return checkIsThereDockNearby(
-                getTribe().getRelatedTownHall().getGrid(),
-                getTribe().getLocation()
-        );
+        if (checkIsThereDockNearby(
+            getTribe().getRelatedTownHall().getGrid(),
+            getTribe().getLocation()
+        )) {
+            setIsReady();
+            return true;
+        }
+        return false;
     }
 
     private static boolean checkIsThereDockNearby(HexGrid hexGrid, HexCoordinate coordinate) {

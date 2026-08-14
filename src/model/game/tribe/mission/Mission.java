@@ -14,6 +14,7 @@ public abstract class Mission {
     private MissionState missionState;
 
     private final int deadLine;
+    private int acquireTurn;
 
     private final Map<Resource, Integer> missionWarehouse;
 
@@ -27,9 +28,14 @@ public abstract class Mission {
 
     public abstract void payReward();
 
-    public void acquireMission() {
-        if (missionState.equals(MissionState.AVAILABLE)) {
+    public boolean acquireMission(int acquireTurn) {
+        if (tribe.canAcquireMission() && missionState.equals(MissionState.AVAILABLE)) {
             missionState = MissionState.ACTIVE;
+            this.acquireTurn = acquireTurn;
+            return true;
+        }
+        else {
+            return false;
         }
     }
 
@@ -46,11 +52,18 @@ public abstract class Mission {
         if (!checkRequirements() && missionState.equals(MissionState.ACTIVE)) {
             missionState = MissionState.FAILED;
         }
+        tribe.failMission();
     }
 
     public void cancelMission() {
         if (!checkRequirements() && missionState.equals(MissionState.ACTIVE)) {
             missionState = MissionState.FAILED;
+        }
+    }
+
+    public void setIsReady() {
+        if (missionState.equals(MissionState.ACTIVE)) {
+            missionState = MissionState.READY_TO_DELIVER;
         }
     }
 
@@ -60,6 +73,12 @@ public abstract class Mission {
             missionWarehouse.put(resource, 0);
         }
         missionWarehouse.put(resource, missionWarehouse.get(resource) + amount);
+    }
+
+    public void addResource(Map<Resource, Integer> resources) {
+        for (Resource resource : resources.keySet()) {
+            addResource(resource, resources.get(resource));
+        }
     }
 
     public Map<Resource, Integer> getMissionWarehouse() {
@@ -80,5 +99,9 @@ public abstract class Mission {
 
     public int getDeadLine() {
         return deadLine;
+    }
+
+    public int getAcquireTurn() {
+        return acquireTurn;
     }
 }

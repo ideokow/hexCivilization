@@ -24,10 +24,14 @@ public class TraderMission extends Mission {
 
     @Override
     public boolean checkRequirements() {
-        return checkIsThereRoadToAnyNearbyBuilding(
-                getTribe().getRelatedTownHall().getGrid(),
-                getTribe().getLocation()
-        );
+         if (checkIsThereRoadToAnyNearbyBuilding(
+             getTribe().getRelatedTownHall().getGrid(),
+             getTribe().getLocation()
+        )){
+             setIsReady();
+             return true;
+         }
+         return false;
     }
 
     private static boolean checkIsThereRoadToAnyNearbyBuilding(HexGrid hexGrid, HexCoordinate start) {
