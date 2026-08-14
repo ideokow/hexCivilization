@@ -252,6 +252,10 @@ public class TownHall extends Building {
         // TODO : consider another things
     }
 
+    public void increaseUnitNumber() {
+        unitNumber++;
+    }
+
     public void decreaseUnitNumber() {
         unitNumber--;
     }
