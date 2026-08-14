@@ -12,6 +12,8 @@ import model.game.registry.MilitaryRegistry;
 import model.game.registry.UnitRegistry;
 import model.game.townhall.opration.GenerationStatus;
 import model.game.unit.*;
+import model.game.unit.military.Archer;
+import model.game.unit.military.Swordsman;
 
 import java.util.*;
 
@@ -287,8 +289,14 @@ public class TownHall extends Building {
         else if (unitType == UnitType.BORDER_EXPANDER) {
             unit = new BorderExpander(getOwner(), getPosition());
         }
+        else if (unitType == UnitType.SWORDSMAN) {
+            unit = new Swordsman(getOwner(), getPosition());
+        }
+        else if (unitType == UnitType.ARCHER) {
+            unit = new Archer(getOwner(), getPosition());
+        }
         else {
-            throw new IllegalArgumentException("undefined type : " + unitType);
+            throw new IllegalArgumentException("Undefined type : " + unitType);
         }
 
         // full ap
