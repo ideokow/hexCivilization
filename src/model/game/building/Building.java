@@ -14,14 +14,19 @@ public abstract class Building {
     private static int buildingN = 0;
 
     private final String buildingID;
-    private final BuildingType type;
     private final Player owner;
+
+    private final HexCoordinate position;
+    private final BuildingType type;
+
     private BuildingState state;
     private int unpaidUpkeepTurns;
-    private final HexCoordinate position;
+
+    private int hp;
+    private final static int MAXIMUM_HP_AMOUNT = 150;
+    private final static int MINIMUM_HP_AMOUNT = 0;
 
     protected Building(BuildingType type, Player owner, HexCoordinate position) {
-
         buildingID = "building-id-" + buildingN;
         buildingN++;
 
@@ -29,6 +34,7 @@ public abstract class Building {
         this.owner = owner;
         this.state = BuildingState.ACTIVE;
         this.position = position;
+        hp = MAXIMUM_HP_AMOUNT;
     }
 
     public String getBuildingID() {
@@ -45,6 +51,14 @@ public abstract class Building {
 
     public Player getOwner() {
         return owner;
+    }
+
+    public int getHp() {
+        return hp;
+    }
+
+    public void increaseHp(int amount) {
+        hp = Math.max(MINIMUM_HP_AMOUNT, Math.min(MAXIMUM_HP_AMOUNT, hp + amount));
     }
 
     // --- upkeep system ---

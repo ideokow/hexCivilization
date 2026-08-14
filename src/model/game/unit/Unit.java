@@ -1,11 +1,8 @@
 package model.game.unit;
 
 import model.game.happiness.Era;
-import model.game.hex.Hex;
 import model.game.hex.HexCoordinate;
 import model.game.player.Player;
-
-import java.util.Objects;
 
 /*
 Units main model
@@ -19,14 +16,19 @@ public abstract class Unit {
     private int currentAP;
     private HexCoordinate position;
 
-    public Unit(Player owner, HexCoordinate position) {
+    private int hp;
+    private final static int MAXIMUM_HP_AMOUNT = 50;
+    private final static int MINIMUM_HP_AMOUNT = 0;
 
+    public Unit(Player owner, HexCoordinate position) {
         this.unitID = "unit-id-" + unitsN;
+        unitsN++;
         this.owner = owner;
         this.position = position;
-
-        unitsN++;
+        hp = MAXIMUM_HP_AMOUNT;
     }
+
+    // --- getters and setters ---
 
     public String getUnitID() {
         return unitID;
@@ -37,6 +39,26 @@ public abstract class Unit {
     }
 
     public abstract UnitType getType();
+
+    public HexCoordinate getPosition() {
+        return position;
+    }
+
+    public void setPosition(HexCoordinate position) {
+        this.position = position;
+    }
+
+    // --- HP things ---
+
+    public int getHp() {
+        return hp;
+    }
+
+    public void increaseHp(int amount) {
+        hp = Math.max(MINIMUM_HP_AMOUNT, Math.min(MAXIMUM_HP_AMOUNT, hp + amount));
+    }
+
+    // --- AP things ---
 
     public void resetAP() {
         currentAP = getType().getEachTurnAP();
@@ -53,25 +75,14 @@ public abstract class Unit {
         return currentAP;
     }
 
-    public boolean spendAP(int amount) {
-        if (amount < 0 || currentAP < amount) {
-            return false;
-        }
+    public void spendAP(int amount) {
+        if (amount < 0 || currentAP < amount) return;
         currentAP -= amount;
-        return true;
     }
 
     public void addAP(int amount) {
         currentAP += amount;
         if (currentAP > getType().getEachTurnAP()) resetAP();
-    }
-
-    public HexCoordinate getPosition() {
-        return position;
-    }
-
-    public void setPosition(HexCoordinate position) {
-        this.position = position;
     }
 
     @Override
