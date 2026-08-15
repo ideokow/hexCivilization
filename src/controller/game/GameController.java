@@ -10,6 +10,7 @@ import model.game.unit.Unit;
 import model.game.unit.UnitType;
 import view.game.GameView;
 
+import javax.swing.*;
 import java.util.List;
 import java.util.HashSet;
 import java.util.Map;
@@ -35,7 +36,7 @@ public class GameController {
     private void attachListeners() {
         view.setHexClickHandler(this::handleHexClick);
         view.getEndTurnButton().addActionListener(e -> handleEndTurn());
-        view.getBuildButton().addActionListener(e -> handleBuild());
+        view.getConfirmBuildButton().addActionListener(e -> handleBuild());
         view.getRuinButton().addActionListener(e -> handleRuin());
         view.getLevelUpButton().addActionListener(e -> handleLevelUp());
         view.getAcquireTechnologyButton().addActionListener(e -> handleAcquireTechnology());
@@ -65,6 +66,7 @@ public class GameController {
 
         // refresh
         view.refresh();
+        view.showHexActions();
         refreshRouteControls();
     }
 
@@ -187,6 +189,18 @@ public class GameController {
 
         Hex hex = engine.getHexGrid().get(selectedHex);
         if (hex == null || hex.getBuilding() == null) return;
+
+        int choice = JOptionPane.showConfirmDialog(
+                view,
+                "Are you sure you want to ruin this building?",
+                "Confirm Ruin",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE
+        );
+
+        if (choice != JOptionPane.YES_OPTION) {
+            return;
+        }
 
         engine.ruinTrigger(view.getSelectedUnit(), hex.getBuilding());
         view.refresh();

@@ -17,6 +17,7 @@ public class GameView extends JFrame {
     private final GameViewState viewState;
     private final GameHudPanel hudPanel;
     private final GameSidePanel sidePanel;
+    private final HexActionPanel hexActionPanel;
     private final GameStatusPanel statusPanel;
     private final HexMapPanel mapPanel;
     private Runnable routeControlsRefreshHandler = () -> {};
@@ -30,11 +31,12 @@ public class GameView extends JFrame {
         this.mapPanel = new HexMapPanel(viewModel, viewState);
         this.hudPanel = new GameHudPanel(viewModel);
         this.statusPanel = new GameStatusPanel();
-        this.sidePanel = new GameSidePanel(
+        this.hexActionPanel = new HexActionPanel(
                 viewModel,
                 viewState,
                 this::handleUnitSelectionChanged
         );
+        this.sidePanel = new GameSidePanel(viewModel);
 
         configureFrame();
         assembleView();
@@ -51,7 +53,39 @@ public class GameView extends JFrame {
 
     private void assembleView() {
         add(hudPanel, BorderLayout.NORTH);
-        add(mapPanel, BorderLayout.CENTER);
+        JLayeredPane mapContainer = new JLayeredPane() {
+            @Override
+            public void doLayout() {
+                mapPanel.setBounds(0, 0, getWidth(), getHeight());
+
+                Dimension preferredSize =
+                        hexActionPanel.getPreferredSize();
+                int actionWidth = Math.min(
+                        preferredSize.width,
+                        Math.max(0, getWidth() - 24)
+                );
+                int actionHeight = Math.min(
+                        preferredSize.height,
+                        Math.max(0, getHeight() - 24)
+                );
+                int actionX = Math.max(
+                        12,
+                        getWidth() - actionWidth - 12
+                );
+
+                hexActionPanel.setBounds(
+                        actionX,
+                        12,
+                        actionWidth,
+                        actionHeight
+                );
+            }
+        };
+        mapContainer.setLayout(null);
+        mapContainer.setOpaque(false);
+        mapContainer.add(mapPanel, JLayeredPane.DEFAULT_LAYER);
+        mapContainer.add(hexActionPanel, JLayeredPane.PALETTE_LAYER);
+        add(mapContainer, BorderLayout.CENTER);
         JScrollPane sidePanelScroll = new JScrollPane(sidePanel);
         sidePanelScroll.setBorder(null);
         sidePanelScroll.setHorizontalScrollBarPolicy(
@@ -63,17 +97,21 @@ public class GameView extends JFrame {
     }
 
     private void handleUnitSelectionChanged() {
-        sidePanel.refreshSelectionPanel();
+        hexActionPanel.refreshSelectionPanel();
         routeControlsRefreshHandler.run();
         mapPanel.repaint();
     }
 
     public void refresh() {
         hudPanel.refresh();
-        sidePanel.refreshUnitCombo();
-        sidePanel.refreshSelectionPanel();
+        hexActionPanel.refreshUnitCombo();
+        hexActionPanel.refreshSelectionPanel();
         sidePanel.refreshTownHallQueue();
         mapPanel.repaint();
+    }
+
+    public void showHexActions() {
+        hexActionPanel.openForSelection();
     }
 
     public void setHexClickHandler(
@@ -83,15 +121,19 @@ public class GameView extends JFrame {
     }
 
     public JButton getBuildButton() {
-        return sidePanel.getBuildButton();
+        return hexActionPanel.getBuildMenuButton();
+    }
+
+    public JButton getConfirmBuildButton() {
+        return hexActionPanel.getConfirmBuildButton();
     }
 
     public JButton getRuinButton() {
-        return sidePanel.getRuinButton();
+        return hexActionPanel.getRuinButton();
     }
 
     public JButton getStationButton() {
-        return sidePanel.getStationButton();
+        return hexActionPanel.getStationButton();
     }
 
     public JButton getLevelUpButton() {
@@ -107,7 +149,7 @@ public class GameView extends JFrame {
     }
 
     public JButton getExpandButton() {
-        return sidePanel.getExpandButton();
+        return hexActionPanel.getExpandButton();
     }
 
     public JButton getRouteButton() {
@@ -154,7 +196,7 @@ public class GameView extends JFrame {
     }
 
     public BuildingType getSelectedBuildingType() {
-        return sidePanel.getSelectedBuildingType();
+        return hexActionPanel.getSelectedBuildingType();
     }
 
     public Level getSelectedLevel() {

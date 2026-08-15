@@ -44,7 +44,8 @@ final class HexMapPanel extends JPanel {
     private static final Color INSTRUCTION_BACKGROUND = new Color(0, 0, 0, 110);
     private static final Color INSTRUCTION_TEXT = new Color(230, 235, 244);
     private static final Color TERRITORY_BORDER = new Color(231, 184, 77);
-    private static final Color SELECTION_BORDER = new Color(255, 255, 255, 180);
+    private static final Color SELECTION_FILL = new Color(235, 245, 255, 34);
+    private static final Color SELECTION_BORDER = new Color(235, 245, 255, 190);
     private static final Color EXPLORER_COLOR = new Color(64, 156, 255);
     private static final Color WORKER_COLOR = new Color(246, 190, 83);
     private static final Color BUILDER_COLOR = new Color(126, 212, 116);
@@ -52,7 +53,7 @@ final class HexMapPanel extends JPanel {
 
     private static final BasicStroke HEX_STROKE = new BasicStroke(1.0f);
     private static final BasicStroke TERRITORY_STROKE = new BasicStroke(2.2f);
-    private static final BasicStroke SELECTION_STROKE = new BasicStroke(3.0f);
+    private static final BasicStroke SELECTION_STROKE = new BasicStroke(1.5f);
     private static final BasicStroke UNIT_STROKE = new BasicStroke(1.4f);
     private static final BasicStroke HIGHLIGHTED_UNIT_STROKE = new BasicStroke(3.0f);
 
@@ -548,10 +549,7 @@ final class HexMapPanel extends JPanel {
         }
 
         if (coordinate.equals(viewState.getSelectedHex())) {
-            if (polygon == null) {
-                polygon = createHexPolygon(coordinate);
-            }
-            drawSelectionBorder(graphics2D, polygon);
+            drawSelectionBorder(graphics2D, coordinate);
         }
     }
 
@@ -566,11 +564,20 @@ final class HexMapPanel extends JPanel {
 
     private void drawSelectionBorder(
             Graphics2D graphics2D,
-            Polygon polygon
+            HexCoordinate coordinate
     ) {
+        Point2D.Double center = centerOf(coordinate);
+        Polygon selectionPolygon = createHexPolygonAt(
+                center.x,
+                center.y,
+                currentHexSize() * 0.78
+        );
+
+        graphics2D.setColor(SELECTION_FILL);
+        graphics2D.fillPolygon(selectionPolygon);
         graphics2D.setColor(SELECTION_BORDER);
         graphics2D.setStroke(SELECTION_STROKE);
-        graphics2D.drawPolygon(polygon);
+        graphics2D.drawPolygon(selectionPolygon);
     }
 
     private void drawUnits(
