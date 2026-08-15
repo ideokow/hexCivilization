@@ -802,6 +802,8 @@ final class HexMapPanel extends JPanel {
         };
         String eraText = ERA_EMOJIS[era.ordinal()] + " " + ViewTextFormatter.pretty(era);
         String happinessText = "Happiness " + townHall.getHappiness().getValue();
+        String townHallLevelText =
+                "Town Hall Level " + townHall.getLevel().getLevelN();
 
         // Section 2: Units
         String unitsText = "Units " + townHall.getUnitNumber() + "/" + townHall.getUnitCap();
@@ -842,7 +844,10 @@ final class HexMapPanel extends JPanel {
         // measure each section's width using the appropriate font
         int sec1w = Math.max(
                 graphics2D.getFontMetrics(boldFont).stringWidth(eraText),
-                graphics2D.getFontMetrics(normalFont).stringWidth(happinessText)
+                Math.max(
+                        graphics2D.getFontMetrics(normalFont).stringWidth(happinessText),
+                        graphics2D.getFontMetrics(boldFont).stringWidth(townHallLevelText)
+                )
         );
         int sec2w = Math.max(
                 graphics2D.getFontMetrics(boldFont).stringWidth(unitsText),
@@ -862,7 +867,7 @@ final class HexMapPanel extends JPanel {
         int dividerAdvance = normalMetrics.getDescent()
                 + dividerPadding * 2
                 + normalMetrics.getAscent();
-        int baselineSpan = rowAdvance
+        int baselineSpan = rowAdvance * 2
                 + dividerAdvance
                 + rowAdvance
                 + dividerAdvance
@@ -897,6 +902,9 @@ final class HexMapPanel extends JPanel {
         textY += rowAdvance;
         graphics2D.setFont(normalFont);
         graphics2D.drawString(happinessText, textX, textY);
+        textY += rowAdvance;
+        graphics2D.setFont(boldFont);
+        graphics2D.drawString(townHallLevelText, textX, textY);
 
         int dividerY = textY + normalMetrics.getDescent() + dividerPadding;
         graphics2D.setColor(new Color(160, 175, 200, 100));

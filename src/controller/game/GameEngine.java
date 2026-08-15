@@ -26,7 +26,7 @@ import java.util.Map;
 
 public class GameEngine {
 
-    public static final boolean DEBUG_VERBOSE = true;
+    public static final boolean DEBUG_VERBOSE = false;
 
     // singleton
     private static GameEngine instance;

@@ -22,6 +22,7 @@ final class GameSidePanel extends JPanel {
     private static final Color ACCENT = new Color(238, 190, 78);
     private static final Color ACTION_BLUE = new Color(52, 91, 132);
     private static final Color ACTION_GREEN = new Color(47, 143, 105);
+    private static final Color CARD_BORDER = new Color(58, 74, 96);
 
     private final GameViewModel viewModel;
     private final JTextArea townHallQueueArea;
@@ -37,6 +38,9 @@ final class GameSidePanel extends JPanel {
     private final JButton clearRouteButton;
     private final JButton endTurnButton;
     private final JButton resetCameraButton;
+    private final JPanel routeSection;
+    private JPanel townHallQueueCard;
+    private JPanel acquiredTechnologiesCard;
 
     GameSidePanel(GameViewModel viewModel) {
         this.viewModel = viewModel;
@@ -48,13 +52,14 @@ final class GameSidePanel extends JPanel {
         );
         this.technologyCombo = new JComboBox<>(technologyModel);
         this.unitTypeCombo = new JComboBox<>(UnitType.values());
-        this.levelUpButton = new JButton("Upgrade Town Hall");
-        this.acquireTechnologyButton = new JButton("Research Technology");
-        this.generateUnitButton = new JButton("Generate Unit");
+        this.levelUpButton = new JButton("Upgrade");
+        this.acquireTechnologyButton = new JButton("Research");
+        this.generateUnitButton = new JButton("Generate");
         this.routeButton = new JButton("Set Route");
         this.clearRouteButton = new JButton("Clear Route");
         this.endTurnButton = new JButton("End Turn");
         this.resetCameraButton = new JButton("Reset Camera");
+        this.routeSection = new JPanel();
 
         configurePanel();
         buildContent();
@@ -62,7 +67,7 @@ final class GameSidePanel extends JPanel {
 
     private void configurePanel() {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        setPreferredSize(new Dimension(310, 100));
+        setPreferredSize(new Dimension(312, 100));
         setBorder(
                 BorderFactory.createCompoundBorder(
                         BorderFactory.createMatteBorder(
@@ -79,53 +84,51 @@ final class GameSidePanel extends JPanel {
     }
 
     private void buildContent() {
-        add(createTitle("Town Hall Queue"));
-        add(Box.createVerticalStrut(8));
         configureTownHallQueueArea();
-        add(townHallQueueArea);
-        add(Box.createVerticalStrut(12));
-
-        add(createSectionLabel("Acquired technologies"));
-        add(Box.createVerticalStrut(4));
-        configureAcquiredTechnologiesArea();
-        add(acquiredTechnologiesArea);
+        add(createTitle("Command Center"));
+        add(Box.createVerticalStrut(10));
+        townHallQueueCard = createInfoCard(
+                "Town Hall Queue",
+                townHallQueueArea
+        );
+        add(townHallQueueCard);
         add(Box.createVerticalStrut(10));
 
+        configureAcquiredTechnologiesArea();
+        acquiredTechnologiesCard = createInfoCard(
+                "Acquired Technologies",
+                acquiredTechnologiesArea
+        );
+        add(acquiredTechnologiesCard);
+        add(Box.createVerticalStrut(12));
+
         configureLevelCombo();
-        add(levelCombo);
-        add(Box.createVerticalStrut(6));
-        addActionButton(levelUpButton, 34);
-        add(Box.createVerticalStrut(8));
-
         configureTechnologyCombo();
-        add(technologyCombo);
-        add(Box.createVerticalStrut(6));
-        addActionButton(acquireTechnologyButton, 34);
-        add(Box.createVerticalStrut(8));
-
         configureUnitTypeCombo();
-        add(unitTypeCombo);
+        add(createSectionLabel("Town Hall Operations"));
         add(Box.createVerticalStrut(6));
-        addActionButton(generateUnitButton, 34);
-        add(Box.createVerticalStrut(18));
-
-        add(createTitle("Unit Routes"));
-        add(Box.createVerticalStrut(8));
-        addActionButton(routeButton, 34);
+        add(createActionRow(levelCombo, levelUpButton));
         add(Box.createVerticalStrut(6));
-        addActionButton(clearRouteButton, 34);
-        add(Box.createVerticalStrut(18));
+        add(createActionRow(technologyCombo, acquireTechnologyButton));
+        add(Box.createVerticalStrut(6));
+        add(createActionRow(unitTypeCombo, generateUnitButton));
 
+        add(Box.createVerticalGlue());
         addEndTurnButton();
         add(Box.createVerticalStrut(8));
-        addActionButton(resetCameraButton, 34);
+        styleActionButton(resetCameraButton, 32);
+        add(resetCameraButton);
+        add(Box.createVerticalStrut(10));
+        configureRouteSection();
+        add(routeSection);
 
         clearRouteButton.setVisible(false);
+        routeSection.setVisible(false);
     }
 
     private JLabel createTitle(String text) {
         JLabel label = new JLabel(text);
-        label.setFont(new Font("SansSerif", Font.BOLD, 16));
+        label.setFont(new Font("SansSerif", Font.BOLD, 17));
         label.setForeground(ACCENT);
         label.setBorder(
                 BorderFactory.createCompoundBorder(
@@ -151,21 +154,91 @@ final class GameSidePanel extends JPanel {
         return label;
     }
 
+    private JPanel createInfoCard(
+            String title,
+            JComponent content
+    ) {
+        JPanel card = new JPanel(new BorderLayout(0, 4));
+        card.setBackground(CARD_BACKGROUND);
+        card.setBorder(
+                BorderFactory.createCompoundBorder(
+                        BorderFactory.createLineBorder(CARD_BORDER),
+                        BorderFactory.createEmptyBorder(8, 10, 8, 10)
+                )
+        );
+        card.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        JLabel titleLabel = createSectionLabel(title);
+        titleLabel.setForeground(ACCENT);
+        card.add(titleLabel, BorderLayout.NORTH);
+        card.add(content, BorderLayout.CENTER);
+        resizeInfoCard(card);
+        return card;
+    }
+
+    private void resizeInfoCard(JPanel card) {
+        card.setPreferredSize(null);
+        Dimension preferredSize = card.getPreferredSize();
+        int height = preferredSize.height;
+        card.setPreferredSize(new Dimension(280, height));
+        card.setMinimumSize(new Dimension(0, height));
+        card.setMaximumSize(new Dimension(Integer.MAX_VALUE, height));
+    }
+
+    private JPanel createActionRow(
+            JComboBox<?> comboBox,
+            JButton button
+    ) {
+        JPanel row = new JPanel(new BorderLayout(6, 0));
+        row.setOpaque(false);
+        row.setAlignmentX(Component.LEFT_ALIGNMENT);
+        row.setMaximumSize(new Dimension(Integer.MAX_VALUE, 32));
+
+        styleActionButton(button, 32);
+        button.setPreferredSize(new Dimension(92, 32));
+        row.add(comboBox, BorderLayout.CENTER);
+        row.add(button, BorderLayout.EAST);
+        return row;
+    }
+
+    private void configureRouteSection() {
+        routeSection.setLayout(new BoxLayout(routeSection, BoxLayout.Y_AXIS));
+        routeSection.setBackground(CARD_BACKGROUND);
+        routeSection.setBorder(
+                BorderFactory.createCompoundBorder(
+                        BorderFactory.createLineBorder(CARD_BORDER),
+                        BorderFactory.createEmptyBorder(8, 10, 8, 10)
+                )
+        );
+        routeSection.setAlignmentX(Component.LEFT_ALIGNMENT);
+        routeSection.setMaximumSize(
+                new Dimension(Integer.MAX_VALUE, 88)
+        );
+
+        JLabel title = createSectionLabel("Unit Route");
+        title.setForeground(ACCENT);
+        routeSection.add(title);
+        routeSection.add(Box.createVerticalStrut(6));
+
+        styleActionButton(routeButton, 30);
+        routeSection.add(routeButton);
+        routeSection.add(Box.createVerticalStrut(5));
+
+        styleActionButton(clearRouteButton, 30);
+        routeSection.add(clearRouteButton);
+    }
+
     private void configureTownHallQueueArea() {
         townHallQueueArea.setEditable(false);
         townHallQueueArea.setOpaque(true);
         townHallQueueArea.setBackground(CARD_BACKGROUND);
         townHallQueueArea.setForeground(TEXT_PRIMARY);
         townHallQueueArea.setFont(new Font("SansSerif", Font.PLAIN, 12));
-        townHallQueueArea.setBorder(
-                BorderFactory.createCompoundBorder(
-                        BorderFactory.createLineBorder(new Color(47, 61, 80)),
-                        BorderFactory.createEmptyBorder(9, 10, 9, 10)
-                )
-        );
+        townHallQueueArea.setBorder(BorderFactory.createEmptyBorder());
         townHallQueueArea.setLineWrap(true);
         townHallQueueArea.setWrapStyleWord(true);
-        townHallQueueArea.setAlignmentX(Component.LEFT_ALIGNMENT);
+        townHallQueueArea.setColumns(20);
+        townHallQueueArea.setRows(1);
     }
 
     private void configureAcquiredTechnologiesArea() {
@@ -174,16 +247,11 @@ final class GameSidePanel extends JPanel {
         acquiredTechnologiesArea.setBackground(CARD_BACKGROUND);
         acquiredTechnologiesArea.setForeground(TEXT_PRIMARY);
         acquiredTechnologiesArea.setFont(new Font("SansSerif", Font.PLAIN, 12));
-        acquiredTechnologiesArea.setBorder(
-                BorderFactory.createCompoundBorder(
-                        BorderFactory.createLineBorder(new Color(47, 61, 80)),
-                        BorderFactory.createEmptyBorder(7, 10, 7, 10)
-                )
-        );
+        acquiredTechnologiesArea.setBorder(BorderFactory.createEmptyBorder());
         acquiredTechnologiesArea.setLineWrap(true);
         acquiredTechnologiesArea.setWrapStyleWord(true);
-        acquiredTechnologiesArea.setRows(2);
-        acquiredTechnologiesArea.setAlignmentX(Component.LEFT_ALIGNMENT);
+        acquiredTechnologiesArea.setColumns(20);
+        acquiredTechnologiesArea.setRows(1);
     }
 
     private void configureLevelCombo() {
@@ -202,10 +270,10 @@ final class GameSidePanel extends JPanel {
         comboBox.setUI(new DarkComboBoxUI());
         comboBox.setAlignmentX(Component.LEFT_ALIGNMENT);
         comboBox.setMaximumSize(
-                new Dimension(Integer.MAX_VALUE, 32)
+                new Dimension(Integer.MAX_VALUE, 30)
         );
         comboBox.setPreferredSize(
-                new Dimension(280, 32)
+                new Dimension(160, 30)
         );
         comboBox.setBackground(CONTROL_BACKGROUND);
         comboBox.setForeground(TEXT_PRIMARY);
@@ -263,7 +331,7 @@ final class GameSidePanel extends JPanel {
         });
     }
 
-    private void addActionButton(JButton button, int height) {
+    private void styleActionButton(JButton button, int height) {
         button.setAlignmentX(Component.LEFT_ALIGNMENT);
         button.setMaximumSize(
                 new Dimension(Integer.MAX_VALUE, height)
@@ -281,13 +349,12 @@ final class GameSidePanel extends JPanel {
                 )
         );
         button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        add(button);
     }
 
     private void addEndTurnButton() {
         endTurnButton.setAlignmentX(Component.LEFT_ALIGNMENT);
         endTurnButton.setMaximumSize(
-                new Dimension(Integer.MAX_VALUE, 56)
+                new Dimension(Integer.MAX_VALUE, 52)
         );
         endTurnButton.setForeground(Color.WHITE);
         endTurnButton.setBackground(ACTION_GREEN);
@@ -299,7 +366,7 @@ final class GameSidePanel extends JPanel {
                                 new Color(119, 204, 163),
                                 1
                         ),
-                        BorderFactory.createEmptyBorder(8, 10, 8, 10)
+                        BorderFactory.createEmptyBorder(7, 10, 7, 10)
                 )
         );
         endTurnButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -314,13 +381,18 @@ final class GameSidePanel extends JPanel {
 
         if (operation == null) {
             townHallQueueArea.setText("Empty");
+            townHallQueueArea.setRows(1);
         } else {
             townHallQueueArea.setText(buildOperationText(operation));
+            townHallQueueArea.setRows(2);
         }
+        resizeInfoCard(townHallQueueCard);
 
         levelUpButton.setEnabled(queueAvailable);
         acquireTechnologyButton.setEnabled(queueAvailable);
         generateUnitButton.setEnabled(queueAvailable);
+        revalidate();
+        repaint();
     }
 
     private void refreshTechnologyDisplay() {
@@ -329,6 +401,7 @@ final class GameSidePanel extends JPanel {
 
         if (acquired.isEmpty()) {
             acquiredTechnologiesArea.setText("None");
+            acquiredTechnologiesArea.setRows(1);
         } else {
             StringBuilder text = new StringBuilder();
             for (Technology technology : acquired) {
@@ -338,7 +411,9 @@ final class GameSidePanel extends JPanel {
                 text.append(ViewTextFormatter.pretty(technology));
             }
             acquiredTechnologiesArea.setText(text.toString());
+            acquiredTechnologiesArea.setRows(acquired.size());
         }
+        resizeInfoCard(acquiredTechnologiesCard);
 
         Technology selected =
                 (Technology) technologyCombo.getSelectedItem();
@@ -386,6 +461,7 @@ final class GameSidePanel extends JPanel {
         routeButton.setEnabled(unitSelected);
         routeButton.setVisible(unitSelected);
         clearRouteButton.setVisible(unitSelected && routeExists);
+        routeSection.setVisible(unitSelected);
         revalidate();
         repaint();
     }
