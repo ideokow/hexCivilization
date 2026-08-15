@@ -5,7 +5,6 @@
          http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <!-- Project Info - change these to whatever you like -->
     <groupId>com.hex.civilization</groupId>
     <artifactId>hex-civilization</artifactId>
     <version>SNAPSHOT-1.0</version>

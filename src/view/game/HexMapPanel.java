@@ -36,6 +36,8 @@ final class HexMapPanel extends JPanel {
     private static final double MAX_ZOOM = 2.50;
     private static final double DEFAULT_ZOOM = 1.0;
     private static final double ZOOM_STEP_FACTOR = 1.12;
+    private static final double LOW_DETAIL_ZOOM = 0.50;
+    private static final double UNIT_LABEL_ZOOM = 0.70;
 
     private static final Color BACKGROUND_TOP = new Color(24, 31, 43);
     private static final Color BACKGROUND_BOTTOM = new Color(12, 15, 21);
@@ -470,12 +472,16 @@ final class HexMapPanel extends JPanel {
 
         graphics2D.setRenderingHint(
                 RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON
+                zoomFactor < LOW_DETAIL_ZOOM
+                        ? RenderingHints.VALUE_ANTIALIAS_OFF
+                        : RenderingHints.VALUE_ANTIALIAS_ON
         );
 
         graphics2D.setRenderingHint(
                 RenderingHints.KEY_TEXT_ANTIALIASING,
-                RenderingHints.VALUE_TEXT_ANTIALIAS_ON
+                zoomFactor < LOW_DETAIL_ZOOM
+                        ? RenderingHints.VALUE_TEXT_ANTIALIAS_OFF
+                        : RenderingHints.VALUE_TEXT_ANTIALIAS_ON
         );
     }
 
@@ -516,34 +522,47 @@ final class HexMapPanel extends JPanel {
         boolean discovered =
                 viewModel.isDiscovered(coordinate);
 
-        Set<Resource> resources = discovered
+        Set<Resource> resources = discovered && zoomFactor >= LOW_DETAIL_ZOOM
                 ? hex.getAvailableResources()
                 : Set.of();
         Point2D.Double center = centerOf(coordinate);
-        HexTileRenderer.CachedSprite cached = tileRenderer.spriteFor(
-                hex,
-                discovered,
-                resources,
-                zoomFactor
-        );
-        BufferedImage tileSprite = cached.image();
+        if (zoomFactor < LOW_DETAIL_ZOOM) {
+            tileRenderer.drawLowDetail(
+                    graphics2D,
+                    hex,
+                    discovered,
+                    resources,
+                    center.x,
+                    center.y,
+                    currentHexSize()
+            );
+        } else {
+            HexTileRenderer.CachedSprite cached = tileRenderer.spriteFor(
+                    hex,
+                    discovered,
+                    resources,
+                    zoomFactor
+            );
+            BufferedImage tileSprite = cached.image();
 
-        // scale the sprite (rendered at bucketZoom) to the current zoom factor
-        double spriteScale = zoomFactor / (2.0 * cached.bucketZoom());
-        int spriteWidth = (int) Math.round(tileSprite.getWidth() * spriteScale);
-        int spriteHeight = (int) Math.round(tileSprite.getHeight() * spriteScale);
+            // scale the sprite (rendered at bucketZoom) to the current zoom factor
+            double spriteScale = zoomFactor / (2.0 * cached.bucketZoom());
+            int spriteWidth = (int) Math.round(tileSprite.getWidth() * spriteScale);
+            int spriteHeight = (int) Math.round(tileSprite.getHeight() * spriteScale);
 
-        graphics2D.drawImage(
-                tileSprite,
-                (int) Math.round(center.x - spriteWidth / 2.0),
-                (int) Math.round(center.y - spriteHeight / 2.0),
-                spriteWidth,
-                spriteHeight,
-                null
-        );
+            graphics2D.drawImage(
+                    tileSprite,
+                    (int) Math.round(center.x - spriteWidth / 2.0),
+                    (int) Math.round(center.y - spriteHeight / 2.0),
+                    spriteWidth,
+                    spriteHeight,
+                    null
+            );
+        }
 
         Polygon polygon = null;
-        if (viewModel.ownsTerritory(coordinate)) {
+        if (zoomFactor >= LOW_DETAIL_ZOOM
+                && viewModel.ownsTerritory(coordinate)) {
             polygon = createHexPolygon(coordinate);
             drawTerritoryBorder(graphics2D, polygon);
         }
@@ -752,17 +771,19 @@ final class HexMapPanel extends JPanel {
                 (int) (unitRadius * 2)
         );
 
-        graphics2D.setColor(Color.WHITE);
-        graphics2D.setFont(
-                UNIT_FONT.deriveFont((float) Math.max(7, 10 * zoomFactor))
-        );
+        if (zoomFactor >= UNIT_LABEL_ZOOM) {
+            graphics2D.setColor(Color.WHITE);
+            graphics2D.setFont(
+                    UNIT_FONT.deriveFont((float) Math.max(7, 10 * zoomFactor))
+            );
 
-        drawCenteredString(
-                graphics2D,
-                unitShortName(unit.getType()),
-                screenX,
-                screenY + 4
-        );
+            drawCenteredString(
+                    graphics2D,
+                    unitShortName(unit.getType()),
+                    screenX,
+                    screenY + 4
+            );
+        }
     }
 
     private void drawUnitShadow(

@@ -90,6 +90,25 @@ final class HexTileRenderer {
         return new CachedSprite(image, ZOOM_BUCKETS[zoomBucket]);
     }
 
+    void drawLowDetail(
+            Graphics2D graphics,
+            Hex hex,
+            boolean discovered,
+            Set<Resource> resources,
+            double centerX,
+            double centerY,
+            double hexSize
+    ) {
+        Polygon polygon = createHexPolygon(centerX, centerY, hexSize);
+        graphics.setColor(discovered
+                ? terrainColor(hex.getTerrain(), resources)
+                : FOG_FILL);
+        graphics.fillPolygon(polygon);
+        graphics.setColor(discovered ? HEX_BORDER : FOG_BORDER);
+        graphics.setStroke(HEX_STROKE);
+        graphics.drawPolygon(polygon);
+    }
+
     // smallest bucket that still covers the requested zoom (keeps text sharp)
     private int zoomBucketFor(double zoomFactor) {
         double scaledZoom = zoomFactor * BASE_HEX_SIZE / (double) BASE_SPRITE_HEX_SIZE;
