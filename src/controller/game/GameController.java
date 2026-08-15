@@ -271,15 +271,6 @@ public class GameController {
         }
     }
 
-//    public void townHallAlert(Upgrade upgrade, UnitType unitType) {
-//        if (upgrade != null) {
-//            toastAlert(MessageFormat.formatUpgradeAlert(upgrade));
-//        }
-//        if (unitType != null) {
-//            toastAlert(MessageFormat.formatGeneratedAlert(unitType));
-//        }
-//    }
-
     public void toastAlert(String message) {
         view.showToast(message);
     }

@@ -5,6 +5,7 @@ import java.awt.*;
 
 final class GameStatusPanel extends JPanel {
 
+    private static final int STATUS_BAR_HEIGHT = 38;
     private static final String DEFAULT_STATUS =
             "Select a hex. Select a unit, then click "
                     + "an adjacent discovered hex to move.";
@@ -22,6 +23,12 @@ final class GameStatusPanel extends JPanel {
 
     private void configurePanel() {
         setLayout(new BorderLayout());
+        Dimension fixedSize = new Dimension(0, STATUS_BAR_HEIGHT);
+        setMinimumSize(fixedSize);
+        setPreferredSize(fixedSize);
+        setMaximumSize(
+                new Dimension(Integer.MAX_VALUE, STATUS_BAR_HEIGHT)
+        );
         setBorder(
                 BorderFactory.createEmptyBorder(6, 12, 8, 12)
         );

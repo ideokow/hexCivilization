@@ -55,12 +55,4 @@ public final class MessageFormat {
     public static String formatStarvationAlert(int turnNumber) {
         return "Turn " + turnNumber + ": WARNING - starvation! Your civilization cannot feed its units. ";
     }
-
-//    public static String formatUpgradeAlert(Upgrade upgrade) {
-//        return "Upgrade complete: " + upgrade.getName() + "!";
-//    }
-//
-//    public static String formatGeneratedAlert(UnitType unitType) {
-//        return "New unit generated: " + unitType.getName() + "!";
-//    }
 }
