@@ -18,7 +18,7 @@ public class MainMenuView extends JFrame {
     private JButton exitButton;
 
     public MainMenuView() {
-        setTitle("Strategy Game - Main Menu");
+        setTitle("Hex Civilization - Main Menu");
         setSize(700, 560);
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -36,7 +36,7 @@ public class MainMenuView extends JFrame {
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
         // --- Title with shadow effect ---
-        JLabel titleLabel = new ShadowLabel("STRATEGY GAME");
+        JLabel titleLabel = new ShadowLabel("HEX CIVILIZATION");
         titleLabel.setFont(new Font("SansSerif", Font.BOLD, 44));
         titleLabel.setForeground(new Color(235, 240, 255));
         titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
