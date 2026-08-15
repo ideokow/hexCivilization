@@ -1,5 +1,7 @@
 package view.game;
 
+import model.game.happiness.Era;
+import model.game.townhall.TownHall;
 import model.game.hex.Hex;
 import model.game.hex.HexCoordinate;
 import model.game.hex.Resource;
@@ -7,6 +9,7 @@ import model.game.unit.Unit;
 import model.game.unit.UnitType;
 
 import javax.swing.*;
+import java.util.Map;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -54,6 +57,7 @@ final class HexMapPanel extends JPanel {
     private static final BasicStroke HIGHLIGHTED_UNIT_STROKE = new BasicStroke(3.0f);
 
     private static final Font INSTRUCTION_FONT = new Font("SansSerif", Font.PLAIN, 12);
+    private static final Font INFO_FONT = new Font("SansSerif", Font.PLAIN, 13);
     private static final Font UNIT_FONT = new Font("SansSerif", Font.BOLD, 10);
 
     private static final double[] HEX_COSINES = new double[6];
@@ -451,7 +455,7 @@ final class HexMapPanel extends JPanel {
             drawHexes(graphics2D, visibleHexes);
             drawUnits(graphics2D, visibleHexes);
             drawMovingUnit(graphics2D);
-            drawMapInstructions(graphics2D);
+            drawTopLeftInfoBox(graphics2D);
         } finally {
             graphics2D.dispose();
         }
@@ -770,27 +774,156 @@ final class HexMapPanel extends JPanel {
         );
     }
 
-    private void drawMapInstructions(
-            Graphics2D graphics2D
-    ) {
-        graphics2D.setColor(INSTRUCTION_BACKGROUND);
-        graphics2D.fillRoundRect(
-                12,
-                12,
-                295,
-                30,
-                14,
-                14
+    private void drawTopLeftInfoBox(Graphics2D graphics2D) {
+        TownHall townHall = viewModel.getTownHall();
+
+        // -- fonts --
+        Font normalFont = new Font("SansSerif", Font.PLAIN, 13);
+        Font boldFont = new Font("SansSerif", Font.BOLD, 13);
+        FontMetrics normalMetrics = graphics2D.getFontMetrics(normalFont);
+        int lineHeight = normalMetrics.getHeight();
+        int lineGap = 2;
+
+        // -- build content lines --
+        // Section 1: Era & Happiness
+        Era era = townHall.getHappiness().getEra();
+        String[] ERA_EMOJIS = {
+                "\uD83D\uDC4D",  // Golden Age
+                "\uD83D\uDE10",  // Normal
+                "\uD83D\uDE1E",  // Discontent
+                "\uD83D\uDD25"   // Rebellion
+        };
+        String eraText = ERA_EMOJIS[era.ordinal()] + " " + ViewTextFormatter.pretty(era);
+        String happinessText = "Happiness " + townHall.getHappiness().getValue();
+
+        // Section 2: Units
+        String unitsText = "Units " + townHall.getUnitNumber() + "/" + townHall.getUnitCap();
+
+
+        int militaryCount = 0;
+        for (Unit unit : viewModel.getUnits()) {
+            if (UnitType.isMilitary(unit.getType())) {
+                militaryCount++;
+            }
+        }
+        String militaryText = "Military " + militaryCount + "/" + townHall.getMilitaryUnitCap();
+
+        // Section 3: Resources
+        Resource[] storedResources = {
+                Resource.FOOD,
+                Resource.WOOD,
+                Resource.STONE,
+                Resource.IRON
+        };
+        Map<Resource, Integer> storage = townHall.getResourceStorage();
+        String[] resourceLines = new String[4];
+        for (int i = 0; i < 4; i++) {
+            Resource r = storedResources[i];
+            int amount = storage.getOrDefault(r, 0);
+            int net = viewModel.getNetResource(r);
+            String netStr = (net >= 0 ? "+" : "") + net;
+            resourceLines[i] = r.getDisplayName() + " " + amount + " (" + netStr + "/turn)";
+        }
+
+        // -- layout calculations --
+        int sepGap = 7;
+        int paddingX = 12;
+        int paddingY = 10;
+        int boxX = 12;
+        int boxY = 12;
+
+        // measure each section's width using the appropriate font
+        int sec1w = Math.max(
+                graphics2D.getFontMetrics(boldFont).stringWidth(eraText),
+                graphics2D.getFontMetrics(normalFont).stringWidth(happinessText)
+        );
+        int sec2w = Math.max(
+                graphics2D.getFontMetrics(boldFont).stringWidth(unitsText),
+                graphics2D.getFontMetrics(normalFont).stringWidth(militaryText)
+        );
+        int sec3w = 0;
+        for (String rl : resourceLines) {
+            int w = graphics2D.getFontMetrics(normalFont).stringWidth(rl);
+            if (w > sec3w) sec3w = w;
+        }
+
+        int maxWidth = Math.max(sec1w, Math.max(sec2w, sec3w));
+        int boxWidth = maxWidth + paddingX * 2 + 10;
+
+        int dividerPadding = 4;
+        int rowAdvance = lineHeight + lineGap;
+        int dividerAdvance = normalMetrics.getDescent()
+                + dividerPadding * 2
+                + normalMetrics.getAscent();
+        int baselineSpan = rowAdvance
+                + dividerAdvance
+                + rowAdvance
+                + dividerAdvance
+                + rowAdvance * 3;
+        int boxHeight = paddingY * 2
+                + normalMetrics.getAscent()
+                + baselineSpan
+                + normalMetrics.getDescent();
+
+        // -- draw box background --
+        graphics2D.setColor(new Color(10, 12, 18, 230));
+        graphics2D.fillRoundRect(boxX, boxY, boxWidth, boxHeight, 12, 12);
+
+        // -- draw box border --
+        graphics2D.setColor(new Color(180, 190, 210, 200));
+        graphics2D.setStroke(new BasicStroke(1.2f));
+        graphics2D.drawRoundRect(boxX, boxY, boxWidth, boxHeight, 12, 12);
+
+        // -- draw text and separators --
+        graphics2D.setRenderingHint(
+                RenderingHints.KEY_TEXT_ANTIALIASING,
+                RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HRGB
         );
 
+        int textX = boxX + paddingX;
+        int textY = boxY + paddingY + normalMetrics.getAscent();
+
+        // Section 1: Era + Happiness
+        graphics2D.setFont(boldFont);
         graphics2D.setColor(INSTRUCTION_TEXT);
-        graphics2D.setFont(INSTRUCTION_FONT);
+        graphics2D.drawString(eraText, textX, textY);
+        textY += rowAdvance;
+        graphics2D.setFont(normalFont);
+        graphics2D.drawString(happinessText, textX, textY);
 
-        graphics2D.drawString(
-                "Drag to pan • Mouse wheel zoom • Click hexes",
-                24,
-                32
+        int dividerY = textY + normalMetrics.getDescent() + dividerPadding;
+        graphics2D.setColor(new Color(160, 175, 200, 100));
+        graphics2D.drawLine(
+                boxX + paddingX,
+                dividerY,
+                boxX + boxWidth - paddingX,
+                dividerY
         );
+        textY = dividerY + dividerPadding + normalMetrics.getAscent();
+
+        graphics2D.setFont(boldFont);
+        graphics2D.setColor(INSTRUCTION_TEXT);
+        graphics2D.drawString(unitsText, textX, textY);
+        textY += rowAdvance;
+        graphics2D.setFont(normalFont);
+        graphics2D.drawString(militaryText, textX, textY);
+
+        dividerY = textY + normalMetrics.getDescent() + dividerPadding;
+        graphics2D.setColor(new Color(160, 175, 200, 100));
+        graphics2D.drawLine(
+                boxX + paddingX,
+                dividerY,
+                boxX + boxWidth - paddingX,
+                dividerY
+        );
+        textY = dividerY + dividerPadding + normalMetrics.getAscent();
+
+        graphics2D.setFont(normalFont);
+        for (String rl : resourceLines) {
+            graphics2D.setColor(INSTRUCTION_TEXT);
+            graphics2D.drawString(rl, textX, textY);
+            textY += rowAdvance;
+        }
     }
 
     private Polygon createHexPolygon(
@@ -860,6 +993,7 @@ final class HexMapPanel extends JPanel {
             case WORKER -> WORKER_COLOR;
             case BUILDER -> BUILDER_COLOR;
             case BORDER_EXPANDER -> BORDER_EXPANDER_COLOR;
+            default -> Color.GRAY;
         };
     }
 
@@ -869,6 +1003,7 @@ final class HexMapPanel extends JPanel {
             case WORKER -> "W";
             case BUILDER -> "B";
             case BORDER_EXPANDER -> "X";
+            default -> "?";
         };
     }
 
