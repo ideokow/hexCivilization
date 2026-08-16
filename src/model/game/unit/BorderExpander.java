@@ -11,8 +11,8 @@ import java.util.List;
 
 public class BorderExpander extends Unit {
 
-    public BorderExpander(Player owner, HexCoordinate position) {
-        super(owner, position);
+    public BorderExpander(boolean ownedByPlayer, HexCoordinate position) {
+        super(ownedByPlayer, position);
     }
 
     /*

@@ -18,8 +18,8 @@ public class Dock extends ProductionBuilding {
 
     private static final int RADIUS = 3;
 
-    public Dock(Player owner, HexCoordinate position) {
-        super(owner, ProductionType.DOCK, position);
+    public Dock(boolean ownedByPlayer, HexCoordinate position) {
+        super(ownedByPlayer, ProductionType.DOCK, position);
     }
 
     @Override

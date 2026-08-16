@@ -2,7 +2,6 @@ package model.game.unit;
 
 import model.game.happiness.Era;
 import model.game.hex.HexCoordinate;
-import model.game.player.Player;
 
 /*
 Units main model
@@ -12,20 +11,20 @@ public abstract class Unit {
     private static int unitsN = 0;
 
     private final String unitID;
-    private final Player owner;
+    private final boolean ownedByPlayer;
     private int currentAP;
     private HexCoordinate position;
 
     private int hp;
     private final int BASE_HP;
 
-    public Unit(Player owner, HexCoordinate position) {
+    public Unit(boolean ownedByPlayer, HexCoordinate position) {
         this.unitID = "unit-id-" + unitsN;
         unitsN++;
-        this.owner = owner;
         this.position = position;
         BASE_HP = getType().getHP();
         hp = BASE_HP;
+        this.ownedByPlayer = ownedByPlayer;
     }
 
     // --- getters and setters ---
@@ -34,8 +33,8 @@ public abstract class Unit {
         return unitID;
     }
 
-    public Player getOwner() {
-        return owner;
+    public boolean isOwnedByPlayer() {
+        return ownedByPlayer;
     }
 
     public abstract UnitType getType();

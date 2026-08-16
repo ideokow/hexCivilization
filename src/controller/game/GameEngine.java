@@ -61,7 +61,7 @@ public class GameEngine {
         loadMap();
 
         // initialize town hall
-        townHall = new TownHall(hexGrid, player);
+        townHall = new TownHall(hexGrid);
         hexGrid.get(zero).setBuilding(townHall);
         BuildingRegistry.getInstance().addBuilding(townHall);
 

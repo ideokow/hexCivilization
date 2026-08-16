@@ -16,7 +16,7 @@ public abstract class Building {
     private static int buildingN = 0;
 
     private final String buildingID;
-    private final Player owner;
+    private final boolean ownedByPlayer;
 
     private final HexCoordinate position;
     private final BuildingType type;
@@ -28,12 +28,12 @@ public abstract class Building {
     private final static int MAXIMUM_HP_AMOUNT = 150;
     private final static int MINIMUM_HP_AMOUNT = 0;
 
-    protected Building(BuildingType type, Player owner, HexCoordinate position) {
+    protected Building(BuildingType type, boolean ownedByPlayer, HexCoordinate position) {
         buildingID = "building-id-" + buildingN;
         buildingN++;
 
         this.type = Objects.requireNonNull(type, "type");
-        this.owner = owner;
+        this.ownedByPlayer = ownedByPlayer;
         this.state = BuildingState.ACTIVE;
         this.position = position;
         hp = MAXIMUM_HP_AMOUNT;
@@ -51,8 +51,8 @@ public abstract class Building {
         return type;
     }
 
-    public Player getOwner() {
-        return owner;
+    public boolean isOwnedByPlayer() {
+        return ownedByPlayer;
     }
 
     public int getHp() {

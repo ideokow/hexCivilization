@@ -6,7 +6,6 @@ import model.game.building.PopulationType;
 import model.game.happiness.Happiness;
 import model.game.hex.HexCoordinate;
 import model.game.hex.HexGrid;
-import model.game.player.Player;
 import model.game.hex.Resource;
 import model.game.registry.MilitaryRegistry;
 import model.game.registry.UnitRegistry;
@@ -37,9 +36,9 @@ public class TownHall extends Building {
 
     private boolean dockBuildingBonus = false;
 
-    public TownHall(HexGrid grid, Player owner) {
+    public TownHall(HexGrid grid) {
 
-        super(BuildingType.TOWN_HALL, owner, new HexCoordinate(0, 0));
+        super(BuildingType.TOWN_HALL, true, new HexCoordinate(0, 0));
         this.grid = grid;
 
         resourceStorage = new HashMap<>();
@@ -278,22 +277,22 @@ public class TownHall extends Building {
         // make unit
         Unit unit;
         if (unitType == UnitType.WORKER) {
-            unit = new Worker(getOwner(), getPosition());
+            unit = new Worker(true, getPosition());
         }
         else if (unitType == UnitType.BUILDER) {
-            unit = new Builder(getOwner(), getPosition());
+            unit = new Builder(true, getPosition());
         }
         else if (unitType == UnitType.EXPLORER) {
-            unit = new Explorer(getOwner(), getPosition());
+            unit = new Explorer(true, getPosition());
         }
         else if (unitType == UnitType.BORDER_EXPANDER) {
-            unit = new BorderExpander(getOwner(), getPosition());
+            unit = new BorderExpander(true, getPosition());
         }
         else if (unitType == UnitType.SWORDSMAN) {
-            unit = new Swordsman(getOwner(), getPosition());
+            unit = new Swordsman(true, getPosition());
         }
         else if (unitType == UnitType.ARCHER) {
-            unit = new Archer(getOwner(), getPosition());
+            unit = new Archer(true, getPosition());
         }
         else {
             throw new IllegalArgumentException("Undefined type : " + unitType);

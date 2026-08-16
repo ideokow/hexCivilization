@@ -1,7 +1,6 @@
 package model.game.building;
 
 import model.game.hex.HexCoordinate;
-import model.game.player.Player;
 import model.game.registry.MilitaryRegistry;
 import model.game.registry.UnitRegistry;
 import model.game.townhall.TownHall;
@@ -12,8 +11,8 @@ import model.game.unit.military.Cavalry;
 
 public class MilitaryStable extends Building {
 
-    public MilitaryStable(Player owner, HexCoordinate position) {
-        super(BuildingType.MILITARY_STABLE, owner, position);
+    public MilitaryStable(boolean ownedByPlayer, HexCoordinate position) {
+        super(BuildingType.MILITARY_STABLE, ownedByPlayer, position);
     }
 
     public GenerationStatus canGenerateUnit(TownHall townHall) {
@@ -33,7 +32,7 @@ public class MilitaryStable extends Building {
         if (!canGenerateUnit(townHall).equals(GenerationStatus.SUCCESS)) return;
 
         // make unit
-        Cavalry unit = new Cavalry(getOwner(), getPosition());
+        Cavalry unit = new Cavalry(isOwnedByPlayer(), getPosition());
 
         // full ap
         unit.resetAP(townHall.getHappiness().getEra());

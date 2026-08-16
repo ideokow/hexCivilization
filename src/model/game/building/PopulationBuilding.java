@@ -1,14 +1,13 @@
 package model.game.building;
 
 import model.game.hex.HexCoordinate;
-import model.game.player.Player;
 
 public class PopulationBuilding extends Building {
 
     private PopulationType populationType;
 
-    public PopulationBuilding(Player owner, BuildingType type, HexCoordinate position) {
-        super(type, owner, position);
+    public PopulationBuilding(boolean ownedByPlayer, BuildingType type, HexCoordinate position) {
+        super(type, ownedByPlayer, position);
 
         if (type == BuildingType.VILLAGE) {
             populationType = PopulationType.VILLAGE;

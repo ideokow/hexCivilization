@@ -1,12 +1,11 @@
 package model.game.unit.military;
 
 import model.game.hex.HexCoordinate;
-import model.game.player.Player;
 import model.game.unit.UnitType;
 
 public class Archer extends MilitaryUnit {
-    public Archer(Player owner, HexCoordinate position) {
-        super(owner, position, MilitaryType.ARCHER);
+    public Archer(boolean ownedByPlayer, HexCoordinate position) {
+        super(ownedByPlayer, position, MilitaryType.ARCHER);
     }
 
     @Override

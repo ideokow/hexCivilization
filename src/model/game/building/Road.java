@@ -5,7 +5,7 @@ import model.game.player.Player;
 
 public class Road extends Building {
 
-    public Road(Player owner, HexCoordinate position) {
-        super(BuildingType.ROAD, owner, position);
+    public Road(boolean ownedByPlayer, HexCoordinate position) {
+        super(BuildingType.ROAD, ownedByPlayer, position);
     }
 }

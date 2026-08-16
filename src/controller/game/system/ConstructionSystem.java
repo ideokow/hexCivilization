@@ -113,7 +113,7 @@ public class ConstructionSystem {
         Builder builder = (Builder) unit;
         Hex hex = grid.get(coordinate);
 
-        Building building = createBuilding(player, type, coordinate);
+        Building building = createBuilding(type, coordinate);
 
         townHall.spendResources(type.getConstructionCost());
         builder.spendAP(type.getBuildAPCost());
@@ -162,18 +162,18 @@ public class ConstructionSystem {
         return productionType.getRequiredResource();
     }
 
-    private Building createBuilding(Player owner, BuildingType type, HexCoordinate coordinate) {
+    private Building createBuilding(BuildingType type, HexCoordinate coordinate) {
         return switch (type) {
-            case LUMBER_MILL -> new ProductionBuilding(owner, ProductionType.LUMBER_MILL, coordinate);
-            case STONE_MINE -> new ProductionBuilding(owner, ProductionType.STONE_MINE, coordinate);
-            case IRON_MINE -> new ProductionBuilding(owner, ProductionType.IRON_MINE, coordinate);
-            case FARM -> new ProductionBuilding(owner, ProductionType.FARM, coordinate);
-            case STABLE -> new ProductionBuilding(owner, ProductionType.STABLE, coordinate);
-            case VILLAGE, TOWN -> new PopulationBuilding(owner, type, coordinate);
-            case MONUMENT -> new Monument(owner, coordinate);
-            case DOCK -> new Dock(owner, coordinate);
-            case ROAD -> new Road(owner, coordinate);
-            case MILITARY_STABLE -> new MilitaryStable(owner, coordinate);
+            case LUMBER_MILL -> new ProductionBuilding(true, ProductionType.LUMBER_MILL, coordinate);
+            case STONE_MINE -> new ProductionBuilding(true, ProductionType.STONE_MINE, coordinate);
+            case IRON_MINE -> new ProductionBuilding(true, ProductionType.IRON_MINE, coordinate);
+            case FARM -> new ProductionBuilding(true, ProductionType.FARM, coordinate);
+            case STABLE -> new ProductionBuilding(true, ProductionType.STABLE, coordinate);
+            case VILLAGE, TOWN -> new PopulationBuilding(true, type, coordinate);
+            case MONUMENT -> new Monument(true, coordinate);
+            case DOCK -> new Dock(true, coordinate);
+            case ROAD -> new Road(true, coordinate);
+            case MILITARY_STABLE -> new MilitaryStable(true, coordinate);
             default -> throw new IllegalArgumentException("Unsupported building type: " + type);
         };
     }

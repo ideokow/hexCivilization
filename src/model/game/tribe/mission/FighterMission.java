@@ -18,7 +18,7 @@ public class FighterMission extends Mission {
             if (MilitaryRegistry.getInstance().getMilitaryUnitsNumber() == getTribe().getRelatedTownHall().getMilitaryUnitCap()) {
                 break; // intentionally i don't decrease happiness
             }
-            Swordsman newOne = new Swordsman(getTribe().getRelatedTownHall().getOwner(), getTribe().getLocation());
+            Swordsman newOne = new Swordsman(true, getTribe().getLocation());
             newOne.resetAP(getTribe().getRelatedTownHall().getHappiness().getEra());
             UnitRegistry.getInstance().addUnit(newOne);
         }

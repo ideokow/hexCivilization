@@ -1,12 +1,11 @@
 package model.game.unit.military;
 
 import model.game.hex.HexCoordinate;
-import model.game.player.Player;
 import model.game.unit.UnitType;
 
 public class Swordsman extends MilitaryUnit {
-    public Swordsman(Player owner, HexCoordinate position) {
-        super(owner, position, MilitaryType.SWORDSMAN);
+    public Swordsman(boolean ownedByPlayer, HexCoordinate position) {
+        super(ownedByPlayer, position, MilitaryType.SWORDSMAN);
     }
 
     @Override

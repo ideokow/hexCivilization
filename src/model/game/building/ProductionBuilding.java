@@ -20,8 +20,8 @@ public class ProductionBuilding extends Building {
     private final ProductionType productionType;
     private final List<Worker> stationedWorkers;
 
-    public ProductionBuilding(Player owner, ProductionType type, HexCoordinate position) {
-        super(Objects.requireNonNull(type, "type").getBuildingType(), owner, position);
+    public ProductionBuilding(boolean ownedByPlayer, ProductionType type, HexCoordinate position) {
+        super(Objects.requireNonNull(type, "type").getBuildingType(), ownedByPlayer, position);
         this.productionType = type;
         this.stationedWorkers = new ArrayList<>();
     }
@@ -69,7 +69,7 @@ public class ProductionBuilding extends Building {
             return StationResult.BUILDING_IS_RUINED;
         }
         // worker is not owned
-        if (!getOwner().equals(worker.getOwner())) {
+        if (!worker.isOwnedByPlayer()) {
             return StationResult.ANOTHER_PLAYER_WORKER;
         }
 
