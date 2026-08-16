@@ -121,9 +121,7 @@ public class ConstructionSystem {
         builder.consumeCharge();
 
         if (!builder.hasCharges()) {
-            UnitRegistry.getInstance().removeUnit(builder);
-            hex.removeUnit(builder);
-            townHall.decreaseUnitNumber();
+            builder.die();
         }
 
         BuildingRegistry.getInstance().addBuilding(building);
@@ -215,12 +213,10 @@ public class ConstructionSystem {
         builder.consumeCharge();
 
         if (!builder.hasCharges()) {
-            UnitRegistry.getInstance().removeUnit(builder);
-            grid.get(building.getPosition()).removeUnit(builder);
-            townHall.decreaseUnitNumber();
+            builder.die();
         }
 
-        BuildingRegistry.getInstance().ruinBuilding(grid, building);
+        BuildingRegistry.getInstance().ruinBuilding(building);
         if (building.getType() == BuildingType.VILLAGE || building.getType() == BuildingType.TOWN) {
             BuildingRegistry.getInstance().refreshUnitCap(townHall);
         }

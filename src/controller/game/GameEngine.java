@@ -107,7 +107,7 @@ public class GameEngine {
         Map<Resource, Integer> generatedResources = BuildingRegistry.getInstance().generateResources(townHall, getSeason());
 
         // pay upkeep
-        UpKeepStatus upkeepStatus = BuildingRegistry.getInstance().payUpKeeps(townHall, hexGrid);
+        UpKeepStatus upkeepStatus = BuildingRegistry.getInstance().payUpKeeps(townHall);
 
         // move in-way units
         routingSystem.moveUnits(inQueueRoutes, gameController, getSeason(), canSail());

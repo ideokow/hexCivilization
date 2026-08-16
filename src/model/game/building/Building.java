@@ -3,6 +3,7 @@ package model.game.building;
 import model.game.hex.HexCoordinate;
 import model.game.hex.Resource;
 import model.game.player.Player;
+import model.game.registry.BuildingRegistry;
 import model.game.townhall.TownHall;
 
 import java.util.Map;
@@ -61,6 +62,7 @@ public abstract class Building {
 
     public void increaseHp(int amount) {
         hp = Math.max(MINIMUM_HP_AMOUNT, Math.min(MAXIMUM_HP_AMOUNT, hp + amount));
+        if (hp == 0) ruin();
     }
 
     // --- upkeep system ---
@@ -97,12 +99,16 @@ public abstract class Building {
         unpaidUpkeepTurns = 0;
     }
 
+    public void setStateRuined() {
+        this.state = BuildingState.RUINED;
+    }
+
     public boolean isRuined() {
         return state == BuildingState.RUINED;
     }
 
     public void ruin() {
-        state = BuildingState.RUINED;
+        BuildingRegistry.getInstance().ruinBuilding(this);
     }
 
     // ---------

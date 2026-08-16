@@ -1,5 +1,6 @@
 package model.game.registry;
 
+import controller.game.GameEngine;
 import model.game.building.*;
 import model.game.hex.HexGrid;
 import model.game.hex.Resource;
@@ -34,7 +35,7 @@ public class BuildingRegistry {
         buildingMap.put(building.getBuildingID(), building);
     }
 
-    public UpKeepStatus payUpKeeps(TownHall townHall, HexGrid hexGrid) {
+    public UpKeepStatus payUpKeeps(TownHall townHall) {
 
         List<Building> finishedBuildings = new ArrayList<>();
         boolean flag=true;
@@ -51,7 +52,7 @@ public class BuildingRegistry {
 
         // remove ruined buildings
         for (Building building : finishedBuildings) {
-            ruinBuilding(hexGrid, building);
+            ruinBuilding(building);
         }
 
         // return status
@@ -64,9 +65,10 @@ public class BuildingRegistry {
         }
     }
 
-    public void ruinBuilding(HexGrid hexGrid, Building building) {
+    public void ruinBuilding(Building building) {
         // remove from hex data
-        hexGrid.get(building.getPosition()).setBuilding(null);
+        GameEngine.getInstance().getHexGrid()
+                .get(building.getPosition()).setBuilding(null);
 
         // remove isWorking units
         if (building instanceof ProductionBuilding){
@@ -77,7 +79,7 @@ public class BuildingRegistry {
         }
 
         // set ruined
-        building.ruin();
+        building.setStateRuined();
 
         // remove from registry
         buildingMap.remove(building.getBuildingID());

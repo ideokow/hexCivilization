@@ -1,9 +1,9 @@
 package model.game.registry;
 
+import controller.game.GameEngine;
 import model.game.happiness.Era;
 import model.game.unit.Unit;
 import model.game.unit.UnitType;
-import model.game.unit.military.MilitaryType;
 import model.game.unit.military.MilitaryUnit;
 
 import java.util.HashMap;
@@ -45,5 +45,13 @@ public class UnitRegistry {
         if (UnitType.isMilitary(unit.getType())) {
             MilitaryRegistry.getInstance().removeUnit((MilitaryUnit) unit);
         }
+    }
+
+    public void killUnit(Unit unit) {
+        removeUnit(unit);
+        GameEngine.getInstance().getHexGrid()
+                .get(unit.getPosition()).removeUnit(unit);
+        GameEngine.getInstance().getTownHall()
+                .decreaseUnitNumber();
     }
 }

@@ -2,6 +2,7 @@ package model.game.unit;
 
 import model.game.happiness.Era;
 import model.game.hex.HexCoordinate;
+import model.game.registry.UnitRegistry;
 
 /*
 Units main model
@@ -59,6 +60,11 @@ public abstract class Unit {
 
     public void increaseHp(int amount) {
         hp = Math.max(0, Math.min(getHpCap(), hp + amount));
+        if (hp == 0) die();
+    }
+
+    public void die() {
+        UnitRegistry.getInstance().killUnit(this);
     }
 
     // --- AP things ---
