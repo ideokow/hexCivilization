@@ -1,5 +1,6 @@
 package model.game.tribe;
 
+import model.game.building.TribeCamp;
 import model.game.happiness.Happiness;
 import model.game.hex.HexCoordinate;
 import model.game.hex.Resource;
@@ -7,7 +8,10 @@ import model.game.townhall.TownHall;
 import model.game.tribe.mission.Mission;
 import model.game.tribe.mission.MissionState;
 import model.game.tribe.mission.MissionType;
+import model.game.unit.Unit;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class Tribe {
@@ -19,7 +23,10 @@ public class Tribe {
     private static final int PEACE_WAIT_TURNS = 3;
 
     private final TribeType tribeType;
+    private final TribeCamp tribeCamp;
     private final HexCoordinate location;
+
+    private final List<Unit> tribeUnits;
 
     private final TownHall relatedTownHall;
     private int relation;
@@ -44,8 +51,10 @@ public class Tribe {
 
     public Tribe(TribeType tribeType, HexCoordinate location, TownHall relatedTownHall) {
         this.tribeType = tribeType;
+        this.tribeCamp = new TribeCamp(this);
         this.location = location;
         this.relatedTownHall = relatedTownHall;
+        tribeUnits = new ArrayList<>();
 
         relation = 0;
         atWar = false;
@@ -327,5 +336,17 @@ public class Tribe {
 
     public Mission getCurrentMission() {
         return currentMission;
+    }
+
+    public TribeCamp getTribeCamp() {
+        return tribeCamp;
+    }
+
+    public List<Unit> getTribeUnits() {
+        return new ArrayList<>(tribeUnits);
+    }
+
+    private void addUnit(Unit unit) {
+        tribeUnits.add(unit);
     }
 }
