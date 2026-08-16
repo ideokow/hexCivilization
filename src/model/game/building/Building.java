@@ -1,9 +1,11 @@
 package model.game.building;
 
 import model.game.hex.HexCoordinate;
+import model.game.hex.Resource;
 import model.game.player.Player;
 import model.game.townhall.TownHall;
 
+import java.util.Map;
 import java.util.Objects;
 
 /*
@@ -63,7 +65,22 @@ public abstract class Building {
 
     // --- upkeep system ---
 
-    public abstract boolean payUpkeep(TownHall townHall);
+    public boolean payUpkeep(TownHall townHall) {
+        if (isRuined()) {
+            return false;
+        }
+
+        Map<Resource, Integer> cost = type.getUpkeepCost();
+
+        if (townHall.canAfford(cost)) {
+            townHall.spendResources(cost);
+            resetUnpaidUpkeepTurns();
+            return true;
+        } else {
+            increaseUnpaidUpkeepTurns();
+            return false;
+        }
+    }
 
     public int getUnpaidUpkeepTurns() {
         return unpaidUpkeepTurns;

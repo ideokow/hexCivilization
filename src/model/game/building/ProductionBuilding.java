@@ -9,7 +9,6 @@ import model.game.unit.Worker;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 /*
@@ -149,29 +148,5 @@ public class ProductionBuilding extends Building {
             }
         }
         return c;
-    }
-
-    @Override
-    public boolean payUpkeep(TownHall townHall) {
-        if (isRuined()) {
-            return false;
-        }
-
-        /*
-        One unit of each material required for maintenance cost
-         */
-        Map<Resource, Integer> cost = productionType.getConstructionCost();
-        for (Resource resource : cost.keySet()) {
-            cost.put(resource, 1);
-        }
-
-        if (townHall.canAfford(cost)) {
-            townHall.spendResources(cost);
-            resetUnpaidUpkeepTurns();
-            return true;
-        } else {
-            increaseUnpaidUpkeepTurns();
-            return false;
-        }
     }
 }

@@ -132,15 +132,8 @@ public class BuildingRegistry {
             amount -= UnitRegistry.getInstance().getUnitMap().size();
         }
         // upkeep
-        else {
-            for (Building building : buildingMap.values()) {
-                if (building instanceof PopulationBuilding) {
-                    amount -= ((PopulationBuilding) building).getPopulationType().getConstructionCost().containsKey(resource) ? 1 : 0;
-                }
-                else if (building instanceof ProductionBuilding) {
-                    amount -= ((ProductionBuilding) building).getProductionType().getConstructionCost().containsKey(resource) ? 1 : 0;
-                }
-            }
+        for (Building building : buildingMap.values()) {
+            amount -= building.getType().getConstructionCost().get(resource);
         }
 
         return amount;

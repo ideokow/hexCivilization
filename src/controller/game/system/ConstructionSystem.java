@@ -13,8 +13,6 @@ import model.game.townhall.TownHall;
 import model.game.unit.Builder;
 import model.game.unit.Unit;
 
-import java.util.EnumMap;
-import java.util.Map;
 import java.util.Objects;
 
 public class ConstructionSystem {
@@ -66,7 +64,7 @@ public class ConstructionSystem {
         if (placementResult != BuildResult.SUCCESS) {
             return placementResult;
         }
-        if (!townHall.canAfford(getConstructionCost(type))) {
+        if (!townHall.canAfford(type.getConstructionCost())) {
             return BuildResult.NOT_ENOUGH_RESOURCES;
         }
         if (unit.getCurrentAP() < type.getBuildAPCost()) {
@@ -117,7 +115,7 @@ public class ConstructionSystem {
 
         Building building = createBuilding(player, type, coordinate);
 
-        townHall.spendResources(getConstructionCost(type));
+        townHall.spendResources(type.getConstructionCost());
         builder.spendAP(type.getBuildAPCost());
         hex.setBuilding(building);
         builder.consumeCharge();
@@ -162,43 +160,6 @@ public class ConstructionSystem {
             return null;
         }
         return productionType.getRequiredResource();
-    }
-
-    private Map<Resource, Integer> getConstructionCost(BuildingType type) {
-
-        if (type.equals(BuildingType.MILITARY_STABLE)) {
-            return MilitaryStable.getConstructionCost();
-        }
-
-        if (type.equals(BuildingType.MONUMENT)) {
-            return Monument.getConstructionCost();
-        }
-
-        if (type.equals(BuildingType.ROAD)) {
-            return Road.getConstructionCost();
-        }
-
-        ProductionType productionType = ProductionType.fromBuildingType(type);
-        if (productionType != null) {
-            Map<Resource, Integer> cost = productionType.getConstructionCost();
-            if (
-                productionType.equals(ProductionType.DOCK)
-                & townHall.hasDockBuildingBonus()
-            ) {
-                townHall.useDockBuildingBonus();
-                for (Resource resource: cost.keySet()) {
-                    cost.put(resource, Math.max(0, cost.get(resource) - 1));
-                }
-            }
-            return cost;
-        }
-
-        PopulationType populationType = PopulationType.fromBuildingType(type);
-        if (populationType != null) {
-            return populationType.getConstructionCost();
-        }
-
-        return new EnumMap<>(Resource.class);
     }
 
     private Building createBuilding(Player owner, BuildingType type, HexCoordinate coordinate) {

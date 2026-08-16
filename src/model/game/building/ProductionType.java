@@ -1,27 +1,23 @@
 package model.game.building;
 
 import model.game.hex.Resource;
-import model.game.hex.TerrainType;
-
-import java.util.EnumMap;
-import java.util.Map;
 
 /*
  * Five primary production types in the game
  */
 public enum ProductionType {
     LUMBER_MILL
-            (BuildingType.LUMBER_MILL, Resource.WOOD, Resource.WOOD, 3, 2, 1, cost(2, 0, 0, 0)),
+            (BuildingType.LUMBER_MILL, Resource.WOOD, Resource.WOOD, 3, 2, 1),
     STONE_MINE
-            (BuildingType.STONE_MINE, Resource.STONE, Resource.STONE, 2, 2, 2, cost(3, 0, 0, 0)),
+            (BuildingType.STONE_MINE, Resource.STONE, Resource.STONE, 2, 2, 2),
     IRON_MINE
-            (BuildingType.IRON_MINE, Resource.IRON, Resource.IRON, 2, 1, 2, cost(4, 1, 0, 0)),
+            (BuildingType.IRON_MINE, Resource.IRON, Resource.IRON, 2, 1, 2),
     FARM
-            (BuildingType.FARM, Resource.FOOD, Resource.FOOD, 3, 3, 1, cost(1, 0, 0, 0)),
+            (BuildingType.FARM, Resource.FOOD, Resource.FOOD, 3, 3, 1),
     STABLE
-            (BuildingType.STABLE, Resource.FOOD, Resource.FOOD, 2, 2, 2, cost(3, 1, 0, 0)),
+            (BuildingType.STABLE, Resource.FOOD, Resource.FOOD, 2, 2, 2),
     DOCK
-            (BuildingType.DOCK, Resource.FOOD, null, 3, 1, 1, cost(10, 0, 4, 0));
+            (BuildingType.DOCK, Resource.FOOD, null, 3, 1, 1);
 
     private final BuildingType buildingType;
     private final Resource produceResource;
@@ -29,7 +25,6 @@ public enum ProductionType {
     private final int workerCapacity;
     private final int productionRate;
     private final int stationApCost;
-    private final Map<Resource, Integer> constructionCost;
 
     ProductionType(
             BuildingType buildingType,
@@ -37,8 +32,7 @@ public enum ProductionType {
             Resource requiredResource,
             int workerCapacity,
             int productionRate,
-            int stationApCost,
-            Map<Resource, Integer> constructionCost
+            int stationApCost
     ) {
         this.buildingType = buildingType;
         this.produceResource = produceResource;
@@ -46,16 +40,6 @@ public enum ProductionType {
         this.workerCapacity = workerCapacity;
         this.productionRate = productionRate;
         this.stationApCost = stationApCost;
-        this.constructionCost = constructionCost;
-    }
-
-    private static Map<Resource, Integer> cost(int wood, int stone, int iron, int food) {
-        Map<Resource, Integer> cost = new EnumMap<>(Resource.class);
-        if (wood > 0) cost.put(Resource.WOOD, wood);
-        if (stone > 0) cost.put(Resource.STONE, stone);
-        if (iron > 0) cost.put(Resource.IRON, iron);
-        if (food > 0) cost.put(Resource.FOOD, food);
-        return cost;
     }
 
     public BuildingType getBuildingType() {
@@ -80,10 +64,6 @@ public enum ProductionType {
 
     public int getStationApCost() {
         return stationApCost;
-    }
-
-    public Map<Resource, Integer> getConstructionCost() {
-        return new EnumMap<>(constructionCost);
     }
 
     public static ProductionType fromBuildingType(BuildingType buildingType) {

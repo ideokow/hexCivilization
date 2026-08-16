@@ -1,7 +1,6 @@
 package model.game.building;
 
 import model.game.hex.HexCoordinate;
-import model.game.hex.Resource;
 import model.game.player.Player;
 import model.game.registry.MilitaryRegistry;
 import model.game.registry.UnitRegistry;
@@ -10,8 +9,6 @@ import model.game.townhall.opration.GenerationStatus;
 import model.game.unit.*;
 import model.game.unit.military.Cavalry;
 
-import java.util.HashMap;
-import java.util.Map;
 
 public class MilitaryStable extends Building {
 
@@ -52,31 +49,5 @@ public class MilitaryStable extends Building {
         // place unit on hex
         townHall.getGrid().get(new HexCoordinate(0, 0)).addUnit(unit);
         townHall.increaseUnitNumber();
-    }
-
-    public static Map<Resource, Integer> getConstructionCost() {
-        Map<Resource, Integer> cost = new HashMap<>();
-        cost.put(Resource.IRON, 2);
-        cost.put(Resource.WOOD, 5);
-        return cost;
-    }
-
-    @Override
-    public boolean payUpkeep(TownHall townHall) {
-        if (isRuined()) {
-            return false;
-        }
-
-        Map<Resource, Integer> cost = new HashMap<>();
-        cost.put(Resource.WOOD, 1);
-
-        if (townHall.canAfford(cost)) {
-            townHall.spendResources(cost);
-            resetUnpaidUpkeepTurns();
-            return true;
-        } else {
-            increaseUnpaidUpkeepTurns();
-            return false;
-        }
     }
 }
