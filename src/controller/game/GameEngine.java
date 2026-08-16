@@ -18,6 +18,7 @@ import model.game.townhall.Technology;
 import model.game.townhall.TechnologyAcquireStatus;
 import model.game.townhall.TownHall;
 import model.game.townhall.opration.*;
+import model.game.trade.*;
 import model.game.unit.*;
 
 import java.io.IOException;
@@ -44,6 +45,7 @@ public class GameEngine {
     private final RoutingSystem routingSystem;
     private final StarvationSystem starvationSystem;
     private final OperationQueue operationQueue;
+    private final TradeSystem tradeSystem;
     private final MovementSystem movementSystem;
     private GameController gameController;
 
@@ -68,6 +70,7 @@ public class GameEngine {
         // essential systems
         constructionSystem = new ConstructionSystem(hexGrid, townHall);
         operationQueue = new OperationQueue(townHall);
+        tradeSystem = new TradeSystem(townHall, player);
         movementSystem = new MovementSystem(hexGrid);
         routingSystem = new RoutingSystem(movementSystem);
         starvationSystem = new StarvationSystem(townHall);
@@ -99,6 +102,7 @@ public class GameEngine {
         if (DEBUG_VERBOSE) System.out.println("Turn > " + turnNumber);
 
         turnNumber++;
+        tradeSystem.setCurrentTurn(turnNumber);
 
         // renew AP
         UnitRegistry.getInstance().renewUnitAPs(townHall.getHappiness().getEra());
@@ -260,6 +264,52 @@ public class GameEngine {
 
     public TownHallOperation getInQueueOperation() {
         return operationQueue.getInQueueOperation();
+    }
+
+    public TradeResult tradeAtBazaar(
+            Bazaar bazaar,
+            Resource soldResource,
+            Resource receivedResource,
+            TradeLevel level
+    ) {
+        return tradeSystem.tradeAtBazaar(
+                bazaar,
+                soldResource,
+                receivedResource,
+                level
+        );
+    }
+
+    public TradeResult tradeAtTradingPost(
+            TradingPost tradingPost,
+            Resource soldResource,
+            Resource receivedResource,
+            int amount
+    ) {
+        return tradeSystem.tradeAtTradingPost(
+                tradingPost,
+                soldResource,
+                receivedResource,
+                amount
+        );
+    }
+
+    public TradeResult tradeWithTribe(
+            model.game.tribe.Tribe tribe,
+            Resource soldResource,
+            Resource receivedResource,
+            int amount
+    ) {
+        return tradeSystem.tradeWithTribe(
+                tribe,
+                soldResource,
+                receivedResource,
+                amount
+        );
+    }
+
+    public TradeSystem getTradeSystem() {
+        return tradeSystem;
     }
 
     /*

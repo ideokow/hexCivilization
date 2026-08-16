@@ -332,6 +332,9 @@ final class HexTileRenderer {
             case DOCK -> "DC";
             case ROAD -> "RD";
             case MILITARY_STABLE -> "MS";
+            case BAZAAR -> "BZ";
+            case TRADING_POST -> "TP";
+            case TRIBE_CAMP -> "TC";
         };
     }
 

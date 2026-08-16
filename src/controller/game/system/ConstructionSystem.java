@@ -37,6 +37,9 @@ public class ConstructionSystem {
         if (type == BuildingType.TOWN_HALL) {
             return BuildResult.CANT_BUILD_TOWN_HALL;
         }
+        if (type == BuildingType.TRADING_POST) {
+            return BuildResult.CANT_BUILD_TRADING_POST;
+        }
         if (!(unit instanceof Builder)) {
             return BuildResult.NOT_A_BUILDER;
         }
@@ -96,6 +99,9 @@ public class ConstructionSystem {
             return false;
         }
         if (buildingType == BuildingType.VILLAGE && !townHall.getTechnologies().isAcquired(Technology.URBANIZATION)) {
+            return false;
+        }
+        if (buildingType == BuildingType.BAZAAR && townHall.getLevel().getLevelN() < 2) {
             return false;
         }
         return true;
@@ -172,6 +178,7 @@ public class ConstructionSystem {
             case DOCK -> new Dock(true, coordinate);
             case ROAD -> new Road(true, coordinate);
             case MILITARY_STABLE -> new MilitaryStable(true, coordinate);
+            case BAZAAR -> new Bazaar(true, coordinate);
             default -> throw new IllegalArgumentException("Unsupported building type: " + type);
         };
     }
@@ -187,6 +194,12 @@ public class ConstructionSystem {
         }
         if (building.getType().equals(BuildingType.TOWN_HALL)) {
             return RuinStatus.CANT_RUIN_TOWN_HALL;
+        }
+        if (building.getType().equals(BuildingType.TRADING_POST)) {
+            return RuinStatus.CANT_RUIN_TRADING_POST;
+        }
+        if (building.getType().equals(BuildingType.TRIBE_CAMP)) {
+            return RuinStatus.CANT_RUIN_TRIBE_CAMP;
         }
         if (!unit.getPosition().equals(building.getPosition())) {
             return RuinStatus.BUILDER_IS_NOT_HERE;

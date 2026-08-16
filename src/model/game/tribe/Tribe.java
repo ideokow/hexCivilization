@@ -48,6 +48,7 @@ public class Tribe {
     private int lastProcessedTurn = -1;
 
     private boolean hadTradeRouteMission = false;
+    private int lastTradeTurn = -1;
 
     public Tribe(TribeType tribeType, HexCoordinate location, TownHall relatedTownHall) {
         this.tribeType = tribeType;
@@ -71,7 +72,9 @@ public class Tribe {
         processPeaceRequest(currentTurn);
         updateMissionFail(currentTurn);
         processMissionDeadLine();
-        currentMission.checkRequirements();
+        if (currentMission != null) {
+            currentMission.checkRequirements();
+        }
         updateAllianceReward();
         reward();
 
@@ -332,6 +335,16 @@ public class Tribe {
 
     public void setHadTradeRouteMission() {
         hadTradeRouteMission = true;
+    }
+
+    public boolean hasTradedThisTurn(int turn) {
+        return turn >= 0 && lastTradeTurn == turn;
+    }
+
+    public void markTrade(int turn) {
+        if (turn >= 0) {
+            lastTradeTurn = turn;
+        }
     }
 
     public Mission getCurrentMission() {

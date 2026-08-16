@@ -27,6 +27,8 @@ public enum BuildResult {
             ("The required upgrade has not been unlocked."),
     CANT_BUILD_TOWN_HALL
             ("A Town Hall cannot be constructed directly."),
+    CANT_BUILD_TRADING_POST
+            ("A Trading Post is a neutral map structure and cannot be constructed."),
     UNIT_NOT_ON_MAP
             ("The Builder is not currently on the map."),
     NO_WATER_FOR_DOCK

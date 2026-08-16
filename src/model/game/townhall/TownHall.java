@@ -120,6 +120,33 @@ public class TownHall extends Building {
         return resourceStorage.get(Resource.WOOD);
     }
 
+    public int getResourceAmount(Resource resource) {
+        if (resource == null) return 0;
+        return resourceStorage.getOrDefault(resource, 0);
+    }
+
+    public int getAvailableStorage(Resource resource) {
+        if (resource == null) return 0;
+        return Math.max(0, getResourceCap() - getResourceAmount(resource));
+    }
+
+    public int addResource(Resource resource, int amount) {
+        if (resource == null || amount <= 0) return 0;
+
+        int addedAmount = Math.min(amount, getAvailableStorage(resource));
+        resourceStorage.put(resource, getResourceAmount(resource) + addedAmount);
+        return addedAmount;
+    }
+
+    public boolean deductResource(Resource resource, int amount) {
+        if (resource == null || amount <= 0 || getResourceAmount(resource) < amount) {
+            return false;
+        }
+
+        resourceStorage.put(resource, getResourceAmount(resource) - amount);
+        return true;
+    }
+
     // --- storage adders ---
 
     public void addStoneToStorage(int amount) {

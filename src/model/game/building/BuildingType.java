@@ -52,6 +52,13 @@ public enum BuildingType {
             cost(1, 0, 0, 0),
             Set.of(TerrainType.PLAINS), Set.of()
     ),
+    BAZAAR(
+            1,
+            cost(10, 10, 0, 0),
+            cost(0, 0, 0, 0),
+            Set.of(),
+            Set.of(TerrainType.SEA, TerrainType.RIVER, TerrainType.MOUNTAIN_RANGE, TerrainType.TOWN_HALL)
+    ),
     DOCK(
             3,
             cost(10, 0, 4, 0),
@@ -81,6 +88,13 @@ public enum BuildingType {
             cost(0, 1, 0, 0),
             cost(0, 0, 0, 0),
             Set.of(), Set.of(TerrainType.SEA, TerrainType.MOUNTAIN_RANGE, TerrainType.TOWN_HALL)
+    ),
+    TRADING_POST( // player can't build this
+            -1,
+            cost(0, 0, 0, 0),
+            cost(0, 0, 0, 0),
+            Set.of(),
+            Set.of()
     ),
     TRIBE_CAMP( // player can't build this
             -1,

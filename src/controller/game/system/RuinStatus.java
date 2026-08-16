@@ -7,6 +7,8 @@ public enum RuinStatus {
     LOW_AP("Builder does not have enough AP!"),
     NULL_ERR("Error: Building is not in the map."),
     CANT_RUIN_TOWN_HALL("You cant ruin town hall."),
+    CANT_RUIN_TRADING_POST("You cannot ruin the neutral Trading Post."),
+    CANT_RUIN_TRIBE_CAMP("You cannot ruin an active tribal camp."),
     NOT_ENOUGH_CHARGE("Builder does not have enough charge!"),
     BUILDER_IS_NOT_HERE("Builder is not in building hex!");
 
