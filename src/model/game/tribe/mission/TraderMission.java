@@ -48,8 +48,8 @@ public class TraderMission extends Mission {
             if (current == null) continue;
 
             if (current.getBuilding() != null
-                    && !current.getBuilding().getType().equals(BuildingType.ROAD)) {
-                // TODO : check that build is not tribe camp
+                    && !current.getBuilding().getType().equals(BuildingType.ROAD)
+                    && !current.getBuilding().getType().equals(BuildingType.TRIBE_CAMP)) {
                 return true;
             }
 

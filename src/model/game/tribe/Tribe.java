@@ -535,4 +535,17 @@ public class Tribe {
     public void setSuspicious(boolean suspicious) {
         this.suspicious = suspicious;
     }
+
+    /*
+    a log used in mission check requirements
+     */
+    private int lastLostTurn = -1;
+
+    public void updateDeath() {
+        lastLostTurn = lastProcessedTurn;
+    }
+
+    public int getLastLostTurn() {
+        return lastLostTurn;
+    }
 }

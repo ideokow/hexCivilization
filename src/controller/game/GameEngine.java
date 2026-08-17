@@ -234,9 +234,21 @@ public class GameEngine {
     /*
     generate unit trigger
      */
-    // TODO : add a building selector for this (town hall or which military stable for cavalry)
     public void generateUnitTrigger(UnitType unitType) {
         TownHallOperation operation = new GenerateUnitOperation(unitType, operationQueue);
+        OperationCheckResult result = operationQueue.reserveOperation(operation);
+        String message;
+        if (!result.getStatus().equals(OperationStatus.POSSIBLE)) {
+            message = result.getMessage();
+        } else {
+            message = "Unit generation process started.";
+        }
+        gameController.toastAlert(message);
+    }
+
+    public void generateUnitTrigger(UnitType unitType, MilitaryStable militaryStable) {
+        if (militaryStable == null) return;
+        TownHallOperation operation = new GenerateCavalryOperation(operationQueue, militaryStable);
         OperationCheckResult result = operationQueue.reserveOperation(operation);
         String message;
         if (!result.getStatus().equals(OperationStatus.POSSIBLE)) {

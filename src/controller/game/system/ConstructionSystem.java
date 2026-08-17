@@ -7,7 +7,6 @@ import model.game.hex.HexGrid;
 import model.game.hex.Resource;
 import model.game.player.Player;
 import model.game.registry.BuildingRegistry;
-import model.game.registry.UnitRegistry;
 import model.game.townhall.Technology;
 import model.game.townhall.TownHall;
 import model.game.unit.Builder;
@@ -80,6 +79,10 @@ public class ConstructionSystem {
         // check specifically docks
         if (type.equals(BuildingType.DOCK) && !Dock.canBuildDock(grid, coordinate)) {
             return BuildResult.NO_WATER_FOR_DOCK;
+        }
+
+        if (!checkLevelRequirements(type)) {
+            return BuildResult.LEVEL_REQUIREMENT;
         }
 
         return BuildResult.SUCCESS;
@@ -181,6 +184,12 @@ public class ConstructionSystem {
             case BAZAAR -> new Bazaar(true, coordinate);
             default -> throw new IllegalArgumentException("Unsupported building type: " + type);
         };
+    }
+
+    private boolean checkLevelRequirements(BuildingType buildingType) {
+        if (buildingType.equals(BuildingType.DOCK) && townHall.getLevel().getLevelN() >= 2) return false;
+        if (buildingType.equals(BuildingType.BAZAAR) && townHall.getLevel().getLevelN() >= 2) return false;
+        return true;
     }
 
     // --- functions for ruining ---

@@ -56,8 +56,7 @@ public enum BuildingType {
             1,
             cost(10, 10, 0, 0),
             cost(0, 0, 0, 0),
-            Set.of(),
-            Set.of(TerrainType.SEA, TerrainType.RIVER, TerrainType.MOUNTAIN_RANGE, TerrainType.TOWN_HALL)
+            Set.of(), Set.of(TerrainType.SEA, TerrainType.RIVER, TerrainType.MOUNTAIN_RANGE, TerrainType.TOWN_HALL)
     ),
     DOCK(
             3,
@@ -93,8 +92,7 @@ public enum BuildingType {
             -1,
             cost(0, 0, 0, 0),
             cost(0, 0, 0, 0),
-            Set.of(),
-            Set.of()
+            Set.of(), Set.of()
     ),
     TRIBE_CAMP( // player can't build this
             -1,
@@ -147,10 +145,10 @@ public enum BuildingType {
 
     private static Map<Resource, Integer> cost(int wood, int stone, int iron, int food) {
         Map<Resource, Integer> cost = new EnumMap<>(Resource.class);
-        if (wood > 0) cost.put(Resource.WOOD, wood);
-        if (stone > 0) cost.put(Resource.STONE, stone);
-        if (iron > 0) cost.put(Resource.IRON, iron);
-        if (food > 0) cost.put(Resource.FOOD, food);
+        cost.put(Resource.WOOD, wood);
+        cost.put(Resource.STONE, stone);
+        cost.put(Resource.IRON, iron);
+        cost.put(Resource.FOOD, food);
         return cost;
     }
 }

@@ -32,7 +32,9 @@ public enum BuildResult {
     UNIT_NOT_ON_MAP
             ("The Builder is not currently on the map."),
     NO_WATER_FOR_DOCK
-            ("You should build Dock across water.");
+            ("You should build Dock across water."),
+    LEVEL_REQUIREMENT
+            ("You don't have enough level requirements.");
 
     private final String message;
 

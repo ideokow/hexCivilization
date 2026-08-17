@@ -121,17 +121,22 @@ public class H2HCombat {
         int attackersAttack = getAttackValue(getAttackMilitaryUnits());
         int defendersAttack = getAttackValue(getDefenceMilitaryUnits());
 
-        applyHits(getAttackMilitaryUnits(), getDefenceMilitaryUnits(), defenderHits, defendersAttack);
-        applyHits(getDefenceMilitaryUnits(), getAttackMilitaryUnits(), attackerHits, attackersAttack);
+        applyHits(getAttackMilitaryUnits (), defenderHits, defendersAttack);
+        applyHits(getDefenceMilitaryUnits(), attackerHits, attackersAttack);
 
         inProgress = false;
     }
 
-    private void applyHits(List<MilitaryUnit> units, List<MilitaryUnit> attackers, int hits, int attack) {
+    private void applyHits(List<MilitaryUnit> units, int hits, int attack) {
         for (int i = 0; i < hits; i++) {
             MilitaryUnit target = pickTarget(units);
             if (target == null) return; // done!
             target.increaseHp(-attack);
+
+            // log die for mission req check
+            if (target.getHp() == 0) {
+                target.getOwnerTribe().updateDeath();
+            }
         }
     }
 
