@@ -3,13 +3,17 @@ package model.game.unit;
 import model.game.hex.Hex;
 import model.game.hex.HexCoordinate;
 import model.game.hex.HexGrid;
+import model.game.tribe.Tribe;
 
 import java.util.List;
 
 public class Explorer extends Unit {
+    public Explorer(HexCoordinate position) {
+        super(position);
+    }
 
-    public Explorer(boolean ownedByPlayer, HexCoordinate position) {
-        super(ownedByPlayer, position);
+    public Explorer(HexCoordinate position, Tribe tribe) {
+        super(position, tribe);
     }
 
     public void exploreMap(HexGrid hexGrid) {

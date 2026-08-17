@@ -3,6 +3,7 @@ package model.game.unit;
 import model.game.happiness.Era;
 import model.game.hex.HexCoordinate;
 import model.game.registry.UnitRegistry;
+import model.game.tribe.Tribe;
 
 /*
 Units main model
@@ -13,19 +14,34 @@ public abstract class Unit {
 
     private final String unitID;
     private final boolean ownedByPlayer;
-    private int currentAP;
+    private final Tribe ownerTribe;
+
     private HexCoordinate position;
+    private int currentAP;
 
     private int hp;
     private final int BASE_HP;
 
-    public Unit(boolean ownedByPlayer, HexCoordinate position) {
+    public Unit(HexCoordinate position) {
         this.unitID = "unit-id-" + unitsN;
         unitsN++;
         this.position = position;
         BASE_HP = getType().getHP();
         hp = BASE_HP;
-        this.ownedByPlayer = ownedByPlayer;
+
+        this.ownedByPlayer = true;
+        ownerTribe = null;
+    }
+
+    public Unit(HexCoordinate position, Tribe ownerTribe) {
+        this.unitID = "unit-id-" + unitsN;
+        unitsN++;
+        this.position = position;
+        BASE_HP = getType().getHP();
+        hp = BASE_HP;
+
+        this.ownedByPlayer = false;
+        this.ownerTribe = ownerTribe;
     }
 
     // --- getters and setters ---
@@ -36,6 +52,10 @@ public abstract class Unit {
 
     public boolean isOwnedByPlayer() {
         return ownedByPlayer;
+    }
+
+    public Tribe getOwnerTribe() {
+        return ownerTribe;
     }
 
     public abstract UnitType getType();

@@ -2,11 +2,17 @@ package model.game.unit.military;
 
 import model.game.building.Building;
 import model.game.hex.HexCoordinate;
+import model.game.tribe.Tribe;
 import model.game.unit.Unit;
 
 public abstract class MilitaryUnit extends Unit {
-    public MilitaryUnit(boolean ownedByPlayer, HexCoordinate position, MilitaryType militaryType) {
-        super(ownedByPlayer, position);
+    public MilitaryUnit(HexCoordinate position, MilitaryType militaryType) {
+        super(position);
+        this.militaryType = militaryType;
+    }
+
+    public MilitaryUnit(HexCoordinate position, MilitaryType militaryType, Tribe tribe) {
+        super(position, tribe);
         this.militaryType = militaryType;
     }
 

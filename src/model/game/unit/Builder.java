@@ -1,13 +1,23 @@
 package model.game.unit;
 
 import model.game.hex.HexCoordinate;
+import model.game.tribe.Tribe;
 
 public class Builder extends Unit {
 
     private int charges;
 
-    public Builder(boolean ownedByPlayer, HexCoordinate position) {
-        super(ownedByPlayer, position);
+    public Builder(HexCoordinate position) {
+        super(position);
+        initialCharge();
+    }
+
+    public Builder(HexCoordinate position, Tribe tribe) {
+        super(position, tribe);
+        initialCharge();
+    }
+
+    private void initialCharge() {
         charges = 3;
     }
 

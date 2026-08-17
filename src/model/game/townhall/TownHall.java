@@ -304,22 +304,22 @@ public class TownHall extends Building {
         // make unit
         Unit unit;
         if (unitType == UnitType.WORKER) {
-            unit = new Worker(true, getPosition());
+            unit = new Worker(getPosition());
         }
         else if (unitType == UnitType.BUILDER) {
-            unit = new Builder(true, getPosition());
+            unit = new Builder(getPosition());
         }
         else if (unitType == UnitType.EXPLORER) {
-            unit = new Explorer(true, getPosition());
+            unit = new Explorer(getPosition());
         }
         else if (unitType == UnitType.BORDER_EXPANDER) {
-            unit = new BorderExpander(true, getPosition());
+            unit = new BorderExpander(getPosition());
         }
         else if (unitType == UnitType.SWORDSMAN) {
-            unit = new Swordsman(true, getPosition());
+            unit = new Swordsman(getPosition());
         }
         else if (unitType == UnitType.ARCHER) {
-            unit = new Archer(true, getPosition());
+            unit = new Archer(getPosition());
         }
         else {
             throw new IllegalArgumentException("Undefined type : " + unitType);

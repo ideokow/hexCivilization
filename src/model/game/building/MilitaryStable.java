@@ -32,7 +32,7 @@ public class MilitaryStable extends Building {
         if (!canGenerateUnit(townHall).equals(GenerationStatus.SUCCESS)) return;
 
         // make unit
-        Cavalry unit = new Cavalry(isOwnedByPlayer(), getPosition());
+        Cavalry unit = new Cavalry(getPosition());
 
         // full ap
         unit.resetAP(townHall.getHappiness().getEra());

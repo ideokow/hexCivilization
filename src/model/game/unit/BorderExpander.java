@@ -6,13 +6,17 @@ import model.game.hex.HexCoordinate;
 import model.game.hex.HexGrid;
 import model.game.player.Player;
 import model.game.registry.UnitRegistry;
+import model.game.tribe.Tribe;
 
 import java.util.List;
 
 public class BorderExpander extends Unit {
+    public BorderExpander(HexCoordinate position) {
+        super(position);
+    }
 
-    public BorderExpander(boolean ownedByPlayer, HexCoordinate position) {
-        super(ownedByPlayer, position);
+    public BorderExpander(HexCoordinate position, Tribe tribe) {
+        super(position, tribe);
     }
 
     /*
