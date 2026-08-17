@@ -43,7 +43,7 @@ public class H2HCombat {
         if (inProgress) return CombatStatus.ALREADY_IN_COMBAT;
 
         // check distance
-        int dist = HexGrid.calculateDistance(attackHex, defenceHex);
+        int dist = HexGrid.calculateDistance(attackHex.getCoordinate(), defenceHex.getCoordinate());
         if (dist > 2) return CombatStatus.FAR_HEXES;
         if (dist == 0) return CombatStatus.SAME_HEXES;
         isNeighborHex = dist == 1;

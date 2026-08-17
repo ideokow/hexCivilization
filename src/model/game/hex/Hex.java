@@ -3,6 +3,7 @@ package model.game.hex;
 import model.game.building.Building;
 import model.game.building.BuildingType;
 import model.game.unit.Unit;
+import model.game.unit.military.MilitaryUnit;
 
 import java.util.*;
 
@@ -43,10 +44,6 @@ public class Hex {
         return new HashSet<>(availableResources);
     }
 
-    public boolean isThereRoad() {
-        return building != null && building.getType().equals(BuildingType.ROAD);
-    }
-
     // building
 
     public Building getBuilding() {
@@ -55,6 +52,10 @@ public class Hex {
 
     public void setBuilding(Building building) {
         this.building = building;
+    }
+
+    public boolean isThereRoad() {
+        return building != null && building.getType().equals(BuildingType.ROAD);
     }
 
     // units
@@ -69,6 +70,13 @@ public class Hex {
 
     public boolean removeUnit(Unit unit) {
         return units.remove(unit);
+    }
+
+    public boolean isThereMilitary() {
+        for (Unit unit : units) {
+            if (unit instanceof MilitaryUnit && unit.isOwnedByPlayer()) return true;
+        }
+        return false;
     }
 
     // overrides

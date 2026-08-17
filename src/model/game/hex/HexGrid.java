@@ -88,6 +88,20 @@ public class HexGrid {
         return result;
     }
 
+    /*
+    usage: in tribe combat logic
+     */
+    public List<Hex> closestMilitaries(HexCoordinate center, int range) {
+        List<Hex> hexes  = hexesInRange(center, range);
+        List<Hex> target = new ArrayList<>();
+
+        for (Hex hex : hexes) {
+            if (hex.isThereMilitary()) target.add(hex);
+        }
+
+        return target;
+    }
+
     // --- Fog of War ---
 
     public boolean isDiscovered(HexCoordinate coordinate) {
@@ -110,9 +124,9 @@ public class HexGrid {
         return new HashSet<>(discovered);
     }
 
-    public static int calculateDistance(Hex hex1, Hex hex2) {
-        int dq = hex1.getCoordinate().getQ() - hex2.getCoordinate().getQ();
-        int dr = hex1.getCoordinate().getR() - hex2.getCoordinate().getR();
+    public static int calculateDistance(HexCoordinate hex1, HexCoordinate hex2) {
+        int dq = hex1.getQ() - hex2.getQ();
+        int dr = hex1.getR() - hex2.getR();
         return (Math.abs(dq) + Math.abs(dr) + Math.abs(dq + dr)) / 2;
     }
 }

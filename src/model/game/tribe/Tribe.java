@@ -1,19 +1,23 @@
 package model.game.tribe;
 
+import controller.game.system.MovementSystem;
 import model.game.building.TribeCamp;
 import model.game.happiness.Happiness;
+import model.game.hex.Hex;
 import model.game.hex.HexCoordinate;
+import model.game.hex.HexGrid;
 import model.game.hex.Resource;
 import model.game.townhall.TownHall;
 import model.game.tribe.mission.Mission;
 import model.game.tribe.mission.MissionState;
 import model.game.tribe.mission.MissionType;
 import model.game.unit.Unit;
-import model.game.unit.military.MilitaryUnit;
+import model.game.unit.military.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 public class Tribe {
 
@@ -22,6 +26,8 @@ public class Tribe {
 
     private static final int PEACE_RELATION = -10;
     private static final int PEACE_WAIT_TURNS = 3;
+
+    private static final int DANGER_ZONE_RADIUS = 2;
 
     private final TribeType tribeType;
     private final TribeCamp tribeCamp;
@@ -68,7 +74,7 @@ public class Tribe {
     /*
     tick function: run every turn
      */
-    public SuspiciousStatus tick(int currentTurn) {
+    public SuspiciousStatus tick(int currentTurn, MovementSystem movementSystem, HexGrid grid) {
         if (currentTurn <= lastProcessedTurn) return null;
         lastProcessedTurn = currentTurn;
 
@@ -83,7 +89,7 @@ public class Tribe {
 
         reward();
 
-        performMilitaryBehaviour(currentTurn);
+        performMilitaryBehaviour(movementSystem, grid);
 
         // suspicious index
         if      (isEnemy())  return SuspiciousStatus.IS_ENEMY;
@@ -91,7 +97,7 @@ public class Tribe {
         else return SuspiciousStatus.ITS_OK;
     }
 
-    private void performMilitaryBehaviour(int turn) {
+    private void performMilitaryBehaviour(MovementSystem movementSystem, HexGrid grid) {
         switch (getMood()) {
             case ALLY     -> {
                 offerThings(1.0);
@@ -104,39 +110,96 @@ public class Tribe {
             case OK       -> {
                 offerThings(0.4);
                 setSuspicious(false);
+                moveBackDefenders(movementSystem);
             }
             case NOT_GOOD -> {
                 generateDefender();
                 setSuspicious(true);
             }
             case ENEMY    -> {
-                moveDefenders();
+                moveDefenders(movementSystem, grid);
             }
         }
     }
 
     private void offerThings(double prob) {
-        // ...
+        if (new Random().nextDouble() > 1-prob) {
+            resetMission();
+            return;
+        }
+        if (new Random().nextDouble() > 1-prob) {
+            // TODO : offer trades
+        }
     }
 
     private void generateDefender() {
         if (tribeUnits.size() >= tribeType.getMilitaryCap()) return;
 
-        // ...
+        MilitaryType[] possibleUnits = new MilitaryType[]{
+                MilitaryType.SWORDSMAN,
+                MilitaryType.ARCHER,
+                MilitaryType.CAVALRY
+        };
+
+        switch (possibleUnits[random012(3, 2, 1)]) {
+            case SWORDSMAN -> addUnit(new Swordsman(location, this));
+            case ARCHER    -> addUnit(new Archer   (location, this));
+            case CAVALRY   -> addUnit(new Cavalry  (location, this));
+        }
     }
 
-    private void moveDefenders() {
-        if (isThereDefender()) {
+    private void moveDefenders(MovementSystem movementSystem, HexGrid grid) {
+        Hex target = closestTarget(grid);
+
+        if (target == null) {
             generateDefender();
             return;
         }
 
-        // ...
+        for (MilitaryUnit unit : tribeUnits) {
+            if (unit.getPosition().equals(location)) {
+                movementSystem.move(unit, target.getCoordinate());
+                return;
+            }
+        }
     }
 
-    private boolean isThereDefender() {
-        // ...
-        return false;
+    private void moveBackDefenders(MovementSystem movementSystem) {
+        for (MilitaryUnit unit : tribeUnits) {
+            if (!unit.getPosition().equals(location)) {
+                movementSystem.move(unit, location);
+                return;
+            }
+        }
+    }
+
+    private Hex closestTarget(HexGrid grid) {
+        List<Hex> targets = grid.closestMilitaries(location, DANGER_ZONE_RADIUS);
+        for (Hex target : targets) {
+            List<Hex> neighborHexes = grid.hexesInRange(target.getCoordinate(), 1);
+
+            boolean flag = false;
+            for (Hex hex : neighborHexes) {
+                if (hex.isThereMilitary()) {
+                    flag = true;
+                    break;
+                }
+            }
+            if (!flag) return target;
+        }
+        return null;
+    }
+
+    private static int random012(double w0, double w1, double w2) {
+        double roll = new Random().nextDouble() * (w0 + w1 + w2);
+
+        if (roll < w0) {
+            return 0;
+        }
+        if (roll < w0 + w1) {
+            return 1;
+        }
+        return 2;
     }
 
     /*
