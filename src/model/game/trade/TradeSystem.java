@@ -6,7 +6,6 @@ import model.game.hex.Resource;
 import model.game.player.Player;
 import model.game.townhall.TownHall;
 import model.game.tribe.Tribe;
-import model.game.tribe.TribeType;
 
 import java.util.Objects;
 
@@ -171,7 +170,7 @@ public class TradeSystem {
         if (tribe.hasTradedThisTurn(turn)) {
             return TradeResult.failure(TradeStatus.TRIBE_ALREADY_USED_THIS_TURN);
         }
-        if (!supportsReceivedResource(tribe.getTribeType(), receivedResource)) {
+        if (!tribe.canProvideResource(receivedResource)) {
             return TradeResult.failure(TradeStatus.TRIBE_RESOURCE_NOT_SUPPORTED);
         }
 
@@ -230,18 +229,5 @@ public class TradeSystem {
                 addedAmount,
                 strategy.getConversionRatePercent()
         );
-    }
-
-    private boolean supportsReceivedResource(TribeType tribeType, Resource receivedResource) {
-        if (tribeType == null || receivedResource == null) {
-            return false;
-        }
-        return switch (tribeType) {
-            case FARMER, COASTAL -> receivedResource == Resource.FOOD;
-            case MOUNTAINEER -> receivedResource == Resource.STONE
-                    || receivedResource == Resource.IRON;
-            case TRADER -> true;
-            case FIGHTER -> false;
-        };
     }
 }

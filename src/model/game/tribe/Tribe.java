@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 public class Tribe {
 
@@ -56,6 +57,7 @@ public class Tribe {
 
     private boolean hadTradeRouteMission = false;
     private int lastTradeTurn = -1;
+    private boolean tradeOfferAvailable = false;
 
     private boolean suspicious = false;
 
@@ -127,8 +129,8 @@ public class Tribe {
             resetMission();
             return;
         }
-        if (new Random().nextDouble() > 1-prob) {
-            // TODO : offer trades
+        if (new Random().nextDouble() > 1-prob && canTrade()) {
+            tradeOfferAvailable = true;
         }
     }
 
@@ -233,8 +235,10 @@ public class Tribe {
         atWar = true;
         allianceActive = false;
 
-        currentMission.cancelMission();
-        // TODO : cancel trades
+        if (currentMission != null) {
+            currentMission.cancelMission();
+        }
+        cancelTrades();
 
         cancelPeaceRequest();
 
@@ -380,6 +384,9 @@ public class Tribe {
     }
 
     private void processMissionDeadLine() {
+        if (currentMission == null) {
+            return;
+        }
         if (lastProcessedTurn - currentMission.getAcquireTurn() > currentMission.getDeadLine()) {
             currentMission.failMission();
         }
@@ -390,17 +397,80 @@ public class Tribe {
     }
 
     private void resetMission() {
-        boolean condition = (
-            canResetMission() &&
-            currentMission.getMissionState().equals(MissionState.CANCELLED) &&
-            currentMission.getMissionState().equals(MissionState.FAILED) &&
-            currentMission.getMissionState().equals(MissionState.COMPLETED)
-        );
-        if (condition) currentMission = MissionType.getMissionFromTribeType(this);
+        if (!canResetMission()) {
+            return;
+        }
+
+        if (currentMission == null) {
+            currentMission = MissionType.getMissionFromTribeType(this);
+            return;
+        }
+
+        MissionState missionState = currentMission.getMissionState();
+        if (
+            missionState.equals(MissionState.CANCELLED) ||
+            missionState.equals(MissionState.FAILED) ||
+            missionState.equals(MissionState.COMPLETED)
+        ) {
+            currentMission = MissionType.getMissionFromTribeType(this);
+        }
     }
 
     public boolean canResetMission() {
         return lastFailedMissionTurn > 5 || lastFailedMissionTurn == -1;
+    }
+
+    public boolean isHadTradeRouteMission() {
+        return hadTradeRouteMission;
+    }
+
+    public void setHadTradeRouteMission() {
+        hadTradeRouteMission = true;
+    }
+
+    /*
+    Related to trade
+     */
+    public boolean canTrade() {
+        return !isEnemy() && relation >= 20;
+    }
+
+    public Set<Resource> getTradeResources() {
+        return switch (tribeType) {
+            case FARMER, COASTAL -> Set.of(Resource.FOOD);
+            case MOUNTAINEER -> Set.of(Resource.STONE, Resource.IRON);
+            case TRADER -> Set.of(
+                    Resource.WOOD,
+                    Resource.STONE,
+                    Resource.IRON,
+                    Resource.FOOD
+            );
+            case FIGHTER -> Set.of();
+        };
+    }
+
+    public boolean canProvideResource(Resource resource) {
+        return resource != null && getTradeResources().contains(resource);
+    }
+
+    public boolean isTradeOfferAvailable() {
+        return tradeOfferAvailable && canTrade();
+    }
+
+    public boolean hasTradedThisTurn(int turn) {
+        return turn >= 0 && lastTradeTurn == turn;
+    }
+
+    public void markTrade(int turn) {
+        if (turn >= 0) {
+            lastTradeTurn = turn;
+            tradeOfferAvailable = false;
+        }
+    }
+
+    private void cancelTrades() {
+        tradeOfferAvailable = false;
+        lastTradeTurn = -1;
     }
 
     /*
@@ -442,30 +512,8 @@ public class Tribe {
         return atWar || getMood() == TribeMood.ENEMY;
     }
 
-    public boolean canTrade() {
-        return !isEnemy() && relation >= 20;
-    }
-
     public TownHall getRelatedTownHall() {
         return relatedTownHall;
-    }
-
-    public boolean isHadTradeRouteMission() {
-        return hadTradeRouteMission;
-    }
-
-    public void setHadTradeRouteMission() {
-        hadTradeRouteMission = true;
-    }
-
-    public boolean hasTradedThisTurn(int turn) {
-        return turn >= 0 && lastTradeTurn == turn;
-    }
-
-    public void markTrade(int turn) {
-        if (turn >= 0) {
-            lastTradeTurn = turn;
-        }
     }
 
     public Mission getCurrentMission() {
