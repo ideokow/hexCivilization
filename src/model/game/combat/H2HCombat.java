@@ -1,6 +1,7 @@
 package model.game.combat;
 
 import model.game.hex.Hex;
+import model.game.hex.HexGrid;
 import model.game.unit.Unit;
 import model.game.unit.UnitType;
 import model.game.unit.military.MilitaryType;
@@ -42,7 +43,7 @@ public class H2HCombat {
         if (inProgress) return CombatStatus.ALREADY_IN_COMBAT;
 
         // check distance
-        int dist = calculateDistance();
+        int dist = HexGrid.calculateDistance(attackHex, defenceHex);
         if (dist > 2) return CombatStatus.FAR_HEXES;
         if (dist == 0) return CombatStatus.SAME_HEXES;
         isNeighborHex = dist == 1;
@@ -157,12 +158,6 @@ public class H2HCombat {
     }
 
     // --- Utils ---
-
-    private int calculateDistance() {
-        int dq = attackHex.getCoordinate().getQ() - defenceHex.getCoordinate().getQ();
-        int dr = attackHex.getCoordinate().getR() - defenceHex.getCoordinate().getR();
-        return (Math.abs(dq) + Math.abs(dr) + Math.abs(dq + dr)) / 2;
-    }
 
     private List<Integer> throwNDices(int N) {
         List<Integer> numbers = new ArrayList<>();

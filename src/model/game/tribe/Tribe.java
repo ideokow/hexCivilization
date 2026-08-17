@@ -9,6 +9,7 @@ import model.game.tribe.mission.Mission;
 import model.game.tribe.mission.MissionState;
 import model.game.tribe.mission.MissionType;
 import model.game.unit.Unit;
+import model.game.unit.military.MilitaryUnit;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +27,7 @@ public class Tribe {
     private final TribeCamp tribeCamp;
     private final HexCoordinate location;
 
-    private final List<Unit> tribeUnits;
+    private final List<MilitaryUnit> tribeUnits;
 
     private final TownHall relatedTownHall;
     private int relation;
@@ -50,6 +51,8 @@ public class Tribe {
     private boolean hadTradeRouteMission = false;
     private int lastTradeTurn = -1;
 
+    private boolean suspicious = false;
+
     public Tribe(TribeType tribeType, HexCoordinate location, TownHall relatedTownHall) {
         this.tribeType = tribeType;
         this.tribeCamp = new TribeCamp(this);
@@ -65,20 +68,75 @@ public class Tribe {
     /*
     tick function: run every turn
      */
-    public void tick(int currentTurn) {
-        if (currentTurn <= lastProcessedTurn) return;
+    public SuspiciousStatus tick(int currentTurn) {
+        if (currentTurn <= lastProcessedTurn) return null;
         lastProcessedTurn = currentTurn;
 
         processPeaceRequest(currentTurn);
         updateMissionFail(currentTurn);
+        updateAllianceReward();
+
         processMissionDeadLine();
         if (currentMission != null) {
             currentMission.checkRequirements();
         }
-        updateAllianceReward();
+
         reward();
 
-        // turn-based logic
+        performMilitaryBehaviour(currentTurn);
+
+        // suspicious index
+        if      (isEnemy())  return SuspiciousStatus.IS_ENEMY;
+        else if (suspicious) return SuspiciousStatus.IS_SUSPICIOUS;
+        else return SuspiciousStatus.ITS_OK;
+    }
+
+    private void performMilitaryBehaviour(int turn) {
+        switch (getMood()) {
+            case ALLY     -> {
+                offerThings(1.0);
+                setSuspicious(false);
+            }
+            case NOT_BAD  -> {
+                offerThings(0.8);
+                setSuspicious(false);
+            }
+            case OK       -> {
+                offerThings(0.4);
+                setSuspicious(false);
+            }
+            case NOT_GOOD -> {
+                generateDefender();
+                setSuspicious(true);
+            }
+            case ENEMY    -> {
+                moveDefenders();
+            }
+        }
+    }
+
+    private void offerThings(double prob) {
+        // ...
+    }
+
+    private void generateDefender() {
+        if (tribeUnits.size() >= tribeType.getMilitaryCap()) return;
+
+        // ...
+    }
+
+    private void moveDefenders() {
+        if (isThereDefender()) {
+            generateDefender();
+            return;
+        }
+
+        // ...
+    }
+
+    private boolean isThereDefender() {
+        // ...
+        return false;
     }
 
     /*
@@ -359,7 +417,11 @@ public class Tribe {
         return new ArrayList<>(tribeUnits);
     }
 
-    private void addUnit(Unit unit) {
+    private void addUnit(MilitaryUnit unit) {
         tribeUnits.add(unit);
+    }
+
+    public void setSuspicious(boolean suspicious) {
+        this.suspicious = suspicious;
     }
 }

@@ -109,4 +109,10 @@ public class HexGrid {
     public Set<HexCoordinate> getDiscovered() {
         return new HashSet<>(discovered);
     }
+
+    public static int calculateDistance(Hex hex1, Hex hex2) {
+        int dq = hex1.getCoordinate().getQ() - hex2.getCoordinate().getQ();
+        int dr = hex1.getCoordinate().getR() - hex2.getCoordinate().getR();
+        return (Math.abs(dq) + Math.abs(dr) + Math.abs(dq + dr)) / 2;
+    }
 }
