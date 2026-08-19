@@ -19,15 +19,19 @@ import model.game.townhall.TechnologyAcquireStatus;
 import model.game.townhall.TownHall;
 import model.game.townhall.opration.*;
 import model.game.trade.*;
+import model.game.tribe.Tribe;
 import model.game.unit.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class GameEngine {
 
     public static final boolean DEBUG_VERBOSE = false;
+    public static final int MAP_NUMBER = 3;
 
     // singleton
     private static GameEngine instance;
@@ -40,6 +44,7 @@ public class GameEngine {
 
     private HexGrid hexGrid;
     private final TownHall townHall;
+    private List<Tribe> tribes;
 
     private final ConstructionSystem constructionSystem;
     private final RoutingSystem routingSystem;
@@ -74,6 +79,17 @@ public class GameEngine {
         movementSystem = new MovementSystem(hexGrid);
         routingSystem = new RoutingSystem(movementSystem);
         starvationSystem = new StarvationSystem(townHall);
+
+        // load tribes
+        tribes = new ArrayList<>();
+        try {
+            hexGrid = (new MapLoader()).loadTribes(MAP_NUMBER, hexGrid, townHall);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // load trading posts
+        // todo: load!
 
         inQueueRoutes = new HashMap<>();
         turnNumber = 1;

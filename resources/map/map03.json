@@ -275103,5 +275103,32 @@
       "q": 4,
       "r": 0
     }
+  ],
+  "tribes": [
+    {
+      "q": 25,
+      "r": -1,
+      "type": "FARMER"
+    },
+    {
+      "q": 10,
+      "r": 20,
+      "type": "FIGHTER"
+    },
+    {
+      "q": -7,
+      "r": 7,
+      "type": "TRADER"
+    },
+    {
+      "q": -19,
+      "r": 1,
+      "type": "MOUNTAINEER"
+    },
+    {
+      "q": 9,
+      "r": -25,
+      "type": "COASTAL"
+    }
   ]
 }
