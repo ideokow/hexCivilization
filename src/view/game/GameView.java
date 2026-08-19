@@ -187,6 +187,10 @@ public class GameView extends JFrame {
         return hexActionPanel.getStationButton();
     }
 
+    public JButton getGenerateMilitaryUnitButton() {
+        return hexActionPanel.getGenerateMilitaryUnitButton();
+    }
+
     public JButton getLevelUpButton() {
         return sidePanel.getLevelUpButton();
     }

@@ -1,6 +1,7 @@
 package view.game;
 
 import model.game.building.BuildingType;
+import model.game.building.MilitaryStable;
 import model.game.building.ProductionBuilding;
 import model.game.hex.Hex;
 import model.game.hex.HexCoordinate;
@@ -36,6 +37,7 @@ final class HexActionPanel extends JPanel {
     private final JButton cancelBuildButton;
     private final JButton ruinButton;
     private final JButton stationButton;
+    private final JButton generateMilitaryUnitButton;
     private final JButton expandButton;
     private final JButton closeButton;
     private final JPanel buildSelectorPanel;
@@ -74,6 +76,8 @@ final class HexActionPanel extends JPanel {
         this.cancelBuildButton = new JButton("Cancel");
         this.ruinButton = new JButton("Ruin");
         this.stationButton = new JButton("Station Worker");
+        this.generateMilitaryUnitButton =
+                new JButton("Generate Military Unit");
         this.expandButton = new JButton("Expand Territory");
         this.closeButton = new JButton("×");
         this.buildSelectorPanel = new JPanel();
@@ -169,6 +173,8 @@ final class HexActionPanel extends JPanel {
         addActionButton(ruinButton, ACTION_RED);
         add(Box.createVerticalStrut(5));
         addActionButton(stationButton, ACTION_BLUE);
+        add(Box.createVerticalStrut(5));
+        addActionButton(generateMilitaryUnitButton, ACTION_BLUE);
         add(Box.createVerticalStrut(5));
         addActionButton(expandButton, ACTION_BLUE);
 
@@ -420,6 +426,9 @@ final class HexActionPanel extends JPanel {
                         && hex.getBuilding() instanceof ProductionBuilding
                         && viewState.getSelectedUnit() instanceof Worker
         );
+        generateMilitaryUnitButton.setEnabled(
+                hasHex && hex.getBuilding() instanceof MilitaryStable
+        );
         expandButton.setEnabled(
                 viewState.getSelectedUnit() instanceof BorderExpander
         );
@@ -512,6 +521,10 @@ final class HexActionPanel extends JPanel {
 
     JButton getStationButton() {
         return stationButton;
+    }
+
+    JButton getGenerateMilitaryUnitButton() {
+        return generateMilitaryUnitButton;
     }
 
     JButton getExpandButton() {

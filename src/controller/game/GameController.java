@@ -3,6 +3,7 @@ package controller.game;
 import model.game.hex.HexCoordinate;
 import model.game.hex.Hex;
 import model.game.hex.Resource;
+import model.game.building.MilitaryStable;
 import model.game.building.TribeCamp;
 import model.game.tribe.Tribe;
 import model.game.registry.UpKeepStatus;
@@ -46,6 +47,9 @@ public class GameController {
         view.getAcquireTechnologyButton().addActionListener(e -> handleAcquireTechnology());
         view.getGenerateUnitButton().addActionListener(e -> handleGenerateUnit());
         view.getStationButton().addActionListener(e -> handleStationWorker());
+        view.getGenerateMilitaryUnitButton().addActionListener(
+                e -> handleGenerateMilitaryUnit()
+        );
         view.getExpandButton().addActionListener(e -> handleExpand());
         view.getGiftTribeButton().addActionListener(e -> handleGiftTribe());
         view.getWarDeclarationTribeButton().addActionListener(e -> handleWarDeclarationTribe());
@@ -316,6 +320,23 @@ public class GameController {
         if (unitType != null) {
             triggers.generateUnit(unitType);
         }
+        view.refresh();
+    }
+
+    private void handleGenerateMilitaryUnit() {
+        exitSelectionMode();
+
+        HexCoordinate selectedHex = view.getSelectedHex();
+        if (selectedHex == null) {
+            return;
+        }
+
+        Hex hex = engine.getHexGrid().get(selectedHex);
+        if (hex == null || !(hex.getBuilding() instanceof MilitaryStable militaryStable)) {
+            return;
+        }
+
+        triggers.generateMilitaryUnit(militaryStable);
         view.refresh();
     }
 
