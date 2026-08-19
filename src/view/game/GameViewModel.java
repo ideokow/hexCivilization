@@ -7,6 +7,7 @@ import model.game.hex.Resource;
 import model.game.season.SeasonName;
 import model.game.townhall.Technology;
 import model.game.townhall.opration.TownHallOperation;
+import model.game.tribe.Tribe;
 import model.game.unit.Unit;
 
 import java.util.Collection;
@@ -23,6 +24,8 @@ public interface GameViewModel {
     boolean containsUnit(Unit unit);
 
     Hex getHex(HexCoordinate coordinate);
+
+    Tribe getTribe(HexCoordinate coordinate);
 
     boolean containsHex(HexCoordinate coordinate);
 

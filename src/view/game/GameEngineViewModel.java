@@ -9,6 +9,8 @@ import model.game.season.SeasonName;
 import model.game.registry.BuildingRegistry;
 import model.game.townhall.Technology;
 import model.game.townhall.opration.TownHallOperation;
+import model.game.building.TribeCamp;
+import model.game.tribe.Tribe;
 import model.game.unit.Unit;
 
 import java.util.Collection;
@@ -48,6 +50,15 @@ final class GameEngineViewModel implements GameViewModel {
     @Override
     public Hex getHex(HexCoordinate coordinate) {
         return engine.getHexGrid().get(coordinate);
+    }
+
+    @Override
+    public Tribe getTribe(HexCoordinate coordinate) {
+        Hex hex = getHex(coordinate);
+        if (hex == null || !(hex.getBuilding() instanceof TribeCamp tribeCamp)) {
+            return null;
+        }
+        return tribeCamp.getTribe();
     }
 
     @Override

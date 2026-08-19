@@ -3,6 +3,8 @@ package controller.game;
 import model.game.hex.HexCoordinate;
 import model.game.hex.Hex;
 import model.game.hex.Resource;
+import model.game.building.TribeCamp;
+import model.game.tribe.Tribe;
 import model.game.registry.UpKeepStatus;
 import model.game.townhall.Level;
 import model.game.townhall.Technology;
@@ -45,6 +47,10 @@ public class GameController {
         view.getGenerateUnitButton().addActionListener(e -> handleGenerateUnit());
         view.getStationButton().addActionListener(e -> handleStationWorker());
         view.getExpandButton().addActionListener(e -> handleExpand());
+        view.getGiftTribeButton().addActionListener(e -> handleGiftTribe());
+        view.getWarDeclarationTribeButton().addActionListener(e -> handleWarDeclarationTribe());
+        view.getPeaceRequestTribeButton().addActionListener(e -> handlePeaceRequestTribe());
+        view.getAllianceRequestTribeButton().addActionListener(e -> handleAllianceRequestTribe());
         view.getRouteButton().addActionListener(e -> beginRouteSelection());
         view.getClearRouteButton().addActionListener(e -> clearSelectedRoute());
         view.getResetCameraButton().addActionListener(e -> view.resetCamera());
@@ -63,12 +69,23 @@ public class GameController {
         view.setSelectedHex(coordinate);
 
         // set selected units
-        List<Unit> units = engine.getHexGrid().get(coordinate).getUnits();
+        Hex clickedHex = engine.getHexGrid().get(coordinate);
+        if (clickedHex == null) {
+            return;
+        }
+
+        List<Unit> units = clickedHex.getUnits();
         view.setSelectedUnit(units.isEmpty() ? null : view.getSelectedUnit());
 
         // refresh
         view.refresh();
-        view.showHexActions();
+        if (engine.getHexGrid().isDiscovered(coordinate)
+                && clickedHex.getBuilding() instanceof TribeCamp) {
+            view.showTribeActions();
+        }
+        else {
+            view.showHexActions();
+        }
         refreshRouteControls();
     }
 
@@ -222,6 +239,54 @@ public class GameController {
 
         triggers.expand(view.getSelectedUnit());
         view.refresh();
+    }
+
+    private void handleGiftTribe() {
+        Tribe tribe = view.getSelectedTribe();
+        if (tribe != null) {
+            triggers.giftTribe(tribe, view.getSelectedGiftResources());
+            view.refresh();
+        }
+    }
+
+    private void handleWarDeclarationTribe() {
+        Tribe tribe = view.getSelectedTribe();
+        if (tribe == null || tribe.isEnemy()) {
+            return;
+        }
+
+        int choice = JOptionPane.showConfirmDialog(
+                view,
+                "Declare war on this tribe?",
+                "Confirm War Declaration",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE
+        );
+        if (choice != JOptionPane.YES_OPTION) {
+            return;
+        }
+
+        triggers.warDeclarationTribe(tribe);
+        view.refresh();
+    }
+
+    private void handlePeaceRequestTribe() {
+        Tribe tribe = view.getSelectedTribe();
+        if (tribe != null) {
+            triggers.requestPeaceTribe(
+                    tribe,
+                    view.getPeaceRequestResources()
+            );
+            view.refresh();
+        }
+    }
+
+    private void handleAllianceRequestTribe() {
+        Tribe tribe = view.getSelectedTribe();
+        if (tribe != null) {
+            triggers.requestAllianceTribe(tribe);
+            view.refresh();
+        }
     }
 
     private void handleLevelUp() {

@@ -3,13 +3,16 @@ package view.game;
 import controller.game.GameEngine;
 import model.game.building.BuildingType;
 import model.game.hex.HexCoordinate;
+import model.game.hex.Resource;
 import model.game.townhall.Level;
 import model.game.townhall.Technology;
+import model.game.tribe.Tribe;
 import model.game.unit.Unit;
 import model.game.unit.UnitType;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Map;
 import java.util.function.Consumer;
 
 public class GameView extends JFrame {
@@ -18,6 +21,7 @@ public class GameView extends JFrame {
     private final GameHudPanel hudPanel;
     private final GameSidePanel sidePanel;
     private final HexActionPanel hexActionPanel;
+    private final TribeActionPanel tribeActionPanel;
     private final GameStatusPanel statusPanel;
     private final HexMapPanel mapPanel;
     private Runnable routeControlsRefreshHandler = () -> {};
@@ -36,6 +40,7 @@ public class GameView extends JFrame {
                 viewState,
                 this::handleUnitSelectionChanged
         );
+        this.tribeActionPanel = new TribeActionPanel(viewModel, viewState);
         this.sidePanel = new GameSidePanel(viewModel);
 
         configureFrame();
@@ -59,7 +64,7 @@ public class GameView extends JFrame {
                 mapPanel.setBounds(0, 0, getWidth(), getHeight());
 
                 Dimension preferredSize =
-                        hexActionPanel.getPreferredSize();
+                hexActionPanel.getPreferredSize();
                 int actionWidth = Math.min(
                         preferredSize.width,
                         Math.max(0, getWidth() - 24)
@@ -79,12 +84,35 @@ public class GameView extends JFrame {
                         actionWidth,
                         actionHeight
                 );
+
+                Dimension tribePreferredSize =
+                        tribeActionPanel.getPreferredSize();
+                int tribeWidth = Math.min(
+                        tribePreferredSize.width,
+                        Math.max(0, getWidth() - 24)
+                );
+                int tribeHeight = Math.min(
+                        tribePreferredSize.height,
+                        Math.max(0, getHeight() - 24)
+                );
+                int tribeX = Math.max(
+                        12,
+                        getWidth() - tribeWidth - 12
+                );
+
+                tribeActionPanel.setBounds(
+                        tribeX,
+                        12,
+                        tribeWidth,
+                        tribeHeight
+                );
             }
         };
         mapContainer.setLayout(null);
         mapContainer.setOpaque(false);
         mapContainer.add(mapPanel, JLayeredPane.DEFAULT_LAYER);
         mapContainer.add(hexActionPanel, JLayeredPane.PALETTE_LAYER);
+        mapContainer.add(tribeActionPanel, JLayeredPane.POPUP_LAYER);
         add(mapContainer, BorderLayout.CENTER);
         JScrollPane sidePanelScroll = new JScrollPane(sidePanel);
         sidePanelScroll.setBorder(null);
@@ -106,12 +134,19 @@ public class GameView extends JFrame {
         hudPanel.refresh();
         hexActionPanel.refreshUnitCombo();
         hexActionPanel.refreshSelectionPanel();
+        tribeActionPanel.refreshSelectionPanel();
         sidePanel.refreshTownHallQueue();
         mapPanel.repaint();
     }
 
     public void showHexActions() {
+        tribeActionPanel.setVisible(false);
         hexActionPanel.openForSelection();
+    }
+
+    public void showTribeActions() {
+        hexActionPanel.setVisible(false);
+        tribeActionPanel.openForSelection();
     }
 
     public void setHexClickHandler(
@@ -130,6 +165,22 @@ public class GameView extends JFrame {
 
     public JButton getRuinButton() {
         return hexActionPanel.getRuinButton();
+    }
+
+    public JButton getGiftTribeButton() {
+        return tribeActionPanel.getGiftButton();
+    }
+
+    public JButton getWarDeclarationTribeButton() {
+        return tribeActionPanel.getWarDeclarationButton();
+    }
+
+    public JButton getPeaceRequestTribeButton() {
+        return tribeActionPanel.getPeaceRequestButton();
+    }
+
+    public JButton getAllianceRequestTribeButton() {
+        return tribeActionPanel.getAllianceRequestButton();
     }
 
     public JButton getStationButton() {
@@ -209,6 +260,18 @@ public class GameView extends JFrame {
 
     public UnitType getSelectedUnitType() {
         return sidePanel.getSelectedUnitType();
+    }
+
+    public Tribe getSelectedTribe() {
+        return tribeActionPanel.getSelectedTribeForAction();
+    }
+
+    public Map<Resource, Integer> getSelectedGiftResources() {
+        return tribeActionPanel.getSelectedGiftResources();
+    }
+
+    public Map<Resource, Integer> getPeaceRequestResources() {
+        return tribeActionPanel.getPeaceRequestResources();
     }
 
     public void setStatus(String message) {

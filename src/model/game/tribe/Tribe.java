@@ -211,14 +211,15 @@ public class Tribe {
         if (gift == null || isEnemy()) return;
 
         int relationIncrease = 0;
-        relationIncrease += (gift.get(Resource.FOOD)  / 10) * 2;
-        relationIncrease += (gift.get(Resource.WOOD)  / 10) * 2;
-        relationIncrease += (gift.get(Resource.STONE) / 10) * 3;
-        relationIncrease += (gift.get(Resource.IRON)  /  5) * 3;
+        relationIncrease += (gift.getOrDefault(Resource.FOOD, 0)  / 10) * 2;
+        relationIncrease += (gift.getOrDefault(Resource.WOOD, 0)  / 10) * 2;
+        relationIncrease += (gift.getOrDefault(Resource.STONE, 0) / 10) * 3;
+        relationIncrease += (gift.getOrDefault(Resource.IRON, 0)  /  5) * 3;
 
         increaseRelation(relationIncrease);
 
-        if (currentMission.getMissionState().equals(MissionState.ACTIVE)) {
+        if (currentMission != null
+                && currentMission.getMissionState().equals(MissionState.ACTIVE)) {
             currentMission.addResource(gift);
         }
     }
@@ -265,19 +266,19 @@ public class Tribe {
 
     public boolean canRequestPeace(Map<Resource, Integer> payment, int currentTurn) {
         return (
-                payment == null ||
-                currentTurn < 0 ||
-                !isEnemy() ||
-                peaceRequestActive ||
-                !hasPeacePayment(payment)
+                payment != null &&
+                currentTurn >= 0 &&
+                isEnemy() &&
+                !peaceRequestActive &&
+                hasPeacePayment(payment)
         );
     }
 
     private boolean hasPeacePayment(Map<Resource, Integer> payment) {
         return (
-            payment.get(Resource.FOOD) >= 30 &&
-            payment.get(Resource.WOOD) >= 30 &&
-            payment.get(Resource.IRON) >= 30
+            payment.getOrDefault(Resource.FOOD, 0) >= 30 &&
+            payment.getOrDefault(Resource.WOOD, 0) >= 30 &&
+            payment.getOrDefault(Resource.IRON, 0) >= 30
         );
     }
 
@@ -347,6 +348,10 @@ public class Tribe {
             && !isEnemy()
             && relation >= 70
         );
+    }
+
+    public boolean isSuspicious() {
+        return suspicious;
     }
 
     /*

@@ -100,6 +100,10 @@ final class GameTriggers {
             return;
         }
 
+        if (!unit.isOwnedByPlayer()) {
+            gameController.toastAlert("You cant route tribe's unit.");
+        }
+
         Route route = engine.getRoutingSystem().route(
                 unit.getPosition(),
                 destination,
@@ -199,6 +203,20 @@ final class GameTriggers {
     // gift tribe
 
     void giftTribe(Tribe tribe, Map<Resource, Integer> resource) {
+        if (tribe == null || !isValidResourceBundle(resource)) {
+            gameController.toastAlert("Choose at least one valid resource to gift.");
+            return;
+        }
+        if (tribe.isEnemy()) {
+            gameController.toastAlert("Enemy tribes do not accept gifts.");
+            return;
+        }
+        if (!engine.getTownHall().canAfford(resource)) {
+            gameController.toastAlert("The Town Hall cannot afford this gift.");
+            return;
+        }
+
+        engine.getTownHall().spendResources(resource);
         tribe.giftResource(resource);
         gameController.toastAlert("Gift sent!");
     }
@@ -206,6 +224,17 @@ final class GameTriggers {
     // peace req
 
     void requestPeaceTribe(Tribe tribe, Map<Resource, Integer> resource) {
+        if (tribe == null
+                || !tribe.canRequestPeace(resource, engine.getTurnNumber())) {
+            gameController.toastAlert("Peace cannot be requested right now.");
+            return;
+        }
+        if (!engine.getTownHall().canAfford(resource)) {
+            gameController.toastAlert("The Town Hall cannot afford the peace payment.");
+            return;
+        }
+
+        engine.getTownHall().spendResources(resource);
         tribe.requestPeace(resource, engine.getTurnNumber());
         gameController.toastAlert("Request sent!");
     }
@@ -213,15 +242,39 @@ final class GameTriggers {
     // alliance req
 
     void requestAllianceTribe(Tribe tribe) {
-        tribe.requestAlliance(engine.getTurnNumber());
-        gameController.toastAlert("Request sent!");
+        if (tribe != null
+                && tribe.requestAlliance(engine.getTurnNumber())) {
+            gameController.toastAlert("Alliance request sent!");
+        }
+        else {
+            gameController.toastAlert("Alliance cannot be requested right now.");
+        }
     }
 
     // war dec
 
     void warDeclarationTribe(Tribe tribe) {
+        if (tribe == null || tribe.isEnemy()) {
+            return;
+        }
         tribe.warDeclaration();
         gameController.toastAlert("War declared!");
+    }
+
+    private boolean isValidResourceBundle(Map<Resource, Integer> resource) {
+        if (resource == null) {
+            return false;
+        }
+
+        boolean hasResource = false;
+        for (Resource value : Resource.values()) {
+            int amount = resource.getOrDefault(value, 0);
+            if (amount < 0) {
+                return false;
+            }
+            hasResource |= amount > 0;
+        }
+        return hasResource;
     }
 
     // acquire mission
