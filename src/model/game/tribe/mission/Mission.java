@@ -42,7 +42,7 @@ public abstract class Mission {
     public abstract boolean checkRequirements();
 
     public void finishMission(TownHall townHall) {
-        if (checkRequirements() && missionState.equals(MissionState.ACTIVE)) {
+        if (checkRequirements() && missionState.equals(MissionState.READY_TO_DELIVER)) {
             missionState = MissionState.COMPLETED;
             payReward();
         }

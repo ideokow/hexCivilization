@@ -64,6 +64,7 @@ public class H2HCombat {
 
         // start war
         inProgress = true;
+        dUnits.get(0).getOwnerTribe().notifyAttacked();
 
         // decrease ap
         for (MilitaryUnit unit : mUnits) {

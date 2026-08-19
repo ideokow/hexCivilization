@@ -20,6 +20,7 @@ public class GameController {
 
     private final GameEngine engine;
     private final GameView view;
+    private final GameTriggers triggers;
     private final Set<Unit> unitsWithRoutes = new HashSet<>();
     private boolean waitingForRouteDestination;
     private Unit routingUnit;
@@ -27,6 +28,7 @@ public class GameController {
     public GameController(GameEngine engine, GameView view) {
         this.engine = engine;
         this.view = view;
+        this.triggers = new GameTriggers(engine, this);
         attachListeners();
         view.setRouteControlsRefreshHandler(this::refreshRouteControls);
         view.refresh();
@@ -125,7 +127,7 @@ public class GameController {
             return;
         }
 
-        engine.routeTrigger(unit, destination);
+        triggers.route(unit, destination);
         unitsWithRoutes.add(unit);
     }
 
@@ -173,7 +175,7 @@ public class GameController {
         // cancel selection
         exitSelectionMode();
 
-        engine.buildTrigger(
+        triggers.build(
                 view.getSelectedUnit(),
                 view.getSelectedBuildingType(),
                 view.getSelectedHex()
@@ -202,7 +204,7 @@ public class GameController {
             return;
         }
 
-        engine.ruinTrigger(view.getSelectedUnit(), hex.getBuilding());
+        triggers.ruin(view.getSelectedUnit(), hex.getBuilding());
         view.refresh();
     }
 
@@ -210,7 +212,7 @@ public class GameController {
         // cancel selection
         exitSelectionMode();
 
-        engine.stationTrigger(view.getSelectedUnit(), view.getSelectedHex());
+        triggers.station(view.getSelectedUnit(), view.getSelectedHex());
         view.refresh();
     }
 
@@ -218,7 +220,7 @@ public class GameController {
         // cancel selection
         exitSelectionMode();
 
-        engine.expandTrigger(view.getSelectedUnit());
+        triggers.expand(view.getSelectedUnit());
         view.refresh();
     }
 
@@ -227,7 +229,7 @@ public class GameController {
 
         Level level = view.getSelectedLevel();
         if (level != null) {
-            engine.levelUpTrigger(level);
+            triggers.levelUp(level);
         }
         view.refresh();
     }
@@ -237,7 +239,7 @@ public class GameController {
 
         Technology technology = view.getSelectedTechnology();
         if (technology != null) {
-            engine.acquireTechnologyTrigger(technology);
+            triggers.acquireTechnology(technology);
         }
         view.refresh();
     }
@@ -247,7 +249,7 @@ public class GameController {
 
         UnitType unitType = view.getSelectedUnitType();
         if (unitType != null) {
-            engine.generateUnitTrigger(unitType);
+            triggers.generateUnit(unitType);
         }
         view.refresh();
     }

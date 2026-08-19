@@ -226,7 +226,8 @@ public class Tribe {
     /*
     war declaration
      */
-    public void warDeclaration(Happiness happiness) {
+    public void warDeclaration() {
+        Happiness happiness = getRelatedTownHall().getHappiness();
         if (happiness == null || isEnemy()) return;
 
         TribeMood previousMood = getMood();
@@ -252,22 +253,24 @@ public class Tribe {
     /*
     peace request section
      */
-    public boolean requestPeace(Map<Resource, Integer> payment, int currentTurn) {
-        if (
-            payment == null ||
-            currentTurn < 0 ||
-            !isEnemy() ||
-            peaceRequestActive ||
-            !hasPeacePayment(payment)
-        ) {
-            return false;
+    public void requestPeace(Map<Resource, Integer> payment, int currentTurn) {
+        if (!canRequestPeace(payment, currentTurn)) {
+            return;
         }
 
         peaceRequestActive = true;
         peaceRequestedTurn = currentTurn;
         attackedAfterPeaceRequest = false;
+    }
 
-        return true;
+    public boolean canRequestPeace(Map<Resource, Integer> payment, int currentTurn) {
+        return (
+                payment == null ||
+                currentTurn < 0 ||
+                !isEnemy() ||
+                peaceRequestActive ||
+                !hasPeacePayment(payment)
+        );
     }
 
     private boolean hasPeacePayment(Map<Resource, Integer> payment) {
@@ -307,10 +310,6 @@ public class Tribe {
 
     // request utils
 
-    public boolean canRequestPeace() {
-        return isEnemy() && !peaceRequestActive;
-    }
-
     public boolean isPeaceRequestActive() {
         return peaceRequestActive;
     }
@@ -318,9 +317,9 @@ public class Tribe {
     /*
     Will notify tribe start war
      */
-    public void notifyAttacked(Happiness happiness) {
+    public void notifyAttacked() {
         if (peaceRequestActive) attackedAfterPeaceRequest = true;
-        if (!isEnemy()) warDeclaration(happiness);
+        if (!isEnemy()) warDeclaration();
     }
 
     /*

@@ -1,8 +1,7 @@
 package controller.game;
 
 import controller.game.system.*;
-import model.game.building.*;
-import model.game.hex.Hex;
+import model.game.building.Building;
 import model.game.hex.HexCoordinate;
 import model.game.hex.HexGrid;
 import model.game.hex.Resource;
@@ -13,14 +12,13 @@ import model.game.registry.UpKeepStatus;
 import model.game.route.Route;
 import model.game.season.Season;
 import model.game.season.SeasonName;
-import model.game.townhall.Level;
 import model.game.townhall.Technology;
-import model.game.townhall.TechnologyAcquireStatus;
 import model.game.townhall.TownHall;
-import model.game.townhall.opration.*;
-import model.game.trade.*;
+import model.game.townhall.opration.OperationQueue;
+import model.game.townhall.opration.TownHallOperation;
+import model.game.trade.TradeSystem;
 import model.game.tribe.Tribe;
-import model.game.unit.*;
+import model.game.unit.Unit;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -152,213 +150,15 @@ public class GameEngine {
         townHall.getHappiness().checkTownHallMilitary(townHall, hexGrid);
     }
 
-    /*
-    build caller and alert handler
-     */
-    public void buildTrigger(
-        Unit unit,
-        BuildingType buildingType,
-        HexCoordinate hexCoordinate
-    ) {
-        BuildResult buildResult = constructionSystem.build(
-                player,
-                unit,
-                buildingType,
-                hexCoordinate
-        );
-        gameController.toastAlert(buildResult.getMessage());
-    }
-
-    /*
-    destroy building trigger
-     */
-    public void ruinTrigger(
-        Unit unit,
-        Building building
-    ) {
-        RuinStatus ruinStatus = constructionSystem.ruin(
-                unit,
-                building
-        );
-        gameController.toastAlert(ruinStatus.getMessage());
-    }
-
-    /*
-    unit station caller and alert handler
-     */
-    public void stationTrigger(Unit unit, HexCoordinate hexCoordinate) {
-        if (hexCoordinate == null) {
-            gameController.toastAlert(StationResult.WRONG_HEX.getMessage());
-            return;
-        };
-
-        Hex hex = hexGrid.get(hexCoordinate);
-        if (hex == null) {
-            gameController.toastAlert(StationResult.WRONG_HEX.getMessage());
-            return;
-        };
-
-        Building building = hex.getBuilding();
-
-        if (!(building instanceof ProductionBuilding)) {
-            gameController.toastAlert(StationResult.NOT_PRODUCTION_BUILDING.getMessage());
-        }
-        else if (!(unit instanceof Worker)) {
-            gameController.toastAlert(StationResult.NOT_A_WORKER.getMessage());
-        }
-        else {
-            StationResult stationResult = ((ProductionBuilding) building).stationWorker(((Worker) unit));
-            gameController.toastAlert(stationResult.getMessage());
-        }
-    }
-
-    /*
-    route caller and alert handler
-     */
-    public void routeTrigger(Unit unit, HexCoordinate destination) {
-        if (unit == null || destination == null || unit.getPosition() == null) {
-            return;
-        }
-
-        Route route = routingSystem.route(unit.getPosition(), destination, hexGrid, gameController,
-                getSeason(), canSail());
-        if (route != null) {
-            inQueueRoutes.entrySet().removeIf(entry -> entry.getValue().equals(unit));
-            inQueueRoutes.put(route, unit);
-        }
-    }
-
-    private boolean canSail() {
-        return townHall.getTechnologies().isAcquired(Technology.BOAT_SAILING);
-    }
-
-    /*
-    acquire technology trigger
-     */
-    public void acquireTechnologyTrigger(Technology technology) {
-        TownHallOperation operation = new AcquireTechnologyOperation(technology, operationQueue);
-        OperationCheckResult result = operationQueue.reserveOperation(operation);
-        String message;
-        if (!result.getStatus().equals(OperationStatus.POSSIBLE)) {
-            message = result.getMessage();
-        } else {
-            message = TechnologyAcquireStatus.SUCCESS.getMessage();
-        }
-        gameController.toastAlert(message);
-    }
-
-    /*
-    generate unit trigger
-     */
-    public void generateUnitTrigger(UnitType unitType) {
-        TownHallOperation operation = new GenerateUnitOperation(unitType, operationQueue);
-        OperationCheckResult result = operationQueue.reserveOperation(operation);
-        String message;
-        if (!result.getStatus().equals(OperationStatus.POSSIBLE)) {
-            message = result.getMessage();
-        } else {
-            message = "Unit generation process started.";
-        }
-        gameController.toastAlert(message);
-    }
-
-    public void generateUnitTrigger(UnitType unitType, MilitaryStable militaryStable) {
-        if (militaryStable == null) return;
-        TownHallOperation operation = new GenerateCavalryOperation(operationQueue, militaryStable);
-        OperationCheckResult result = operationQueue.reserveOperation(operation);
-        String message;
-        if (!result.getStatus().equals(OperationStatus.POSSIBLE)) {
-            message = result.getMessage();
-        } else {
-            message = "Unit generation process started.";
-        }
-        gameController.toastAlert(message);
-    }
-
-    /*
-    level up trigger
-     */
-    public void levelUpTrigger(Level level) {
-        TownHallOperation operation = new LevelUpOperation(level, operationQueue);
-        OperationCheckResult result = operationQueue.reserveOperation(operation);
-        String message;
-        if (!result.getStatus().equals(OperationStatus.POSSIBLE)) {
-            message = result.getMessage();
-        } else {
-            message = "Level Up process started.";
-        }
-        gameController.toastAlert(message);
-    }
+    // Getters
 
     public TownHallOperation getInQueueOperation() {
         return operationQueue.getInQueueOperation();
     }
 
-    public TradeResult tradeAtBazaar(
-            Bazaar bazaar,
-            Resource soldResource,
-            Resource receivedResource,
-            TradeLevel level
-    ) {
-        return tradeSystem.tradeAtBazaar(
-                bazaar,
-                soldResource,
-                receivedResource,
-                level
-        );
-    }
-
-    public TradeResult tradeAtTradingPost(
-            TradingPost tradingPost,
-            Resource soldResource,
-            Resource receivedResource,
-            int amount
-    ) {
-        return tradeSystem.tradeAtTradingPost(
-                tradingPost,
-                soldResource,
-                receivedResource,
-                amount
-        );
-    }
-
-    public TradeResult tradeWithTribe(
-            model.game.tribe.Tribe tribe,
-            Resource soldResource,
-            Resource receivedResource,
-            int amount
-    ) {
-        return tradeSystem.tradeWithTribe(
-                tribe,
-                soldResource,
-                receivedResource,
-                amount
-        );
-    }
-
     public TradeSystem getTradeSystem() {
         return tradeSystem;
     }
-
-    /*
-    expand trigger
-     */
-    public void expandTrigger(Unit unit) {
-        if (!(unit instanceof BorderExpander)) {
-            gameController.toastAlert("Select an expander.");
-        }
-        else {
-            ((BorderExpander) unit).expand(hexGrid, townHall, player);
-        }
-    }
-
-    public void clearRoute(Unit unit) {
-        if (unit != null) {
-            inQueueRoutes.entrySet().removeIf(entry -> entry.getValue().equals(unit));
-        }
-    }
-
-    // UI getters
 
     public Player getPlayer() {
         return player;
@@ -390,5 +190,32 @@ public class GameEngine {
 
     public SeasonName getSeason() {
         return Season.getSeason(turnNumber);
+    }
+
+    ConstructionSystem getConstructionSystem() {
+        return constructionSystem;
+    }
+
+    RoutingSystem getRoutingSystem() {
+        return routingSystem;
+    }
+
+    OperationQueue getOperationQueue() {
+        return operationQueue;
+    }
+
+    boolean canSail() {
+        return townHall.getTechnologies().isAcquired(Technology.BOAT_SAILING);
+    }
+
+    void queueRoute(Route route, Unit unit) {
+        inQueueRoutes.entrySet().removeIf(entry -> entry.getValue().equals(unit));
+        inQueueRoutes.put(route, unit);
+    }
+
+    public void clearRoute(Unit unit) {
+        if (unit != null) {
+            inQueueRoutes.entrySet().removeIf(entry -> entry.getValue().equals(unit));
+        }
     }
 }
