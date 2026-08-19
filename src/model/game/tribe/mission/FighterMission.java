@@ -34,7 +34,8 @@ public class FighterMission extends Mission {
         List<Hex> hexesInRange = getTribe().getRelatedTownHall().getGrid()
                 .hexesInRange(getTribe().getLocation(), 5);
         for (Hex hex : hexesInRange) {
-            if (hex.getBuilding().getType().equals(BuildingType.TRIBE_CAMP) &&
+            if (hex.getBuilding() != null
+                    && hex.getBuilding().getType().equals(BuildingType.TRIBE_CAMP) &&
                     ((TribeCamp) hex.getBuilding()).getTribe().getLastLostTurn() > getAcquireTurn()) {
                 setIsReady();
                 return true;

@@ -2,6 +2,8 @@ package view.game;
 
 import model.game.hex.Resource;
 import model.game.tribe.Tribe;
+import model.game.tribe.mission.Mission;
+import model.game.tribe.mission.MissionState;
 
 import javax.swing.*;
 import java.awt.*;
@@ -37,6 +39,13 @@ final class TribeActionPanel extends JPanel {
     private final JButton allianceRequestButton;
     private final JButton closeButton;
     private final JLabel peacePaymentLabel;
+    private final JPanel missionSection;
+    private final JLabel missionTypeLabel;
+    private final JLabel missionStateLabel;
+    private final JTextArea missionDescriptionArea;
+    private final JButton acquireMissionButton;
+    private final JButton cancelMissionButton;
+    private final JButton deliverMissionButton;
 
     TribeActionPanel(
             GameViewModel viewModel,
@@ -52,6 +61,13 @@ final class TribeActionPanel extends JPanel {
         this.allianceRequestButton = new JButton("Request Alliance");
         this.closeButton = new JButton("×");
         this.peacePaymentLabel = new JLabel();
+        this.missionSection = new JPanel();
+        this.missionTypeLabel = new JLabel();
+        this.missionStateLabel = new JLabel();
+        this.missionDescriptionArea = new JTextArea();
+        this.acquireMissionButton = new JButton("Acquire");
+        this.cancelMissionButton = new JButton("Cancel");
+        this.deliverMissionButton = new JButton("Deliver");
 
         configurePanel();
         buildContent();
@@ -63,8 +79,16 @@ final class TribeActionPanel extends JPanel {
         setOpaque(false);
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBorder(BorderFactory.createEmptyBorder(12, 12, 12, 12));
-        setPreferredSize(new Dimension(370, 540));
         setMaximumSize(new Dimension(430, 700));
+    }
+
+    @Override
+    public Dimension getPreferredSize() {
+        Dimension preferredSize = super.getPreferredSize();
+        return new Dimension(
+                Math.max(370, preferredSize.width),
+                preferredSize.height
+        );
     }
 
     @Override
@@ -126,7 +150,6 @@ final class TribeActionPanel extends JPanel {
 
         configureTribeInfoArea();
         add(tribeInfoArea);
-        add(Box.createVerticalStrut(8));
 
         add(createSectionLabel("Gift resources"));
         add(Box.createVerticalStrut(5));
@@ -145,6 +168,60 @@ final class TribeActionPanel extends JPanel {
         addActionButton(peaceRequestButton, ACTION_BLUE);
         add(Box.createVerticalStrut(5));
         addActionButton(allianceRequestButton, ACTION_BLUE);
+    }
+
+    private void configureMissionSection() {
+        missionSection.setOpaque(false);
+        missionSection.setLayout(new BoxLayout(missionSection, BoxLayout.Y_AXIS));
+        missionSection.setBorder(BorderFactory.createEmptyBorder(8, 0, 8, 0));
+        missionSection.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        JLabel title = createSectionLabel("Missions");
+        title.setForeground(ACCENT);
+        title.setFont(new Font("SansSerif", Font.BOLD, 13));
+        missionSection.add(title);
+        missionSection.add(Box.createVerticalStrut(5));
+
+        missionSection.add(createSectionLabel("Mission type"));
+        missionTypeLabel.setForeground(TEXT_PRIMARY);
+        missionTypeLabel.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        missionTypeLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        missionSection.add(missionTypeLabel);
+        missionSection.add(Box.createVerticalStrut(5));
+
+        missionSection.add(createSectionLabel("Description"));
+        configureMissionDescriptionArea();
+        missionSection.add(missionDescriptionArea);
+        missionSection.add(Box.createVerticalStrut(5));
+
+        missionSection.add(createSectionLabel("Mission state"));
+        missionStateLabel.setForeground(TEXT_PRIMARY);
+        missionStateLabel.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        missionStateLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        missionSection.add(missionStateLabel);
+        missionSection.add(Box.createVerticalStrut(7));
+
+        JPanel missionActions = new JPanel(new GridLayout(1, 3, 5, 0));
+        missionActions.setOpaque(false);
+        missionActions.setAlignmentX(Component.LEFT_ALIGNMENT);
+        missionActions.setMaximumSize(new Dimension(Integer.MAX_VALUE, 34));
+        missionActions.add(styleActionButton(acquireMissionButton, ACTION_GREEN));
+        missionActions.add(styleActionButton(cancelMissionButton, ACTION_RED));
+        missionActions.add(styleActionButton(deliverMissionButton, ACTION_BLUE));
+        missionSection.add(missionActions);
+    }
+
+    private void configureMissionDescriptionArea() {
+        missionDescriptionArea.setEditable(false);
+        missionDescriptionArea.setOpaque(false);
+        missionDescriptionArea.setBackground(new Color(0, 0, 0, 0));
+        missionDescriptionArea.setForeground(TEXT_PRIMARY);
+        missionDescriptionArea.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        missionDescriptionArea.setLineWrap(true);
+        missionDescriptionArea.setWrapStyleWord(true);
+        missionDescriptionArea.setRows(3);
+        missionDescriptionArea.setMaximumSize(new Dimension(Integer.MAX_VALUE, 90));
+        missionDescriptionArea.setAlignmentX(Component.LEFT_ALIGNMENT);
     }
 
     private void configureTribeInfoArea() {
@@ -220,6 +297,10 @@ final class TribeActionPanel extends JPanel {
     }
 
     private void addActionButton(JButton button, Color background) {
+        add(styleActionButton(button, background));
+    }
+
+    private JButton styleActionButton(JButton button, Color background) {
         button.setAlignmentX(Component.LEFT_ALIGNMENT);
         button.setMaximumSize(new Dimension(Integer.MAX_VALUE, 34));
         button.setForeground(TEXT_PRIMARY);
@@ -233,10 +314,12 @@ final class TribeActionPanel extends JPanel {
                 )
         );
         button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        add(button);
+        return button;
     }
 
     private void configureListeners() {
+        configureMissionSection();
+
         closeButton.addActionListener(event -> setVisible(false));
         for (JSpinner spinner : giftSpinners.values()) {
             spinner.addChangeListener(event -> refreshActionAvailability());
@@ -255,11 +338,13 @@ final class TribeActionPanel extends JPanel {
         if (tribe == null || !viewModel.isDiscovered(viewState.getSelectedHex())) {
             tribeInfoArea.setText("Select a discovered tribe camp to see its details.");
             peacePaymentLabel.setText("");
+            removeMissionSection();
             refreshActionAvailability();
             return;
         }
 
         tribeInfoArea.setText(buildTribeText(tribe));
+        refreshMissionSection(tribe);
         peacePaymentLabel.setText(
                 tribe.isAtWar()
                         ? "Peace cost: 30 Food  •  30 Wood  •  30 Iron"
@@ -295,6 +380,73 @@ final class TribeActionPanel extends JPanel {
         text.append('\n')
                 .append(formatReward(tribe));
         return text.toString();
+    }
+
+    private void refreshMissionSection(Tribe tribe) {
+        Mission mission = tribe.getCurrentMission();
+        if (mission == null) {
+            removeMissionSection();
+            return;
+        }
+
+        if (missionSection.getParent() != this) {
+            add(missionSection, 3);
+        }
+
+        if (mission.getMissionState() == MissionState.ACTIVE) {
+            mission.checkRequirements();
+        }
+
+        missionTypeLabel.setText(ViewTextFormatter.pretty(mission.getMissionType()));
+        missionDescriptionArea.setText(mission.getMissionType().getDescription());
+        missionStateLabel.setText(ViewTextFormatter.pretty(mission.getMissionState()));
+        refreshMissionActionAvailability(tribe, mission);
+        revalidate();
+        repaint();
+    }
+
+    private void removeMissionSection() {
+        if (missionSection.getParent() == this) {
+            remove(missionSection);
+            revalidate();
+            repaint();
+        }
+
+        acquireMissionButton.setEnabled(false);
+        cancelMissionButton.setEnabled(false);
+        deliverMissionButton.setEnabled(false);
+    }
+
+    private void refreshMissionActionAvailability(Tribe tribe, Mission mission) {
+        boolean validSelection = viewModel.isDiscovered(viewState.getSelectedHex());
+        MissionState missionState = mission.getMissionState();
+
+        boolean canAcquire = validSelection
+                && tribe.canAcquireMission()
+                && missionState == MissionState.AVAILABLE;
+        acquireMissionButton.setEnabled(canAcquire);
+        acquireMissionButton.setToolTipText(
+                canAcquire
+                        ? "Accept this mission"
+                        : "This mission cannot be acquired right now"
+        );
+
+        boolean canCancel = validSelection && missionState == MissionState.ACTIVE;
+        cancelMissionButton.setEnabled(canCancel);
+        cancelMissionButton.setToolTipText(
+                canCancel
+                        ? "Cancel the active mission"
+                        : "Only active missions can be canceled"
+        );
+
+        boolean canDeliver = validSelection
+                && missionState == MissionState.READY_TO_DELIVER;
+        deliverMissionButton.setEnabled(canDeliver);
+        deliverMissionButton.setToolTipText(
+                canDeliver
+                        ? "Deliver the completed mission"
+                        : "Complete the mission requirements first"
+        );
     }
 
     private String formatReward(Tribe tribe) {
@@ -409,5 +561,17 @@ final class TribeActionPanel extends JPanel {
 
     JButton getAllianceRequestButton() {
         return allianceRequestButton;
+    }
+
+    JButton getAcquireMissionButton() {
+        return acquireMissionButton;
+    }
+
+    JButton getCancelMissionButton() {
+        return cancelMissionButton;
+    }
+
+    JButton getDeliverMissionButton() {
+        return deliverMissionButton;
     }
 }

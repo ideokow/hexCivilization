@@ -37,7 +37,8 @@ public class CoastalMission extends Mission {
     private static boolean checkIsThereDockNearby(HexGrid hexGrid, HexCoordinate coordinate) {
         List<Hex> hexesInRange = hexGrid.hexesInRange(coordinate, DOCK_RADIUS);
         for (Hex hex: hexesInRange) {
-            if (hex.getBuilding().getType().equals(BuildingType.DOCK)) {
+            if (hex.getBuilding() != null
+                    && hex.getBuilding().getType().equals(BuildingType.DOCK)) {
                 return true;
             }
         }

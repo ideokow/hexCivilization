@@ -9,6 +9,7 @@ import model.game.tribe.Tribe;
 import model.game.registry.UpKeepStatus;
 import model.game.townhall.Level;
 import model.game.townhall.Technology;
+import model.game.tribe.mission.Mission;
 import model.game.unit.Unit;
 import model.game.unit.UnitType;
 import view.game.GameView;
@@ -55,6 +56,9 @@ public class GameController {
         view.getWarDeclarationTribeButton().addActionListener(e -> handleWarDeclarationTribe());
         view.getPeaceRequestTribeButton().addActionListener(e -> handlePeaceRequestTribe());
         view.getAllianceRequestTribeButton().addActionListener(e -> handleAllianceRequestTribe());
+        view.getAcquireMissionButton().addActionListener(e -> handleAcquireMission());
+        view.getCancelMissionButton().addActionListener(e -> handleCancelMission());
+        view.getDeliverMissionButton().addActionListener(e -> handleDeliverMission());
         view.getRouteButton().addActionListener(e -> beginRouteSelection());
         view.getClearRouteButton().addActionListener(e -> clearSelectedRoute());
         view.getResetCameraButton().addActionListener(e -> view.resetCamera());
@@ -291,6 +295,35 @@ public class GameController {
             triggers.requestAllianceTribe(tribe);
             view.refresh();
         }
+    }
+
+    private void handleAcquireMission() {
+        Mission mission = getSelectedMission();
+        if (mission != null) {
+            triggers.acquireMission(mission);
+            view.refresh();
+        }
+    }
+
+    private void handleCancelMission() {
+        Mission mission = getSelectedMission();
+        if (mission != null) {
+            triggers.cancelMission(mission);
+            view.refresh();
+        }
+    }
+
+    private void handleDeliverMission() {
+        Mission mission = getSelectedMission();
+        if (mission != null) {
+            triggers.deliverMission(mission);
+            view.refresh();
+        }
+    }
+
+    private Mission getSelectedMission() {
+        Tribe tribe = view.getSelectedTribe();
+        return tribe == null ? null : tribe.getCurrentMission();
     }
 
     private void handleLevelUp() {

@@ -183,6 +183,18 @@ public class GameView extends JFrame {
         return tribeActionPanel.getAllianceRequestButton();
     }
 
+    public JButton getAcquireMissionButton() {
+        return tribeActionPanel.getAcquireMissionButton();
+    }
+
+    public JButton getCancelMissionButton() {
+        return tribeActionPanel.getCancelMissionButton();
+    }
+
+    public JButton getDeliverMissionButton() {
+        return tribeActionPanel.getDeliverMissionButton();
+    }
+
     public JButton getStationButton() {
         return hexActionPanel.getStationButton();
     }

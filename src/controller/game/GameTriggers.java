@@ -280,6 +280,10 @@ final class GameTriggers {
     // acquire mission
 
     void acquireMission(Mission mission) {
+        if (mission == null) {
+            return;
+        }
+
         boolean status = mission.acquireMission(engine.getTurnNumber());
         gameController.toastAlert(status ? "Mission acquired successfully!" : "can't acquire mission.");
     }
@@ -287,8 +291,23 @@ final class GameTriggers {
     // cancel mission
 
     void cancelMission(Mission mission) {
+        if (mission == null) {
+            return;
+        }
+
         mission.cancelMission();
         gameController.toastAlert("Mission canceled!");
+    }
+
+    // deliver mission
+
+    void deliverMission(Mission mission) {
+        if (mission == null) {
+            return;
+        }
+
+        mission.finishMission(engine.getTownHall());
+        gameController.toastAlert("Mission delivered!");
     }
 
     /*
