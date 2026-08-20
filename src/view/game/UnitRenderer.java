@@ -25,8 +25,10 @@ final class UnitRenderer extends DefaultListCellRenderer {
                 );
 
         if (value instanceof Unit unit) {
+            String owner = unit.isOwnedByPlayer() ? "Player " : "Tribe ";
             setText(
-                    ViewTextFormatter.pretty(unit.getType())
+                    owner
+                            + ViewTextFormatter.pretty(unit.getType())
                             + "  AP "
                             + unit.getCurrentAP()
                             + "/"

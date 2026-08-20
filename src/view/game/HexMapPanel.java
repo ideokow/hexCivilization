@@ -52,6 +52,12 @@ final class HexMapPanel extends JPanel {
     private static final Color WORKER_COLOR = new Color(246, 190, 83);
     private static final Color BUILDER_COLOR = new Color(126, 212, 116);
     private static final Color BORDER_EXPANDER_COLOR = new Color(201, 122, 245);
+    private static final Color PLAYER_SWORDSMAN_COLOR = new Color(69, 121, 214);
+    private static final Color PLAYER_ARCHER_COLOR = new Color(54, 157, 132);
+    private static final Color PLAYER_CAVALRY_COLOR = new Color(183, 123, 52);
+    private static final Color TRIBE_SWORDSMAN_COLOR = new Color(191, 75, 83);
+    private static final Color TRIBE_ARCHER_COLOR = new Color(176, 77, 139);
+    private static final Color TRIBE_CAVALRY_COLOR = new Color(164, 82, 52);
 
     private static final BasicStroke HEX_STROKE = new BasicStroke(1.0f);
     private static final BasicStroke TERRITORY_STROKE = new BasicStroke(2.2f);
@@ -753,7 +759,7 @@ final class HexMapPanel extends JPanel {
                 unitRadius
         );
 
-        graphics2D.setColor(unitColor(unit.getType()));
+        graphics2D.setColor(unitColor(unit));
         graphics2D.fillOval(
                 (int) (screenX - unitRadius),
                 (int) (screenY - unitRadius),
@@ -1023,13 +1029,21 @@ final class HexMapPanel extends JPanel {
         return BASE_HEX_SIZE * zoomFactor;
     }
 
-    private Color unitColor(UnitType unitType) {
-        return switch (unitType) {
+    private Color unitColor(Unit unit) {
+        return switch (unit.getType()) {
             case EXPLORER -> EXPLORER_COLOR;
             case WORKER -> WORKER_COLOR;
             case BUILDER -> BUILDER_COLOR;
             case BORDER_EXPANDER -> BORDER_EXPANDER_COLOR;
-            default -> Color.GRAY;
+            case SWORDSMAN -> unit.isOwnedByPlayer()
+                    ? PLAYER_SWORDSMAN_COLOR
+                    : TRIBE_SWORDSMAN_COLOR;
+            case ARCHER -> unit.isOwnedByPlayer()
+                    ? PLAYER_ARCHER_COLOR
+                    : TRIBE_ARCHER_COLOR;
+            case CAVALRY -> unit.isOwnedByPlayer()
+                    ? PLAYER_CAVALRY_COLOR
+                    : TRIBE_CAVALRY_COLOR;
         };
     }
 
@@ -1039,7 +1053,9 @@ final class HexMapPanel extends JPanel {
             case WORKER -> "W";
             case BUILDER -> "B";
             case BORDER_EXPANDER -> "X";
-            default -> "?";
+            case SWORDSMAN -> "S";
+            case ARCHER -> "A";
+            case CAVALRY -> "C";
         };
     }
 

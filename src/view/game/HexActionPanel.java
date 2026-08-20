@@ -257,6 +257,40 @@ final class HexActionPanel extends JPanel {
                         new Color(92, 112, 136)
                 )
         );
+        comboBox.setRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(
+                    JList<?> list,
+                    Object value,
+                    int index,
+                    boolean isSelected,
+                    boolean cellHasFocus
+            ) {
+                JLabel label = (JLabel) super.getListCellRendererComponent(
+                        list,
+                        value,
+                        index,
+                        isSelected,
+                        false
+                );
+
+                if (value instanceof Enum<?> enumValue) {
+                    label.setText(ViewTextFormatter.pretty(enumValue));
+                }
+
+                label.setOpaque(true);
+                label.setForeground(TEXT_PRIMARY);
+                label.setBackground(
+                        isSelected
+                                ? new Color(62, 83, 108)
+                                : CONTROL_BACKGROUND
+                );
+                label.setBorder(
+                        BorderFactory.createEmptyBorder(4, 6, 4, 6)
+                );
+                return label;
+            }
+        });
     }
 
     private void addActionButton(JButton button, Color background) {

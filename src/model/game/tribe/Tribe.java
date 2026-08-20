@@ -22,6 +22,8 @@ import java.util.Set;
 
 public class Tribe {
 
+    private static final boolean DEBUG_VERBOSE = false;
+
     private static final int MIN_RELATION = -100;
     private static final int MAX_RELATION =  100;
 
@@ -76,8 +78,8 @@ public class Tribe {
     /*
     tick function: run every turn
      */
-    public SuspiciousStatus tick(int currentTurn, MovementSystem movementSystem, HexGrid grid) {
-        if (currentTurn <= lastProcessedTurn) return null;
+    public void tick(int currentTurn, MovementSystem movementSystem, HexGrid grid) {
+        if (currentTurn <= lastProcessedTurn) return;
         lastProcessedTurn = currentTurn;
 
         processPeaceRequest(currentTurn);
@@ -92,11 +94,6 @@ public class Tribe {
         reward();
 
         performMilitaryBehaviour(movementSystem, grid);
-
-        // suspicious index
-        if      (isEnemy())  return SuspiciousStatus.IS_ENEMY;
-        else if (suspicious) return SuspiciousStatus.IS_SUSPICIOUS;
-        else return SuspiciousStatus.ITS_OK;
     }
 
     private void performMilitaryBehaviour(MovementSystem movementSystem, HexGrid grid) {
@@ -115,13 +112,15 @@ public class Tribe {
                 moveBackDefenders(movementSystem);
             }
             case NOT_GOOD -> {
-                generateDefender();
+                generateDefender(grid);
                 setSuspicious(true);
             }
             case ENEMY    -> {
                 moveDefenders(movementSystem, grid);
             }
         }
+
+        if (DEBUG_VERBOSE) System.out.println("[INFO]: " + getMood().toString() + " selected in performMilitaryBehaviour");
     }
 
     private void offerThings(double prob) {
@@ -134,7 +133,7 @@ public class Tribe {
         }
     }
 
-    private void generateDefender() {
+    private void generateDefender(HexGrid grid) {
         if (tribeUnits.size() >= tribeType.getMilitaryCap()) return;
 
         MilitaryType[] possibleUnits = new MilitaryType[]{
@@ -143,18 +142,26 @@ public class Tribe {
                 MilitaryType.CAVALRY
         };
 
-        switch (possibleUnits[random012(3, 2, 1)]) {
-            case SWORDSMAN -> addUnit(new Swordsman(location, this));
-            case ARCHER    -> addUnit(new Archer   (location, this));
-            case CAVALRY   -> addUnit(new Cavalry  (location, this));
-        }
+        MilitaryUnit defender = switch (possibleUnits[random012(3, 2, 1)]) {
+            case SWORDSMAN -> new Swordsman(location, this);
+            case ARCHER    -> new Archer(location, this);
+            case CAVALRY   -> new Cavalry(location, this);
+        };
+
+        Hex tribeHex = grid.get(location);
+        if (tribeHex == null) return;
+
+        addUnit(defender);
+        tribeHex.addUnit(defender);
+
+        if (DEBUG_VERBOSE) System.out.println("[INFO]: defender generate triggered");
     }
 
     private void moveDefenders(MovementSystem movementSystem, HexGrid grid) {
         Hex target = closestTarget(grid);
 
-        if (target == null) {
-            generateDefender();
+        if (target == null || !isThereReadyDefender(grid)) {
+            generateDefender(grid);
             return;
         }
 
@@ -164,6 +171,8 @@ public class Tribe {
                 return;
             }
         }
+
+        if (DEBUG_VERBOSE) System.out.println("[INFO]: defender move triggered");
     }
 
     private void moveBackDefenders(MovementSystem movementSystem) {
@@ -173,6 +182,8 @@ public class Tribe {
                 return;
             }
         }
+
+        if (DEBUG_VERBOSE) System.out.println("[INFO]: defender move back triggered");
     }
 
     private Hex closestTarget(HexGrid grid) {
@@ -190,6 +201,16 @@ public class Tribe {
             if (!flag) return target;
         }
         return null;
+    }
+
+    private boolean isThereReadyDefender(HexGrid grid) {
+        List<Unit> units = grid.get(location).getUnits();
+
+        for (Unit unit : units) {
+            if (!unit.isOwnedByPlayer()) return true;
+        }
+
+        return false;
     }
 
     private static int random012(double w0, double w1, double w2) {

@@ -95,18 +95,29 @@ public class MapLoader {
         };
     }
 
-    public HexGrid loadTribes(int X, HexGrid grid, TownHall townHall) throws IOException {
+    public List<Tribe> loadTribes(int X, TownHall townHall) throws IOException {
         String tag = String.valueOf(X);
         if (tag.length() == 1) tag = "0" + tag;
 
         Path path = Path.of("resources", "map", "map" + tag + ".json");
-        Map<HexCoordinate, TribeType> tribes = parseTribes(objectMapper.readTree(path.toFile()));
+        Map<HexCoordinate, TribeType> tribesMap = parseTribes(objectMapper.readTree(path.toFile()));
 
-        for (HexCoordinate position : tribes.keySet()) {
-            grid.get(position).setBuilding(new TribeCamp(new Tribe(tribes.get(position), position, townHall)));
+        List<Tribe> tribes = new ArrayList<>();
+
+        for (HexCoordinate position : tribesMap.keySet()) {
+            tribes.add(new Tribe(tribesMap.get(position), position, townHall));
         }
 
-        return grid;
+        return tribes;
+    }
+
+    public void loadTribesInGrid(HexGrid grid, List<Tribe> tribes) {
+        for (Tribe tribe : tribes) {
+            Hex hex = grid.get(tribe.getLocation());
+            if (hex != null) {
+                hex.setBuilding(new TribeCamp(tribe));
+            }
+        }
     }
 
     private HexCoordinate parseCoordinate(JsonNode node) {

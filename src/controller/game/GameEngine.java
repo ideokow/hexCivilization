@@ -21,7 +21,6 @@ import model.game.tribe.Tribe;
 import model.game.unit.Unit;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -79,9 +78,10 @@ public class GameEngine {
         starvationSystem = new StarvationSystem(townHall);
 
         // load tribes
-        tribes = new ArrayList<>();
         try {
-            hexGrid = (new MapLoader()).loadTribes(MAP_NUMBER, hexGrid, townHall);
+            MapLoader mapLoader = new MapLoader();
+            tribes = mapLoader.loadTribes(MAP_NUMBER, townHall);
+            mapLoader.loadTribesInGrid(hexGrid, tribes);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -148,6 +148,9 @@ public class GameEngine {
         townHall.getHappiness().checkMonuments();
         // check is there military in TownHall
         townHall.getHappiness().checkTownHallMilitary(townHall, hexGrid);
+
+        // --- trigger tribes ---
+        tribes.forEach(tribe -> tribe.tick(turnNumber, movementSystem, hexGrid));
     }
 
     // Getters
