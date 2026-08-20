@@ -2,7 +2,6 @@ package model.game.registry;
 
 import controller.game.GameEngine;
 import model.game.building.*;
-import model.game.hex.HexGrid;
 import model.game.hex.Resource;
 import model.game.season.SeasonName;
 import model.game.townhall.TownHall;
@@ -135,7 +134,7 @@ public class BuildingRegistry {
         }
         // upkeep
         for (Building building : buildingMap.values()) {
-            amount -= building.getType().getConstructionCost().get(resource);
+            amount -= building.getType().getUpkeepCost().getOrDefault(resource, 0);
         }
 
         return amount;
