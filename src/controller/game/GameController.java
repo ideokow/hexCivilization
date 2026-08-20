@@ -1,5 +1,6 @@
 package controller.game;
 
+import controller.game.combat.CombatController;
 import model.game.hex.HexCoordinate;
 import model.game.hex.Hex;
 import model.game.hex.Resource;
@@ -12,6 +13,7 @@ import model.game.townhall.Technology;
 import model.game.tribe.mission.Mission;
 import model.game.unit.Unit;
 import model.game.unit.UnitType;
+import model.game.unit.military.MilitaryUnit;
 import view.game.GameView;
 
 import javax.swing.*;
@@ -28,6 +30,8 @@ public class GameController {
     private final Set<Unit> unitsWithRoutes = new HashSet<>();
     private boolean waitingForRouteDestination;
     private Unit routingUnit;
+    private boolean waitingForCombatTarget;
+    private HexCoordinate combatAttackCoordinate;
 
     public GameController(GameEngine engine, GameView view) {
         this.engine = engine;
@@ -61,6 +65,7 @@ public class GameController {
         view.getDeliverMissionButton().addActionListener(e -> handleDeliverMission());
         view.getRouteButton().addActionListener(e -> beginRouteSelection());
         view.getClearRouteButton().addActionListener(e -> clearSelectedRoute());
+        view.getCombatButton().addActionListener(e -> beginCombatSelection());
         view.getResetCameraButton().addActionListener(e -> view.resetCamera());
     }
 
@@ -70,6 +75,11 @@ public class GameController {
 
         if (waitingForRouteDestination) {
             finishRouteSelection(coordinate);
+            return;
+        }
+
+        if (waitingForCombatTarget) {
+            finishCombatSelection(coordinate);
             return;
         }
 
@@ -99,7 +109,84 @@ public class GameController {
 
     private void exitSelectionMode() {
         waitingForRouteDestination = false;
+        waitingForCombatTarget = false;
+        combatAttackCoordinate = null;
         view.setAlert("");
+    }
+
+    private void beginCombatSelection() {
+        HexCoordinate attackCoordinate = view.getSelectedHex();
+        Hex attackHex = attackCoordinate == null
+                ? null
+                : engine.getHexGrid().get(attackCoordinate);
+
+        if (attackHex == null || !hasPlayerMilitary(attackHex)) {
+            view.showToast("Select a hex containing your military units.");
+            return;
+        }
+
+        waitingForRouteDestination = false;
+        routingUnit = null;
+        combatAttackCoordinate = attackCoordinate;
+        waitingForCombatTarget = true;
+        view.setStatus("Select a discovered hex containing hostile military units.");
+        view.setAlert("Choose combat target");
+    }
+
+    private void finishCombatSelection(HexCoordinate defenceCoordinate) {
+        HexCoordinate attackCoordinate = combatAttackCoordinate;
+        combatAttackCoordinate = null;
+        waitingForCombatTarget = false;
+        view.setAlert("");
+        view.setStatus("");
+
+        if (attackCoordinate == null || defenceCoordinate == null) {
+            return;
+        }
+
+        Hex attackHex = engine.getHexGrid().get(attackCoordinate);
+        Hex defenceHex = engine.getHexGrid().get(defenceCoordinate);
+        if (attackHex == null || defenceHex == null) {
+            return;
+        }
+
+        if (!engine.getHexGrid().isDiscovered(defenceCoordinate)) {
+            view.showToast("You cannot attack an undiscovered hex.");
+            return;
+        }
+
+        if (!hasHostileMilitary(defenceHex)) {
+            view.showToast("The selected hex has no hostile military units.");
+            return;
+        }
+
+        boolean targetTribe = defenceHex.getBuilding() instanceof TribeCamp;
+        CombatController.launch(
+                attackHex,
+                defenceHex,
+                targetTribe,
+                () -> finishCombat(defenceCoordinate)
+        );
+    }
+
+    private void finishCombat(HexCoordinate defenceCoordinate) {
+        view.setSelectedHex(defenceCoordinate);
+        view.setSelectedUnit(null);
+        view.setStatus("Combat resolved.");
+        view.refresh();
+        refreshRouteControls();
+    }
+
+    private boolean hasPlayerMilitary(Hex hex) {
+        return hex.getUnits().stream().anyMatch(
+                unit -> unit instanceof MilitaryUnit && unit.isOwnedByPlayer()
+        );
+    }
+
+    private boolean hasHostileMilitary(Hex hex) {
+        return hex.getUnits().stream().anyMatch(
+                unit -> unit instanceof MilitaryUnit && !unit.isOwnedByPlayer()
+        );
     }
 
     private void beginRouteSelection() {

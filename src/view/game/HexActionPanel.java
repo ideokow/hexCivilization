@@ -10,6 +10,7 @@ import model.game.unit.Builder;
 import model.game.unit.Unit;
 import model.game.unit.Worker;
 import model.game.unit.UnitType;
+import model.game.unit.military.MilitaryUnit;
 
 import javax.swing.*;
 import java.awt.*;
@@ -39,6 +40,7 @@ final class HexActionPanel extends JPanel {
     private final JButton stationButton;
     private final JButton generateMilitaryUnitButton;
     private final JButton expandButton;
+    private final JButton combatButton;
     private final JButton closeButton;
     private final JPanel buildSelectorPanel;
 
@@ -79,6 +81,7 @@ final class HexActionPanel extends JPanel {
         this.generateMilitaryUnitButton =
                 new JButton("Generate Military Unit");
         this.expandButton = new JButton("Expand Territory");
+        this.combatButton = new JButton("Attack from this Hex");
         this.closeButton = new JButton("×");
         this.buildSelectorPanel = new JPanel();
 
@@ -92,8 +95,8 @@ final class HexActionPanel extends JPanel {
         setOpaque(false);
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBorder(BorderFactory.createEmptyBorder(12, 12, 12, 12));
-        setPreferredSize(new Dimension(330, 410));
-        setMaximumSize(new Dimension(370, 540));
+        setPreferredSize(new Dimension(330, 450));
+        setMaximumSize(new Dimension(370, 580));
     }
 
     @Override
@@ -177,6 +180,8 @@ final class HexActionPanel extends JPanel {
         addActionButton(generateMilitaryUnitButton, ACTION_BLUE);
         add(Box.createVerticalStrut(5));
         addActionButton(expandButton, ACTION_BLUE);
+        add(Box.createVerticalStrut(5));
+        addActionButton(combatButton, ACTION_RED);
 
         buildSelectorPanel.setOpaque(false);
         buildSelectorPanel.setLayout(new BoxLayout(buildSelectorPanel, BoxLayout.Y_AXIS));
@@ -432,6 +437,14 @@ final class HexActionPanel extends JPanel {
         expandButton.setEnabled(
                 viewState.getSelectedUnit() instanceof BorderExpander
         );
+        combatButton.setEnabled(
+                hasHex
+                        && viewModel.isDiscovered(viewState.getSelectedHex())
+                        && hex.getUnits().stream().anyMatch(
+                                unit -> unit instanceof MilitaryUnit
+                                        && unit.isOwnedByPlayer()
+                        )
+        );
     }
 
     private String buildSelectionText(
@@ -529,6 +542,10 @@ final class HexActionPanel extends JPanel {
 
     JButton getExpandButton() {
         return expandButton;
+    }
+
+    JButton getCombatButton() {
+        return combatButton;
     }
 
     BuildingType getSelectedBuildingType() {

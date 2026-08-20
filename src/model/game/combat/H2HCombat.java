@@ -31,6 +31,7 @@ public class H2HCombat {
     private List<Boolean>     compares;
 
     private boolean inProgress = false;
+    private boolean isDone = false;
 
     public H2HCombat(Hex attackHex, Hex defenceHex, boolean isTargetTribe) {
         this.attackHex = attackHex;
@@ -64,7 +65,9 @@ public class H2HCombat {
 
         // start war
         inProgress = true;
-        dUnits.get(0).getOwnerTribe().notifyAttacked();
+        if (fightWithTribe && dUnits.get(0).getOwnerTribe() != null) {
+            dUnits.get(0).getOwnerTribe().notifyAttacked();
+        }
 
         // decrease ap
         for (MilitaryUnit unit : mUnits) {
@@ -126,6 +129,7 @@ public class H2HCombat {
         applyHits(getDefenceMilitaryUnits(), attackerHits, attackersAttack);
 
         inProgress = false;
+        isDone = true;
     }
 
     private void applyHits(List<MilitaryUnit> units, int hits, int attack) {
@@ -135,7 +139,7 @@ public class H2HCombat {
             target.increaseHp(-attack);
 
             // log die for mission req check
-            if (target.getHp() == 0) {
+            if (target.getHp() == 0 && target.getOwnerTribe() != null) {
                 target.getOwnerTribe().updateDeath();
             }
         }
@@ -175,7 +179,7 @@ public class H2HCombat {
         return generator.nextInt(6) + 1;
     }
 
-    private List<MilitaryUnit> getAttackMilitaryUnits() {
+    public List<MilitaryUnit> getAttackMilitaryUnits() {
         List<Unit> units = attackHex.getUnits();
         List<MilitaryUnit> mUnits = new ArrayList<>();
         for (Unit unit : units) {
@@ -187,7 +191,7 @@ public class H2HCombat {
         return mUnits;
     }
 
-    private List<MilitaryUnit> getDefenceMilitaryUnits() {
+    public List<MilitaryUnit> getDefenceMilitaryUnits() {
         List<Unit> units = defenceHex.getUnits();
         List<MilitaryUnit> mUnits = new ArrayList<>();
         for (Unit unit : units) {
@@ -242,5 +246,13 @@ public class H2HCombat {
 
     public List<Boolean> getCompares() {
         return compares;
+    }
+
+    public boolean isInProgress() {
+        return inProgress;
+    }
+
+    public boolean isDone() {
+        return isDone;
     }
 }
