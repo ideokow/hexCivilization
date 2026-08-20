@@ -17,6 +17,7 @@ import java.util.function.Consumer;
 
 public class GameView extends JFrame {
 
+    private final GameViewModel viewModel;
     private final GameViewState viewState;
     private final GameHudPanel hudPanel;
     private final GameSidePanel sidePanel;
@@ -24,17 +25,20 @@ public class GameView extends JFrame {
     private final TribeActionPanel tribeActionPanel;
     private final GameStatusPanel statusPanel;
     private final HexMapPanel mapPanel;
+    private final SeasonOverlayPanel seasonOverlay;
     private Runnable routeControlsRefreshHandler = () -> {};
 
     private ToastWindow toast;
 
     public GameView(GameEngine engine) {
-        GameViewModel viewModel = new GameEngineViewModel(engine);
+        this.viewModel = new GameEngineViewModel(engine);
 
         this.viewState = new GameViewState();
         this.mapPanel = new HexMapPanel(viewModel, viewState);
         this.hudPanel = new GameHudPanel(viewModel);
         this.statusPanel = new GameStatusPanel();
+        this.seasonOverlay = new SeasonOverlayPanel();
+        this.seasonOverlay.setSeason(viewModel.getSeason());
         this.hexActionPanel = new HexActionPanel(
                 viewModel,
                 viewState,
@@ -62,6 +66,7 @@ public class GameView extends JFrame {
             @Override
             public void doLayout() {
                 mapPanel.setBounds(0, 0, getWidth(), getHeight());
+                seasonOverlay.setBounds(0, 0, getWidth(), getHeight());
 
                 Dimension preferredSize =
                 hexActionPanel.getPreferredSize();
@@ -111,6 +116,7 @@ public class GameView extends JFrame {
         mapContainer.setLayout(null);
         mapContainer.setOpaque(false);
         mapContainer.add(mapPanel, JLayeredPane.DEFAULT_LAYER);
+        mapContainer.add(seasonOverlay, JLayeredPane.PALETTE_LAYER);
         mapContainer.add(hexActionPanel, JLayeredPane.PALETTE_LAYER);
         mapContainer.add(tribeActionPanel, JLayeredPane.POPUP_LAYER);
         add(mapContainer, BorderLayout.CENTER);
@@ -136,6 +142,7 @@ public class GameView extends JFrame {
         hexActionPanel.refreshSelectionPanel();
         tribeActionPanel.refreshSelectionPanel();
         sidePanel.refreshTownHallQueue();
+        seasonOverlay.setSeason(viewModel.getSeason());
         mapPanel.repaint();
     }
 

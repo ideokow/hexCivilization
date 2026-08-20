@@ -1,5 +1,7 @@
 package view.game;
 
+import model.game.season.SeasonName;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -7,10 +9,12 @@ final class GameHudPanel extends JPanel {
 
     private final GameViewModel viewModel;
     private final JLabel turnLabel;
+    private final JLabel seasonLabel;
 
     GameHudPanel(GameViewModel viewModel) {
         this.viewModel = viewModel;
         this.turnLabel = new JLabel();
+        this.seasonLabel = new JLabel();
 
         configurePanel();
         buildContent();
@@ -22,9 +26,12 @@ final class GameHudPanel extends JPanel {
     }
 
     private void buildContent() {
-        setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        setLayout(new BorderLayout());
         configureLabel(turnLabel, new Color(238, 241, 247), Font.BOLD, 16);
-        add(turnLabel);
+        configureLabel(seasonLabel, new Color(238, 241, 247), Font.BOLD, 16);
+        seasonLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+        add(turnLabel, BorderLayout.WEST);
+        add(seasonLabel, BorderLayout.EAST);
     }
 
     private void configureLabel(
@@ -39,5 +46,18 @@ final class GameHudPanel extends JPanel {
 
     void refresh() {
         turnLabel.setText("Turn " + viewModel.getTurnNumber());
+
+        SeasonName season = viewModel.getSeason();
+        seasonLabel.setText("Season: " + season.getName());
+        seasonLabel.setForeground(seasonColor(season));
+    }
+
+    private Color seasonColor(SeasonName season) {
+        return switch (season) {
+            case SPRING -> new Color(150, 220, 160);
+            case SUMMER -> new Color(255, 210, 105);
+            case FALL -> new Color(230, 155, 90);
+            case WINTER -> new Color(170, 215, 255);
+        };
     }
 }
