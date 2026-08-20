@@ -230,6 +230,10 @@ public class GameView extends JFrame {
         return hexActionPanel.getCombatButton();
     }
 
+    public JButton getDirectAttackButton() {
+        return hexActionPanel.getDirectAttackButton();
+    }
+
     public JButton getRouteButton() {
         return sidePanel.getRouteButton();
     }

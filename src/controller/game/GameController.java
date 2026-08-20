@@ -3,6 +3,7 @@ package controller.game;
 import controller.game.combat.CombatController;
 import model.game.hex.HexCoordinate;
 import model.game.hex.Hex;
+import model.game.hex.HexGrid;
 import model.game.hex.Resource;
 import model.game.building.MilitaryStable;
 import model.game.building.TribeCamp;
@@ -32,6 +33,9 @@ public class GameController {
     private Unit routingUnit;
     private boolean waitingForCombatTarget;
     private HexCoordinate combatAttackCoordinate;
+    private boolean waitingForDirectAttackTarget;
+    private MilitaryUnit directAttackUnit;
+    private HexCoordinate directAttackOrigin;
 
     public GameController(GameEngine engine, GameView view) {
         this.engine = engine;
@@ -66,6 +70,7 @@ public class GameController {
         view.getRouteButton().addActionListener(e -> beginRouteSelection());
         view.getClearRouteButton().addActionListener(e -> clearSelectedRoute());
         view.getCombatButton().addActionListener(e -> beginCombatSelection());
+        view.getDirectAttackButton().addActionListener(e -> beginDirectAttackSelection());
         view.getResetCameraButton().addActionListener(e -> view.resetCamera());
     }
 
@@ -80,6 +85,11 @@ public class GameController {
 
         if (waitingForCombatTarget) {
             finishCombatSelection(coordinate);
+            return;
+        }
+
+        if (waitingForDirectAttackTarget) {
+            finishDirectAttackSelection(coordinate);
             return;
         }
 
@@ -111,7 +121,99 @@ public class GameController {
         waitingForRouteDestination = false;
         waitingForCombatTarget = false;
         combatAttackCoordinate = null;
+        waitingForDirectAttackTarget = false;
+        directAttackUnit = null;
+        directAttackOrigin = null;
         view.setAlert("");
+    }
+
+    private void beginDirectAttackSelection() {
+        Unit selectedUnit = view.getSelectedUnit();
+        if (!(selectedUnit instanceof MilitaryUnit militaryUnit)
+                || !militaryUnit.isOwnedByPlayer()) {
+            view.showToast("Select one of your military units.");
+            return;
+        }
+
+        if (militaryUnit.getCurrentAP()
+                < militaryUnit.getMilitaryType().getAttackAP()) {
+            view.showToast("This unit does not have enough AP to attack.");
+            return;
+        }
+
+        directAttackUnit = militaryUnit;
+        directAttackOrigin = militaryUnit.getPosition();
+        waitingForDirectAttackTarget = true;
+        waitingForRouteDestination = false;
+        routingUnit = null;
+        view.setStatus(
+                "Select a target hex within the unit's attack range."
+        );
+        view.setAlert("Choose direct-attack target");
+    }
+
+    private void finishDirectAttackSelection(HexCoordinate targetCoordinate) {
+        MilitaryUnit attacker = directAttackUnit;
+        HexCoordinate originCoordinate = directAttackOrigin;
+        directAttackUnit = null;
+        directAttackOrigin = null;
+        waitingForDirectAttackTarget = false;
+        view.setAlert("");
+        view.setStatus("");
+
+        if (attacker == null || originCoordinate == null || targetCoordinate == null) {
+            return;
+        }
+
+        Hex targetHex = engine.getHexGrid().get(targetCoordinate);
+        if (targetHex == null
+                || !engine.getHexGrid().isDiscovered(targetCoordinate)) {
+            view.showToast("You cannot attack an undiscovered hex.");
+            return;
+        }
+
+        if (!engine.getHexGrid().contains(originCoordinate)
+                || !attacker.getPosition().equals(originCoordinate)) {
+            view.showToast("The selected military unit is no longer available.");
+            view.refresh();
+            return;
+        }
+
+        int distance = HexGrid.calculateDistance(
+                originCoordinate,
+                targetCoordinate
+        );
+        if (distance > attacker.getMilitaryType().getAttackRange()) {
+            view.showToast("The target is outside this unit's attack range.");
+            return;
+        }
+
+        Unit targetUnit = findHostileUnit(targetHex);
+        if (targetUnit != null) {
+            attacker.attack(targetUnit);
+            view.setStatus("Direct attack resolved.");
+            view.refresh();
+            return;
+        }
+
+        if (targetHex.getBuilding() != null
+                && !targetHex.getBuilding().isOwnedByPlayer()) {
+            attacker.attack(targetHex.getBuilding());
+            view.setStatus("Direct attack resolved.");
+            view.refresh();
+            return;
+        }
+
+        view.showToast("The selected hex has no hostile unit or building.");
+    }
+
+    private Unit findHostileUnit(Hex targetHex) {
+        for (Unit unit : targetHex.getUnits()) {
+            if (!unit.isOwnedByPlayer()) {
+                return unit;
+            }
+        }
+        return null;
     }
 
     private void beginCombatSelection() {

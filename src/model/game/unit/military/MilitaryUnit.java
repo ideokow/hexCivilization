@@ -19,17 +19,21 @@ public abstract class MilitaryUnit extends Unit {
     private final MilitaryType militaryType;
 
     public void attack(Unit unit) {
-        if (getCurrentAP() >= getMilitaryType().getAttackAP()) {
-            unit.increaseHp(getMilitaryType().getAttackAP());
-            spendAP(getMilitaryType().getAttackAP());
-        }
+        if (unit == null || unit.equals(this) || !canAttack()) return;
+
+        unit.increaseHp(-getMilitaryType().getAttackValue());
+        spendAP(getMilitaryType().getAttackAP());
     }
 
     public void attack(Building building) {
-        if (getCurrentAP() >= getMilitaryType().getAttackAP()) {
-            building.increaseHp(getMilitaryType().getAttackAP());
-            spendAP(getMilitaryType().getAttackAP());
-        }
+        if (building == null || !canAttack()) return;
+
+        building.increaseHp(-getMilitaryType().getAttackValue());
+        spendAP(getMilitaryType().getAttackAP());
+    }
+
+    private boolean canAttack() {
+        return getCurrentAP() >= getMilitaryType().getAttackAP();
     }
 
     // TODO : implement wall attack
