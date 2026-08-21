@@ -89,6 +89,10 @@ public abstract class Unit {
 
     // --- AP things ---
 
+    public void zeroAP() {
+        currentAP = 0;
+    }
+
     public void resetAP() {
         currentAP = getType().getEachTurnAP();
     }

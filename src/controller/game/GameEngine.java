@@ -50,6 +50,7 @@ public class GameEngine {
     private final TradeSystem tradeSystem;
     private final MovementSystem movementSystem;
     private GameController gameController;
+    private final DisasterSpawner disasterSpawner;
 
     private final Map<Route, Unit> inQueueRoutes;
     private int turnNumber;
@@ -76,6 +77,7 @@ public class GameEngine {
         movementSystem = new MovementSystem(hexGrid);
         routingSystem = new RoutingSystem(movementSystem);
         starvationSystem = new StarvationSystem(townHall);
+        disasterSpawner = new DisasterSpawner(hexGrid, gameController);
 
         // load tribes
         try {
@@ -149,8 +151,11 @@ public class GameEngine {
         // check is there military in TownHall
         townHall.getHappiness().checkTownHallMilitary(townHall, hexGrid);
 
-        // --- trigger tribes ---
+        // trigger tribes
         tribes.forEach(tribe -> tribe.tick(turnNumber, movementSystem, hexGrid));
+
+        // spawn disaster
+        disasterSpawner.tick(getSeason());
     }
 
     // Getters

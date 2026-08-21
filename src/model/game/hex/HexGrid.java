@@ -120,8 +120,8 @@ public class HexGrid {
         }
     }
 
-    public Set<HexCoordinate> getDiscovered() {
-        return new HashSet<>(discovered);
+    public List<HexCoordinate> getDiscovered() {
+        return new ArrayList<>(discovered);
     }
 
     public static int calculateDistance(HexCoordinate hex1, HexCoordinate hex2) {
