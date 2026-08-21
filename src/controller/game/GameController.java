@@ -353,6 +353,13 @@ public class GameController {
         view.animateUnitMovement(unit, origin, destination);
     }
 
+    public void animateDisaster(
+            Disaster disaster,
+            List<HexCoordinate> coordinates
+    ) {
+        view.animateDisaster(disaster, coordinates);
+    }
+
     /* Route cancellation hook for the Clear Route button. */
     public void clearRoute(Unit unit) {
         if (unit != null) {

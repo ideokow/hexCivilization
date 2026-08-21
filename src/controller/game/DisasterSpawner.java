@@ -14,6 +14,8 @@ import java.util.Random;
 
 public class DisasterSpawner {
 
+    private static final boolean DEBUG_VERBOSE = false;
+
     private static final Random rnd = new Random();
 
     private static final double EACH_TURN_PROBABILITY = 0.05;
@@ -25,10 +27,13 @@ public class DisasterSpawner {
     private static final int BEAR_DAMAGE_ON_UNIT            = 20;
 
     private final HexGrid hexGrid;
-    private final GameController gameController;
+    private GameController gameController;
 
-    public DisasterSpawner(HexGrid hexGrid, GameController gameController) {
+    public DisasterSpawner(HexGrid hexGrid) {
         this.hexGrid = hexGrid;
+    }
+
+    void setGameController(GameController gameController) {
         this.gameController = gameController;
     }
 
@@ -46,6 +51,8 @@ public class DisasterSpawner {
 
         // select disaster
         Disaster chosenDisaster = disasters.get(rnd.nextInt(disasters.size()));
+
+        if (DEBUG_VERBOSE) System.out.println("[INFO]: disaster selected: " + chosenDisaster.toString());
 
         // make disaster!
         switch (chosenDisaster) {
@@ -65,8 +72,10 @@ public class DisasterSpawner {
         effectEarthQuake(hexes);
 
         gameController.toastAlert(Disaster.EARTH_QUAKE.getMessage());
-
-        // TODO : animate earth quake, apply on `hexes` list
+        gameController.animateDisaster(
+                Disaster.EARTH_QUAKE,
+                coordinatesOf(hexes)
+        );
     }
 
     private void effectEarthQuake(List<Hex> hexes) {
@@ -120,8 +129,10 @@ public class DisasterSpawner {
         effectFlood(hexes);
 
         gameController.toastAlert(Disaster.FLOOD.getMessage());
-
-        // TODO : animate flood, apply on `hexes` list
+        gameController.animateDisaster(
+                Disaster.FLOOD,
+                coordinatesOf(hexes)
+        );
     }
 
     private void effectFlood(List<Hex> hexes) {
@@ -188,8 +199,10 @@ public class DisasterSpawner {
         effectBearAttack(hexGrid.get(attackHex));
 
         gameController.toastAlert(Disaster.BEAR_ATTACK.getMessage());
-
-        // TODO : animate bear attack, apply on `attackHex` hex
+        gameController.animateDisaster(
+                Disaster.BEAR_ATTACK,
+                List.of(attackHex)
+        );
     }
 
     private void effectBearAttack(Hex hex) {
@@ -203,7 +216,10 @@ public class DisasterSpawner {
         List<HexCoordinate> toDelete = new ArrayList<>();
 
         for (HexCoordinate coordinate : discoveredArea) {
-            if (!hexGrid.get(coordinate).getTerrain().isLand() || !hasOwnedUnit(coordinate)) toDelete.add(coordinate);
+            if (!hexGrid.get(coordinate).getTerrain().isLand()
+                    || !hasOwnedUnit(coordinate)
+                    || hexGrid.get(coordinate).getTerrain().equals(TerrainType.TOWN_HALL)
+            ) toDelete.add(coordinate);
         }
 
         for (HexCoordinate coordinate : toDelete) {
@@ -222,5 +238,11 @@ public class DisasterSpawner {
             if (unit.isOwnedByPlayer()) return true;
         }
         return false;
+    }
+
+    private List<HexCoordinate> coordinatesOf(List<Hex> hexes) {
+        return hexes.stream()
+                .map(Hex::getCoordinate)
+                .toList();
     }
 }

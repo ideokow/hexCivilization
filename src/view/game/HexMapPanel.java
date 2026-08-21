@@ -1,5 +1,6 @@
 package view.game;
 
+import controller.game.Disaster;
 import model.game.happiness.Era;
 import model.game.townhall.TownHall;
 import model.game.hex.Hex;
@@ -30,6 +31,8 @@ final class HexMapPanel extends JPanel {
     private static final int BASE_HEX_SIZE = 32;
     private static final int UNIT_ANIMATION_FRAMES = 1;
     private static final int UNIT_ANIMATION_DELAY_MS = 24;
+    private static final int DISASTER_ANIMATION_FRAMES = 24;
+    private static final int DISASTER_ANIMATION_DELAY_MS = 35;
 
     // continuous zoom: see much further out or in without steps
     private static final double MIN_ZOOM = 0.25;
@@ -98,6 +101,9 @@ final class HexMapPanel extends JPanel {
     private Timer animationTimer;
     private final Deque<MovementAnimation> animationQueue = new ArrayDeque<>();
     private final Set<Unit> animationPendingUnits = new HashSet<>();
+    private DisasterAnimation disasterAnimation;
+    private int disasterAnimationFrame;
+    private Timer disasterAnimationTimer;
 
     HexMapPanel(
             GameViewModel viewModel,
@@ -109,6 +115,15 @@ final class HexMapPanel extends JPanel {
         setBackground(new Color(18, 22, 29));
         setFocusable(true);
         configureMouseInteraction();
+    }
+
+    @Override
+    public void removeNotify() {
+        if (disasterAnimationTimer != null) {
+            disasterAnimationTimer.stop();
+        }
+        stopAnimationTimer();
+        super.removeNotify();
     }
 
     private void configureMouseInteraction() {
@@ -253,6 +268,45 @@ final class HexMapPanel extends JPanel {
                 animationPendingUnits.remove(completedUnit);
             }
             startNextAnimation();
+        }
+
+        repaint();
+    }
+
+    void animateDisaster(
+            Disaster disaster,
+            List<HexCoordinate> coordinates
+    ) {
+        if (disaster == null || coordinates == null || coordinates.isEmpty()) {
+            return;
+        }
+
+        disasterAnimation = new DisasterAnimation(
+                disaster,
+                List.copyOf(coordinates)
+        );
+        disasterAnimationFrame = 0;
+
+        if (disasterAnimationTimer == null) {
+            disasterAnimationTimer = new Timer(
+                    DISASTER_ANIMATION_DELAY_MS,
+                    event -> advanceDisasterAnimation()
+            );
+        }
+
+        if (!disasterAnimationTimer.isRunning()) {
+            disasterAnimationTimer.start();
+        }
+
+        repaint();
+    }
+
+    private void advanceDisasterAnimation() {
+        disasterAnimationFrame++;
+
+        if (disasterAnimationFrame >= DISASTER_ANIMATION_FRAMES) {
+            disasterAnimation = null;
+            disasterAnimationTimer.stop();
         }
 
         repaint();
@@ -464,6 +518,7 @@ final class HexMapPanel extends JPanel {
             drawHexes(graphics2D, visibleHexes);
             drawUnits(graphics2D, visibleHexes);
             drawMovingUnit(graphics2D);
+            drawDisasterAnimation(graphics2D);
             drawTopLeftInfoBox(graphics2D);
         } finally {
             graphics2D.dispose();
@@ -692,6 +747,139 @@ final class HexMapPanel extends JPanel {
                 screenY,
                 true
         );
+    }
+
+    private void drawDisasterAnimation(Graphics2D graphics2D) {
+        if (disasterAnimation == null) {
+            return;
+        }
+
+        double progress = Math.min(
+                1.0,
+                disasterAnimationFrame
+                        / (double) Math.max(1, DISASTER_ANIMATION_FRAMES - 1)
+        );
+
+        for (HexCoordinate coordinate : disasterAnimation.coordinates()) {
+            Point2D.Double center = centerOf(coordinate);
+
+            switch (disasterAnimation.disaster()) {
+                case EARTH_QUAKE -> drawEarthquakeAnimation(
+                        graphics2D,
+                        center,
+                        coordinate,
+                        progress
+                );
+                case FLOOD -> drawFloodAnimation(
+                        graphics2D,
+                        center,
+                        progress
+                );
+                case BEAR_ATTACK -> drawBearAttackAnimation(
+                        graphics2D,
+                        center,
+                        progress
+                );
+            }
+        }
+    }
+
+    private void drawEarthquakeAnimation(
+            Graphics2D graphics2D,
+            Point2D.Double center,
+            HexCoordinate coordinate,
+            double progress
+    ) {
+        double fade = 1.0 - progress;
+        double phase = coordinate.getQ() * 0.8 + coordinate.getR() * 0.55;
+        double shakeX = Math.sin(progress * Math.PI * 10.0 + phase)
+                * currentHexSize()
+                * 0.10
+                * fade;
+        double shakeY = Math.cos(progress * Math.PI * 12.0 + phase)
+                * currentHexSize()
+                * 0.07
+                * fade;
+
+        Polygon polygon = createHexPolygonAt(
+                center.x + shakeX,
+                center.y + shakeY,
+                currentHexSize() * 0.88
+        );
+
+        graphics2D.setColor(new Color(220, 94, 48, (int) (38 * fade)));
+        graphics2D.fillPolygon(polygon);
+        graphics2D.setColor(new Color(255, 204, 92, (int) (210 * fade)));
+        graphics2D.setStroke(new BasicStroke(2.4f));
+        graphics2D.drawPolygon(polygon);
+    }
+
+    private void drawFloodAnimation(
+            Graphics2D graphics2D,
+            Point2D.Double center,
+            double progress
+    ) {
+        double wave = 0.5 + 0.5 * Math.sin(progress * Math.PI * 4.0);
+        Polygon polygon = createHexPolygonAt(
+                center.x,
+                center.y,
+                currentHexSize() * (0.78 + 0.08 * wave)
+        );
+
+        graphics2D.setColor(new Color(48, 145, 235, (int) (40 * (1.0 - progress))));
+        graphics2D.fillPolygon(polygon);
+        graphics2D.setColor(new Color(100, 205, 255, (int) (175 * (1.0 - progress))));
+        graphics2D.setStroke(new BasicStroke(2.0f));
+        graphics2D.drawPolygon(polygon);
+
+        double radius = currentHexSize()
+                * (0.35 + progress * 1.20);
+        graphics2D.setColor(new Color(90, 195, 255, (int) (150 * (1.0 - progress))));
+        graphics2D.setStroke(new BasicStroke(2.0f));
+        graphics2D.drawOval(
+                (int) Math.round(center.x - radius),
+                (int) Math.round(center.y - radius * 0.72),
+                (int) Math.round(radius * 2.0),
+                (int) Math.round(radius * 1.44)
+        );
+    }
+
+    private void drawBearAttackAnimation(
+            Graphics2D graphics2D,
+            Point2D.Double center,
+            double progress
+    ) {
+        double pulse = 0.5 + 0.5 * Math.sin(progress * Math.PI * 5.0);
+        double radius = currentHexSize()
+                * (0.45 + pulse * 0.22);
+        int alpha = (int) (210 * (1.0 - progress));
+
+        graphics2D.setColor(new Color(220, 57, 66, Math.max(0, alpha / 4)));
+        graphics2D.fillOval(
+                (int) Math.round(center.x - radius),
+                (int) Math.round(center.y - radius),
+                (int) Math.round(radius * 2.0),
+                (int) Math.round(radius * 2.0)
+        );
+        graphics2D.setColor(new Color(255, 102, 92, Math.max(0, alpha)));
+        graphics2D.setStroke(new BasicStroke(3.0f));
+        graphics2D.drawOval(
+                (int) Math.round(center.x - radius),
+                (int) Math.round(center.y - radius),
+                (int) Math.round(radius * 2.0),
+                (int) Math.round(radius * 2.0)
+        );
+
+        double slashSize = currentHexSize() * 0.24;
+        for (int slash = -1; slash <= 1; slash++) {
+            double slashX = center.x + slash * slashSize * 0.75;
+            graphics2D.drawLine(
+                    (int) Math.round(slashX - slashSize * 0.45),
+                    (int) Math.round(center.y - slashSize),
+                    (int) Math.round(slashX + slashSize * 0.45),
+                    (int) Math.round(center.y + slashSize)
+            );
+        }
     }
 
     private void drawUnit(
@@ -1087,6 +1275,12 @@ final class HexMapPanel extends JPanel {
             Unit unit,
             HexCoordinate origin,
             HexCoordinate destination
+    ) {
+    }
+
+    private record DisasterAnimation(
+            Disaster disaster,
+            List<HexCoordinate> coordinates
     ) {
     }
 

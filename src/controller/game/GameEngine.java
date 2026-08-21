@@ -77,7 +77,7 @@ public class GameEngine {
         movementSystem = new MovementSystem(hexGrid);
         routingSystem = new RoutingSystem(movementSystem);
         starvationSystem = new StarvationSystem(townHall);
-        disasterSpawner = new DisasterSpawner(hexGrid, gameController);
+        disasterSpawner = new DisasterSpawner(hexGrid);
 
         // load tribes
         try {
@@ -100,6 +100,7 @@ public class GameEngine {
 
     public void setController(GameController gameController) {
         this.gameController = gameController;
+        disasterSpawner.setGameController(gameController);
     }
 
     private void loadMap() {

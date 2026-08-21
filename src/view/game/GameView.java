@@ -1,5 +1,6 @@
 package view.game;
 
+import controller.game.Disaster;
 import controller.game.GameEngine;
 import model.game.building.BuildingType;
 import model.game.hex.HexCoordinate;
@@ -12,6 +13,7 @@ import model.game.unit.UnitType;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
@@ -331,5 +333,12 @@ public class GameView extends JFrame {
             HexCoordinate destination
     ) {
         mapPanel.animateUnitMovement(unit, origin, destination);
+    }
+
+    public void animateDisaster(
+            Disaster disaster,
+            List<HexCoordinate> coordinates
+    ) {
+        mapPanel.animateDisaster(disaster, coordinates);
     }
 }
