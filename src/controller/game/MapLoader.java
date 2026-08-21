@@ -2,6 +2,7 @@ package controller.game;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import model.game.building.TradingPost;
 import model.game.building.TribeCamp;
 import model.game.hex.Hex;
 import model.game.hex.HexCoordinate;
@@ -14,100 +15,60 @@ import model.game.tribe.TribeType;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.Function;
 
 public class MapLoader {
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
-    /*
-    map X : normal map
-     */
-    public HexGrid loadMapX(int X) throws IOException {
-        String tag = String.valueOf(X);
-        if (tag.length() == 1) tag = "0" + tag;
+    private static final String HEXES = "hexes";
+    private static final String DISCOVERED = "discovered";
+    private static final String TRIBES = "tribes";
+    private static final String TRADING_POSTS = "trading-posts";
 
-        return load(Path.of("resources", "map", "map" + tag + ".json"));
+    private final Map<Path, JsonNode> rootCache = new HashMap<>();
+
+    // --- paths ---
+
+    public static Path mapPath(int index) {
+        return Path.of("resources", "map", String.format("map%02d.json", index));
+    }
+
+    // --- hex grid ---
+
+    public HexGrid loadMap(int index) throws IOException {
+        return load(mapPath(index));
     }
 
     public HexGrid load(Path path) throws IOException {
-        JsonNode root = objectMapper.readTree(path.toFile());
+        JsonNode root = readRoot(path);
 
-        HexGrid grid = new HexGrid(parseHexes(root));
-        parseDiscovered(root).forEach(grid::discover);
+        HexGrid grid = new HexGrid(parseArray(root, HEXES, this::parseHex, true));
+        parseArray(root, DISCOVERED, this::parseCoordinate, true).forEach(grid::discover);
         return grid;
     }
 
-    private List<Hex> parseHexes(JsonNode root) {
-        JsonNode hexesNode = requireSection(root, "hexes");
-        List<Hex> hexes = new ArrayList<>();
+    // --- tribes ---
 
-        for (JsonNode hexNode : hexesNode) {
-            HexCoordinate coordinate = parseCoordinate(hexNode);
-            TerrainType terrain = TerrainType.valueOf(hexNode.get("terrain").asText());
-            Set<Resource> resources = parseResources(hexNode);
-            hexes.add(new Hex(coordinate, terrain, resources));
-        }
-
-        return hexes;
+    public List<Tribe> loadTribes(int index, TownHall townHall) throws IOException {
+        return loadTribes(mapPath(index), townHall);
     }
 
-    private List<HexCoordinate> parseDiscovered(JsonNode root) {
-        JsonNode discoveredNode = requireSection(root, "discovered");
-        List<HexCoordinate> discovered = new ArrayList<>();
-
-        for (JsonNode coordinateNode : discoveredNode) {
-            discovered.add(parseCoordinate(coordinateNode));
-        }
-
-        return discovered;
-    }
-
-    private Map<HexCoordinate, TribeType> parseTribes(JsonNode root) {
-        JsonNode tribesNode = requireSection(root, "tribes");
-        Map<HexCoordinate, TribeType> tribes = new HashMap<>();
-
-        for (JsonNode tribeNode : tribesNode) {
-            JsonNode qNode = tribeNode.get("q");
-            JsonNode rNode = tribeNode.get("r");
-            JsonNode typeNode = tribeNode.get("type");
-
-            int q = qNode.asInt();
-            int r = rNode.asInt();
-
-            HexCoordinate coordinate = new HexCoordinate(q, r);
-            TribeType type = toTribeType(typeNode.asText());
-
-            tribes.put(coordinate, type);
-        }
-
-        return tribes;
-    }
-
-    private TribeType toTribeType(String text) {
-        return switch (text) {
-            case "FARMER"      -> TribeType.FARMER;
-            case "FIGHTER"     -> TribeType.FIGHTER;
-            case "TRADER"      -> TribeType.TRADER;
-            case "MOUNTAINEER" -> TribeType.MOUNTAINEER;
-            case "COASTAL"     -> TribeType.COASTAL;
-            default -> null;
-        };
-    }
-
-    public List<Tribe> loadTribes(int X, TownHall townHall) throws IOException {
-        String tag = String.valueOf(X);
-        if (tag.length() == 1) tag = "0" + tag;
-
-        Path path = Path.of("resources", "map", "map" + tag + ".json");
-        Map<HexCoordinate, TribeType> tribesMap = parseTribes(objectMapper.readTree(path.toFile()));
-
+    public List<Tribe> loadTribes(Path path, TownHall townHall) throws IOException {
         List<Tribe> tribes = new ArrayList<>();
 
-        for (HexCoordinate position : tribesMap.keySet()) {
-            tribes.add(new Tribe(tribesMap.get(position), position, townHall));
+        for (JsonNode tribeNode : requireSection(readRoot(path), TRIBES)) {
+            TribeType type = parseTribeType(tribeNode.get("type"));
+            if (type != null) {
+                tribes.add(new Tribe(type, parseCoordinate(tribeNode), townHall));
+            }
         }
-
         return tribes;
     }
 
@@ -120,6 +81,34 @@ public class MapLoader {
         }
     }
 
+    // --- trading posts ---
+
+    public List<HexCoordinate> loadTradingPosts(int index) throws IOException {
+        return loadTradingPosts(mapPath(index));
+    }
+
+    public List<HexCoordinate> loadTradingPosts(Path path) throws IOException {
+        return parseArray(readRoot(path), TRADING_POSTS, this::parseCoordinate, false);
+    }
+
+    public void loadTradingPostsInGrid(HexGrid grid, List<HexCoordinate> locations) {
+        for (HexCoordinate location : locations) {
+            Hex hex = grid.get(location);
+            if (hex != null) {
+                hex.setBuilding(new TradingPost(location));
+            }
+        }
+    }
+
+    // --- parsing ---
+
+    private Hex parseHex(JsonNode hexNode) {
+        return new Hex(
+                parseCoordinate(hexNode),
+                TerrainType.valueOf(hexNode.get("terrain").asText()),
+                parseResources(hexNode));
+    }
+
     private HexCoordinate parseCoordinate(JsonNode node) {
         return new HexCoordinate(node.get("q").asInt(), node.get("r").asInt());
     }
@@ -127,7 +116,6 @@ public class MapLoader {
     private Set<Resource> parseResources(JsonNode hexNode) {
         Set<Resource> resources = EnumSet.noneOf(Resource.class);
 
-        // "resources" field is optional; return empty set if missing
         JsonNode resourcesNode = hexNode.get("resources");
         if (resourcesNode == null || !resourcesNode.isArray()) {
             return resources;
@@ -136,15 +124,54 @@ public class MapLoader {
         for (JsonNode resourceNode : resourcesNode) {
             resources.add(Resource.valueOf(resourceNode.asText()));
         }
-
         return resources;
     }
 
-    private JsonNode requireSection(JsonNode root, String sectionName) {
-        JsonNode section = root.get(sectionName);
-        if (section == null || !section.isArray()) {
-            throw new IllegalArgumentException("Missing JSON section: " + sectionName);
+    private TribeType parseTribeType(JsonNode typeNode) {
+        if (typeNode == null || typeNode.isNull()) {
+            return null;
         }
-        return section;
+        try {
+            return TribeType.valueOf(typeNode.asText());
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
+    }
+
+    // --- utilities ---
+
+    private JsonNode readRoot(Path path) throws IOException {
+        JsonNode cached = rootCache.get(path);
+        if (cached != null) {
+            return cached;
+        }
+        JsonNode root = OBJECT_MAPPER.readTree(path.toFile());
+        rootCache.put(path, root);
+        return root;
+    }
+
+    private <T> List<T> parseArray(JsonNode root, String section,
+                                   Function<JsonNode, T> parser, boolean required) {
+        JsonNode sectionNode = root.get(section);
+        if (sectionNode == null || !sectionNode.isArray()) {
+            if (required) {
+                throw new IllegalArgumentException("Missing JSON section: " + section);
+            }
+            return List.of();
+        }
+
+        List<T> values = new ArrayList<>(sectionNode.size());
+        for (JsonNode element : sectionNode) {
+            values.add(parser.apply(element));
+        }
+        return values;
+    }
+
+    private JsonNode requireSection(JsonNode root, String section) {
+        JsonNode sectionNode = root.get(section);
+        if (sectionNode == null || !sectionNode.isArray()) {
+            throw new IllegalArgumentException("Missing JSON section: " + section);
+        }
+        return sectionNode;
     }
 }

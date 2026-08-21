@@ -42,6 +42,7 @@ public class GameEngine {
     private HexGrid hexGrid;
     private final TownHall townHall;
     private List<Tribe> tribes;
+    private List<HexCoordinate> tradingPosts;
 
     private final ConstructionSystem constructionSystem;
     private final RoutingSystem routingSystem;
@@ -79,17 +80,19 @@ public class GameEngine {
         starvationSystem = new StarvationSystem(townHall);
         disasterSpawner = new DisasterSpawner(hexGrid);
 
-        // load tribes
         try {
             MapLoader mapLoader = new MapLoader();
+
+            // load tribes
             tribes = mapLoader.loadTribes(MAP_NUMBER, townHall);
             mapLoader.loadTribesInGrid(hexGrid, tribes);
+
+            // load trading posts
+            tradingPosts = mapLoader.loadTradingPosts(MAP_NUMBER);
+            mapLoader.loadTradingPostsInGrid(hexGrid, tradingPosts);
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        // load trading posts
-        // todo: load!
 
         inQueueRoutes = new HashMap<>();
         turnNumber = 1;
@@ -105,7 +108,7 @@ public class GameEngine {
 
     private void loadMap() {
         try {
-            hexGrid = (new MapLoader()).loadMapX(3);
+            hexGrid = (new MapLoader()).loadMap(MAP_NUMBER);
         } catch (IOException e) {
             e.printStackTrace();
         }
