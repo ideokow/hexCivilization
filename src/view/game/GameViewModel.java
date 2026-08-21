@@ -33,6 +33,12 @@ public interface GameViewModel {
 
     boolean ownsTerritory(HexCoordinate coordinate);
 
+    boolean hasTradedAtBazaarThisTurn();
+
+    boolean hasTradedAtTradingPostThisTurn();
+
+    boolean hasTradedWithTribeThisTurn(Tribe tribe);
+
     List<Hex> getHexesInBounds(
             int minQ,
             int maxQ,

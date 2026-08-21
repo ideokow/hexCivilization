@@ -198,6 +198,18 @@ public class TradeSystem {
         return currentTurn;
     }
 
+    public boolean hasTradedAtBazaarThisTurn() {
+        return lastBazaarTradeTurn == currentTurn;
+    }
+
+    public boolean hasTradedAtTradingPostThisTurn() {
+        return lastTradingPostTradeTurn == currentTurn;
+    }
+
+    public boolean hasTradedWithTribeThisTurn(Tribe tribe) {
+        return tribe != null && tribe.hasTradedThisTurn(currentTurn);
+    }
+
     private TradeResult executeTrade(
             Resource soldResource,
             Resource receivedResource,
@@ -220,6 +232,10 @@ public class TradeSystem {
         }
 
         int receivedAmount = strategy.calculateReceivedAmount(soldAmount);
+        if (townHall.getAvailableStorage(receivedResource) < receivedAmount) {
+            return TradeResult.failure(TradeStatus.INSUFFICIENT_STORAGE);
+        }
+
         townHall.deductResource(soldResource, soldAmount);
         int addedAmount = townHall.addResource(receivedResource, receivedAmount);
 

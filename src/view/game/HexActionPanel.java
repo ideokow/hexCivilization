@@ -1,8 +1,10 @@
 package view.game;
 
 import model.game.building.BuildingType;
+import model.game.building.Bazaar;
 import model.game.building.MilitaryStable;
 import model.game.building.ProductionBuilding;
+import model.game.building.TradingPost;
 import model.game.hex.Hex;
 import model.game.hex.HexCoordinate;
 import model.game.unit.BorderExpander;
@@ -34,6 +36,7 @@ final class HexActionPanel extends JPanel {
     private final JComboBox<Unit> selectedUnitCombo;
     private final JComboBox<BuildingType> buildingCombo;
     private final JButton buildMenuButton;
+    private final JButton tradeButton;
     private final JButton confirmBuildButton;
     private final JButton cancelBuildButton;
     private final JButton ruinButton;
@@ -70,11 +73,13 @@ final class HexActionPanel extends JPanel {
                         BuildingType.TOWN,
                         BuildingType.MONUMENT,
                         BuildingType.DOCK,
+                        BuildingType.BAZAAR,
                         BuildingType.ROAD,
                         BuildingType.MILITARY_STABLE
                 }
         );
         this.buildMenuButton = new JButton("Build");
+        this.tradeButton = new JButton("Trade");
         this.confirmBuildButton = new JButton("Confirm Build");
         this.cancelBuildButton = new JButton("Cancel");
         this.ruinButton = new JButton("Ruin");
@@ -174,6 +179,8 @@ final class HexActionPanel extends JPanel {
         add(Box.createVerticalStrut(8));
 
         addActionButton(buildMenuButton, ACTION_BLUE);
+        add(Box.createVerticalStrut(5));
+        addActionButton(tradeButton, ACTION_BLUE);
         add(Box.createVerticalStrut(5));
         addActionButton(ruinButton, ACTION_RED);
         add(Box.createVerticalStrut(5));
@@ -463,6 +470,40 @@ final class HexActionPanel extends JPanel {
         buildMenuButton.setEnabled(
                 hasHex && viewState.getSelectedUnit() instanceof Builder
         );
+        boolean tradeBuilding = hasHex
+                && (hex.getBuilding() instanceof Bazaar
+                || hex.getBuilding() instanceof TradingPost);
+        tradeButton.setVisible(tradeBuilding);
+        boolean tradeInTerritory = hasHex
+                && viewModel.ownsTerritory(viewState.getSelectedHex());
+        boolean tradeAlreadyUsed =
+                (hex != null
+                        && hex.getBuilding() instanceof Bazaar
+                        && viewModel.hasTradedAtBazaarThisTurn())
+                || (hex != null
+                        && hex.getBuilding() instanceof TradingPost
+                        && viewModel.hasTradedAtTradingPostThisTurn());
+        boolean tradeAvailable = tradeBuilding
+                && tradeInTerritory
+                && !hex.getBuilding().isRuined()
+                && (hex.getBuilding() instanceof TradingPost
+                || viewModel.getTownHall().getLevel().getLevelN() >= 2)
+                && !tradeAlreadyUsed;
+        tradeButton.setEnabled(tradeAvailable);
+        tradeButton.setToolTipText(
+                !tradeBuilding
+                        ? "Select a Bazaar or Trading Post."
+                        : !tradeInTerritory
+                        ? "The trade structure must be inside your territory."
+                        : hex.getBuilding().isRuined()
+                        ? "This trade structure is ruined."
+                        : viewModel.getTownHall().getLevel().getLevelN() < 2
+                        && hex.getBuilding() instanceof Bazaar
+                        ? "A Bazaar requires Town Hall level 2."
+                        : tradeAlreadyUsed
+                        ? "This trade source has already been used this turn."
+                        : "Open the trade window"
+        );
         ruinButton.setEnabled(hasHex && hex.getBuilding() != null);
         stationButton.setEnabled(
                 hasHex
@@ -490,6 +531,8 @@ final class HexActionPanel extends JPanel {
                         && militaryUnit.getCurrentAP()
                         >= militaryUnit.getMilitaryType().getAttackAP()
         );
+        revalidate();
+        repaint();
     }
 
     private String buildSelectionText(
@@ -567,6 +610,10 @@ final class HexActionPanel extends JPanel {
 
     JButton getBuildMenuButton() {
         return buildMenuButton;
+    }
+
+    JButton getTradeButton() {
+        return tradeButton;
     }
 
     JButton getConfirmBuildButton() {

@@ -4,9 +4,11 @@ import controller.game.system.BuildResult;
 import controller.game.system.RuinStatus;
 import model.game.building.Building;
 import model.game.building.BuildingType;
+import model.game.building.Bazaar;
 import model.game.building.MilitaryStable;
 import model.game.building.ProductionBuilding;
 import model.game.building.StationResult;
+import model.game.building.TradingPost;
 import model.game.hex.Hex;
 import model.game.hex.HexCoordinate;
 import model.game.hex.Resource;
@@ -21,6 +23,8 @@ import model.game.townhall.opration.OperationCheckResult;
 import model.game.townhall.opration.OperationStatus;
 import model.game.townhall.opration.TownHallOperation;
 import model.game.route.Route;
+import model.game.trade.TradeLevel;
+import model.game.trade.TradeResult;
 import model.game.tribe.Tribe;
 import model.game.tribe.mission.Mission;
 import model.game.unit.BorderExpander;
@@ -311,6 +315,66 @@ final class GameTriggers {
     }
 
     /*
-    ...
+    Trade related triggers
      */
+
+    void tradeAtBazaar(
+            Bazaar bazaar,
+            Resource soldResource,
+            Resource receivedResource,
+            TradeLevel level
+    ) {
+        showTradeResult(engine.getTradeSystem().tradeAtBazaar(
+                bazaar,
+                soldResource,
+                receivedResource,
+                level
+        ));
+    }
+
+    void tradeAtTradingPost(
+            TradingPost tradingPost,
+            Resource soldResource,
+            Resource receivedResource,
+            int amount
+    ) {
+        showTradeResult(engine.getTradeSystem().tradeAtTradingPost(
+                tradingPost,
+                soldResource,
+                receivedResource,
+                amount
+        ));
+    }
+
+    void tradeWithTribe(
+            Tribe tribe,
+            Resource soldResource,
+            Resource receivedResource,
+            int amount
+    ) {
+        showTradeResult(engine.getTradeSystem().tradeWithTribe(
+                tribe,
+                soldResource,
+                receivedResource,
+                amount
+        ));
+    }
+
+    private void showTradeResult(TradeResult result) {
+        if (result == null) {
+            gameController.toastAlert("Trade could not be completed.");
+        } else if (!result.isSuccess()) {
+            gameController.toastAlert(result.getMessage());
+        } else {
+            gameController.toastAlert(
+                    "Trade completed: -"
+                            + result.getSoldAmount()
+                            + " sold, +"
+                            + result.getAddedAmount()
+                            + " received at "
+                            + result.getConversionRatePercent()
+                            + "%."
+            );
+        }
+    }
 }

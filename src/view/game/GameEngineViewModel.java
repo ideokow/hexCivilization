@@ -77,6 +77,21 @@ final class GameEngineViewModel implements GameViewModel {
     }
 
     @Override
+    public boolean hasTradedAtBazaarThisTurn() {
+        return engine.getTradeSystem().hasTradedAtBazaarThisTurn();
+    }
+
+    @Override
+    public boolean hasTradedAtTradingPostThisTurn() {
+        return engine.getTradeSystem().hasTradedAtTradingPostThisTurn();
+    }
+
+    @Override
+    public boolean hasTradedWithTribeThisTurn(Tribe tribe) {
+        return engine.getTradeSystem().hasTradedWithTribeThisTurn(tribe);
+    }
+
+    @Override
     public List<Hex> getHexesInBounds(
             int minQ,
             int maxQ,

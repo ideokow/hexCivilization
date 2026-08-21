@@ -134,13 +134,7 @@ public enum BuildingType {
 
     public boolean isAllowedOn(TerrainType terrain) {
         if (terrain == null) return false;
-        if (allowed != null) {
-            return allowed.contains(terrain);
-        }
-        else if (blocked != null) {
-            return !blocked.contains(terrain);
-        }
-        else return true;
+        return allowed.contains(terrain) && !blocked.contains(terrain);
     }
 
     private static Map<Resource, Integer> cost(int wood, int stone, int iron, int food) {

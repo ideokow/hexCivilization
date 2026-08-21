@@ -187,8 +187,10 @@ public class ConstructionSystem {
     }
 
     private boolean checkLevelRequirements(BuildingType buildingType) {
-        if (buildingType.equals(BuildingType.DOCK) && townHall.getLevel().getLevelN() >= 2) return false;
-        if (buildingType.equals(BuildingType.BAZAAR) && townHall.getLevel().getLevelN() >= 2) return false;
+        if (buildingType == BuildingType.DOCK
+                || buildingType == BuildingType.BAZAAR) {
+            return townHall.getLevel().getLevelN() >= 2;
+        }
         return true;
     }
 

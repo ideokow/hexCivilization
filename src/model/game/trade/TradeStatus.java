@@ -13,6 +13,8 @@ public enum TradeStatus {
             ("The trade turn cannot be negative."),
     INSUFFICIENT_RESOURCES
             ("The Town Hall does not have enough of the sold resource."),
+    INSUFFICIENT_STORAGE
+            ("The Town Hall does not have enough storage space for the received resource."),
     BAZAAR_NOT_AVAILABLE
             ("The selected Bazaar is not available for trade."),
     BAZAAR_LEVEL_REQUIRED

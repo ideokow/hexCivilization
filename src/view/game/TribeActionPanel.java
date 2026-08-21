@@ -34,6 +34,7 @@ final class TribeActionPanel extends JPanel {
     private final JTextArea tribeInfoArea;
     private final EnumMap<Resource, JSpinner> giftSpinners;
     private final JButton giftButton;
+    private final JButton tradeButton;
     private final JButton warDeclarationButton;
     private final JButton peaceRequestButton;
     private final JButton allianceRequestButton;
@@ -56,6 +57,7 @@ final class TribeActionPanel extends JPanel {
         this.tribeInfoArea = new JTextArea();
         this.giftSpinners = new EnumMap<>(Resource.class);
         this.giftButton = new JButton("Send Gift");
+        this.tradeButton = new JButton("Start Trade");
         this.warDeclarationButton = new JButton("Declare War");
         this.peaceRequestButton = new JButton("Request Peace");
         this.allianceRequestButton = new JButton("Request Alliance");
@@ -156,6 +158,8 @@ final class TribeActionPanel extends JPanel {
         add(createGiftSelector());
         add(Box.createVerticalStrut(5));
         addActionButton(giftButton, ACTION_GREEN);
+        add(Box.createVerticalStrut(7));
+        addActionButton(tradeButton, ACTION_BLUE);
         add(Box.createVerticalStrut(7));
 
         peacePaymentLabel.setForeground(TEXT_MUTED);
@@ -361,8 +365,14 @@ final class TribeActionPanel extends JPanel {
                 .append("Relation: ")
                 .append(tribe.getRelation())
                 .append('\n')
+                .append("Camp: ")
+                .append(ViewTextFormatter.formatCoordinate(tribe.getLocation()))
+                .append('\n')
                 .append("Mood: ")
-                .append(ViewTextFormatter.pretty(tribe.getMood()));
+                .append(ViewTextFormatter.pretty(tribe.getMood()))
+                .append('\n')
+                .append("Trade resources: ")
+                .append(formatTradeResources(tribe));
 
         if (tribe.isSuspicious()) {
             text.append('\n')
@@ -492,6 +502,25 @@ final class TribeActionPanel extends JPanel {
                         : "The Town Hall cannot afford this gift"
         );
 
+        boolean canTrade = validSelection
+                && tribe.canTrade()
+                && !tribe.getTradeResources().isEmpty()
+                && !viewModel.hasTradedWithTribeThisTurn(tribe);
+        tradeButton.setEnabled(canTrade);
+        tradeButton.setToolTipText(
+                canTrade
+                        ? "Exchange resources with this tribe"
+                        : tribe == null
+                        ? "Select a discovered tribe camp."
+                        : tribe.isEnemy()
+                        ? "Enemy tribes do not trade."
+                        : tribe.getRelation() < 20
+                        ? "Trade requires a relation of at least 20."
+                        : viewModel.hasTradedWithTribeThisTurn(tribe)
+                        ? "This tribe has already been traded with this turn."
+                        : "This tribe has no resources available for trade."
+        );
+
         warDeclarationButton.setEnabled(validSelection && !tribe.isEnemy());
 
         Map<Resource, Integer> peacePayment = getPeaceRequestResources();
@@ -531,6 +560,17 @@ final class TribeActionPanel extends JPanel {
         return resources;
     }
 
+    private String formatTradeResources(Tribe tribe) {
+        if (tribe.getTradeResources().isEmpty()) {
+            return "None";
+        }
+        return tribe.getTradeResources().stream()
+                .map(Resource::getDisplayName)
+                .sorted()
+                .reduce((left, right) -> left + ", " + right)
+                .orElse("None");
+    }
+
     Map<Resource, Integer> getSelectedGiftResources() {
         return getGiftResources();
     }
@@ -549,6 +589,10 @@ final class TribeActionPanel extends JPanel {
 
     JButton getGiftButton() {
         return giftButton;
+    }
+
+    JButton getTradeButton() {
+        return tradeButton;
     }
 
     JButton getWarDeclarationButton() {

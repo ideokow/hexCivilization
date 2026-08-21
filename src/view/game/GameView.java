@@ -176,8 +176,16 @@ public class GameView extends JFrame {
         return hexActionPanel.getRuinButton();
     }
 
+    public JButton getTradeButton() {
+        return hexActionPanel.getTradeButton();
+    }
+
     public JButton getGiftTribeButton() {
         return tribeActionPanel.getGiftButton();
+    }
+
+    public JButton getTradeTribeButton() {
+        return tribeActionPanel.getTradeButton();
     }
 
     public JButton getWarDeclarationTribeButton() {

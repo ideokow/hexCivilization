@@ -6,12 +6,15 @@ import model.game.hex.Hex;
 import model.game.hex.HexGrid;
 import model.game.hex.Resource;
 import model.game.building.MilitaryStable;
+import model.game.building.Bazaar;
 import model.game.building.TribeCamp;
+import model.game.building.TradingPost;
 import model.game.tribe.Tribe;
 import model.game.registry.UpKeepStatus;
 import model.game.townhall.Level;
 import model.game.townhall.Technology;
 import model.game.tribe.mission.Mission;
+import view.game.TradeDialog;
 import model.game.unit.Unit;
 import model.game.unit.UnitType;
 import model.game.unit.military.MilitaryUnit;
@@ -52,6 +55,7 @@ public class GameController {
         view.getEndTurnButton().addActionListener(e -> handleEndTurn());
         view.getConfirmBuildButton().addActionListener(e -> handleBuild());
         view.getRuinButton().addActionListener(e -> handleRuin());
+        view.getTradeButton().addActionListener(e -> handleStructureTrade());
         view.getLevelUpButton().addActionListener(e -> handleLevelUp());
         view.getAcquireTechnologyButton().addActionListener(e -> handleAcquireTechnology());
         view.getGenerateUnitButton().addActionListener(e -> handleGenerateUnit());
@@ -61,6 +65,7 @@ public class GameController {
         );
         view.getExpandButton().addActionListener(e -> handleExpand());
         view.getGiftTribeButton().addActionListener(e -> handleGiftTribe());
+        view.getTradeTribeButton().addActionListener(e -> handleTribeTrade());
         view.getWarDeclarationTribeButton().addActionListener(e -> handleWarDeclarationTribe());
         view.getPeaceRequestTribeButton().addActionListener(e -> handlePeaceRequestTribe());
         view.getAllianceRequestTribeButton().addActionListener(e -> handleAllianceRequestTribe());
@@ -451,6 +456,77 @@ public class GameController {
             triggers.giftTribe(tribe, view.getSelectedGiftResources());
             view.refresh();
         }
+    }
+
+    private void handleStructureTrade() {
+        HexCoordinate selectedHex = view.getSelectedHex();
+        Hex hex = selectedHex == null
+                ? null
+                : engine.getHexGrid().get(selectedHex);
+        if (hex == null || hex.getBuilding() == null) {
+            return;
+        }
+
+        TradeDialog.Source source;
+        if (hex.getBuilding() instanceof Bazaar) {
+            source = TradeDialog.Source.BAZAAR;
+        } else if (hex.getBuilding() instanceof TradingPost) {
+            source = TradeDialog.Source.TRADING_POST;
+        } else {
+            return;
+        }
+
+        TradeDialog.TradeRequest request = TradeDialog.open(
+                view,
+                source,
+                engine.getTownHall(),
+                null
+        );
+        if (request == null) {
+            return;
+        }
+
+        if (source == TradeDialog.Source.BAZAAR) {
+            triggers.tradeAtBazaar(
+                    (Bazaar) hex.getBuilding(),
+                    request.soldResource(),
+                    request.receivedResource(),
+                    request.level()
+            );
+        } else {
+            triggers.tradeAtTradingPost(
+                    (TradingPost) hex.getBuilding(),
+                    request.soldResource(),
+                    request.receivedResource(),
+                    request.amount()
+            );
+        }
+        view.refresh();
+    }
+
+    private void handleTribeTrade() {
+        Tribe tribe = view.getSelectedTribe();
+        if (tribe == null) {
+            return;
+        }
+
+        TradeDialog.TradeRequest request = TradeDialog.open(
+                view,
+                TradeDialog.Source.TRIBE,
+                engine.getTownHall(),
+                tribe
+        );
+        if (request == null) {
+            return;
+        }
+
+        triggers.tradeWithTribe(
+                tribe,
+                request.soldResource(),
+                request.receivedResource(),
+                request.amount()
+        );
+        view.refresh();
     }
 
     private void handleWarDeclarationTribe() {
