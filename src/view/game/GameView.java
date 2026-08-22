@@ -5,6 +5,7 @@ import controller.game.GameEngine;
 import model.game.building.BuildingType;
 import model.game.hex.HexCoordinate;
 import model.game.hex.Resource;
+import model.game.hex.Wall;
 import model.game.townhall.Level;
 import model.game.townhall.Technology;
 import model.game.tribe.Tribe;
@@ -168,12 +169,20 @@ public class GameView extends JFrame {
         return hexActionPanel.getBuildMenuButton();
     }
 
+    public JButton getBuildWallButton() {
+        return hexActionPanel.getBuildWallButton();
+    }
+
     public JButton getConfirmBuildButton() {
         return hexActionPanel.getConfirmBuildButton();
     }
 
     public JButton getRuinButton() {
         return hexActionPanel.getRuinButton();
+    }
+
+    public JButton getRuinWallButton() {
+        return hexActionPanel.getRuinWallButton();
     }
 
     public JButton getTradeButton() {
@@ -289,6 +298,10 @@ public class GameView extends JFrame {
 
     public BuildingType getSelectedBuildingType() {
         return hexActionPanel.getSelectedBuildingType();
+    }
+
+    public Wall getSelectedWall() {
+        return hexActionPanel.getSelectedWall();
     }
 
     public Level getSelectedLevel() {

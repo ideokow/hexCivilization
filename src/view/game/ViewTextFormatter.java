@@ -3,6 +3,7 @@ package view.game;
 import model.game.building.Building;
 import model.game.hex.HexCoordinate;
 import model.game.hex.Resource;
+import model.game.hex.Wall;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +50,32 @@ final class ViewTextFormatter {
                 building.isRuined() ? " (Ruined)" : "";
 
         return pretty(building.getType()) + ruinedSuffix;
+    }
+
+    static String formatWall(Wall wall) {
+        if (wall == null) {
+            return "None";
+        }
+
+        return formatCoordinate(wall.getCoordinate1())
+                + " - "
+                + formatCoordinate(wall.getCoordinate2())
+                + " ("
+                + wall.getHp()
+                + " HP)";
+    }
+
+    static String formatWalls(List<Wall> walls) {
+        if (walls == null || walls.isEmpty()) {
+            return "None";
+        }
+
+        List<String> wallDescriptions = new ArrayList<>();
+        for (Wall wall : walls) {
+            wallDescriptions.add(formatWall(wall));
+        }
+        wallDescriptions.sort(String::compareTo);
+        return String.join(", ", wallDescriptions);
     }
 
     static String pretty(Enum<?> value) {

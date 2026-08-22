@@ -4,6 +4,7 @@ import model.game.townhall.TownHall;
 import model.game.hex.Hex;
 import model.game.hex.HexCoordinate;
 import model.game.hex.Resource;
+import model.game.hex.Wall;
 import model.game.season.SeasonName;
 import model.game.townhall.Technology;
 import model.game.townhall.opration.TownHallOperation;
@@ -12,6 +13,7 @@ import model.game.unit.Unit;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 public interface GameViewModel {
 
@@ -24,6 +26,10 @@ public interface GameViewModel {
     boolean containsUnit(Unit unit);
 
     Hex getHex(HexCoordinate coordinate);
+
+    List<Wall> getWalls(HexCoordinate coordinate);
+
+    Set<Wall> getAllWalls();
 
     Tribe getTribe(HexCoordinate coordinate);
 

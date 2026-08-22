@@ -7,6 +7,7 @@ import model.game.building.ProductionBuilding;
 import model.game.building.TradingPost;
 import model.game.hex.Hex;
 import model.game.hex.HexCoordinate;
+import model.game.hex.Wall;
 import model.game.unit.BorderExpander;
 import model.game.unit.Builder;
 import model.game.unit.Unit;
@@ -16,6 +17,9 @@ import model.game.unit.military.MilitaryUnit;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Comparator;
+import java.util.List;
+
 final class HexActionPanel extends JPanel {
 
     private static final Color PANEL_BACKGROUND = new Color(8, 12, 18, 232);
@@ -34,21 +38,27 @@ final class HexActionPanel extends JPanel {
     private final JTextArea selectedInfoArea;
     private final DefaultComboBoxModel<Unit> selectedUnitModel;
     private final JComboBox<Unit> selectedUnitCombo;
+    private final DefaultComboBoxModel<Wall> selectedWallModel;
+    private final JComboBox<Wall> selectedWallCombo;
     private final JComboBox<BuildingType> buildingCombo;
     private final JButton buildMenuButton;
+    private final JButton buildWallButton;
     private final JButton tradeButton;
     private final JButton confirmBuildButton;
     private final JButton cancelBuildButton;
     private final JButton ruinButton;
+    private final JButton ruinWallButton;
     private final JButton stationButton;
     private final JButton generateMilitaryUnitButton;
     private final JButton expandButton;
     private final JButton combatButton;
     private final JButton directAttackButton;
     private final JButton closeButton;
+    private final JPanel wallSection;
     private final JPanel buildSelectorPanel;
 
     private boolean updatingUnitCombo;
+    private boolean updatingWallCombo;
 
     HexActionPanel(
             GameViewModel viewModel,
@@ -62,6 +72,8 @@ final class HexActionPanel extends JPanel {
         this.selectedInfoArea = new JTextArea();
         this.selectedUnitModel = new DefaultComboBoxModel<>();
         this.selectedUnitCombo = new JComboBox<>(selectedUnitModel);
+        this.selectedWallModel = new DefaultComboBoxModel<>();
+        this.selectedWallCombo = new JComboBox<>(selectedWallModel);
         this.buildingCombo = new JComboBox<>(
                 new BuildingType[]{
                         BuildingType.LUMBER_MILL,
@@ -79,10 +91,12 @@ final class HexActionPanel extends JPanel {
                 }
         );
         this.buildMenuButton = new JButton("Build");
+        this.buildWallButton = new JButton("Build Wall");
         this.tradeButton = new JButton("Trade");
         this.confirmBuildButton = new JButton("Confirm Build");
         this.cancelBuildButton = new JButton("Cancel");
         this.ruinButton = new JButton("Ruin");
+        this.ruinWallButton = new JButton("Ruin Wall");
         this.stationButton = new JButton("Station Worker");
         this.generateMilitaryUnitButton =
                 new JButton("Generate Military Unit");
@@ -90,6 +104,7 @@ final class HexActionPanel extends JPanel {
         this.combatButton = new JButton("H2H Attack");
         this.directAttackButton = new JButton("Direct Attack");
         this.closeButton = new JButton("×");
+        this.wallSection = new JPanel();
         this.buildSelectorPanel = new JPanel();
 
         configurePanel();
@@ -178,11 +193,19 @@ final class HexActionPanel extends JPanel {
         add(selectedUnitCombo);
         add(Box.createVerticalStrut(8));
 
+        configureWallSection();
+        add(wallSection);
+        add(Box.createVerticalStrut(6));
+
         addActionButton(buildMenuButton, ACTION_BLUE);
+        add(Box.createVerticalStrut(5));
+        addActionButton(buildWallButton, ACTION_BLUE);
         add(Box.createVerticalStrut(5));
         addActionButton(tradeButton, ACTION_BLUE);
         add(Box.createVerticalStrut(5));
         addActionButton(ruinButton, ACTION_RED);
+        add(Box.createVerticalStrut(5));
+        addActionButton(ruinWallButton, ACTION_RED);
         add(Box.createVerticalStrut(5));
         addActionButton(stationButton, ACTION_BLUE);
         add(Box.createVerticalStrut(5));
@@ -215,6 +238,35 @@ final class HexActionPanel extends JPanel {
         buildSelectorPanel.add(buildControls);
         buildSelectorPanel.setVisible(false);
         add(buildSelectorPanel);
+    }
+
+    private void configureWallSection() {
+        wallSection.setOpaque(false);
+        wallSection.setLayout(new BoxLayout(wallSection, BoxLayout.Y_AXIS));
+        wallSection.setAlignmentX(Component.LEFT_ALIGNMENT);
+        wallSection.setBorder(
+                BorderFactory.createCompoundBorder(
+                        BorderFactory.createMatteBorder(
+                                1,
+                                0,
+                                1,
+                                0,
+                                new Color(130, 148, 170, 100)
+                        ),
+                        BorderFactory.createEmptyBorder(6, 0, 6, 0)
+                )
+        );
+
+        JLabel wallLabel = new JLabel("Wall on selected edge");
+        wallLabel.setForeground(TEXT_MUTED);
+        wallLabel.setFont(new Font("SansSerif", Font.BOLD, 11));
+        wallLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        wallSection.add(wallLabel);
+        wallSection.add(Box.createVerticalStrut(4));
+
+        styleComboBox(selectedWallCombo);
+        wallSection.add(selectedWallCombo);
+        wallSection.setVisible(false);
     }
 
     private void configureSelectedInfoArea() {
@@ -287,6 +339,8 @@ final class HexActionPanel extends JPanel {
 
                 if (value instanceof Enum<?> enumValue) {
                     label.setText(ViewTextFormatter.pretty(enumValue));
+                } else if (value instanceof Wall wall) {
+                    label.setText(ViewTextFormatter.formatWall(wall));
                 }
 
                 label.setOpaque(true);
@@ -358,6 +412,16 @@ final class HexActionPanel extends JPanel {
                     (Unit) selectedUnitCombo.getSelectedItem();
             viewState.setSelectedUnit(selectedUnit);
             unitSelectionChangedHandler.run();
+        });
+        selectedWallCombo.addActionListener(event -> {
+            if (updatingWallCombo) {
+                return;
+            }
+
+            HexCoordinate selectedHex = viewState.getSelectedHex();
+            refreshActionAvailability(
+                    selectedHex == null ? null : viewModel.getHex(selectedHex)
+            );
         });
     }
 
@@ -447,6 +511,7 @@ final class HexActionPanel extends JPanel {
 
         if (selectedHex == null) {
             selectedInfoArea.setText("Select a hex to see its details.");
+            refreshWallCombo(null);
             refreshActionAvailability(null);
             return;
         }
@@ -455,20 +520,61 @@ final class HexActionPanel extends JPanel {
 
         if (hex == null) {
             selectedInfoArea.setText("Selected hex is outside the map.");
+            refreshWallCombo(null);
             refreshActionAvailability(null);
             return;
         }
 
+        refreshWallCombo(hex);
         selectedInfoArea.setText(
                 buildSelectionText(selectedHex, hex)
         );
         refreshActionAvailability(hex);
     }
 
+    private void refreshWallCombo(Hex hex) {
+        Wall previousWall = (Wall) selectedWallCombo.getSelectedItem();
+        List<Wall> walls = hex == null || !viewModel.isDiscovered(hex.getCoordinate())
+                ? List.of()
+                : viewModel.getWalls(hex.getCoordinate());
+        walls = walls.stream()
+                .sorted(Comparator.comparing(ViewTextFormatter::formatWall))
+                .toList();
+
+        updatingWallCombo = true;
+        try {
+            selectedWallModel.removeAllElements();
+            for (Wall wall : walls) {
+                selectedWallModel.addElement(wall);
+            }
+
+            if (previousWall != null && walls.contains(previousWall)) {
+                selectedWallCombo.setSelectedItem(previousWall);
+            } else if (!walls.isEmpty()) {
+                selectedWallCombo.setSelectedIndex(0);
+            }
+        } finally {
+            updatingWallCombo = false;
+        }
+    }
+
     private void refreshActionAvailability(Hex hex) {
         boolean hasHex = hex != null;
+        Unit selectedUnit = viewState.getSelectedUnit();
+        List<Wall> walls = hasHex && viewModel.isDiscovered(hex.getCoordinate())
+                ? viewModel.getWalls(hex.getCoordinate())
+                : List.of();
+        Wall selectedWall = (Wall) selectedWallCombo.getSelectedItem();
+
         buildMenuButton.setEnabled(
-                hasHex && viewState.getSelectedUnit() instanceof Builder
+                hasHex && selectedUnit instanceof Builder
+        );
+        buildWallButton.setVisible(hasHex && selectedUnit instanceof Builder);
+        buildWallButton.setEnabled(
+                hasHex
+                        && selectedUnit instanceof Builder
+                        && viewModel.isDiscovered(hex.getCoordinate())
+                        && viewModel.ownsTerritory(hex.getCoordinate())
         );
         boolean tradeBuilding = hasHex
                 && (hex.getBuilding() instanceof Bazaar
@@ -504,7 +610,20 @@ final class HexActionPanel extends JPanel {
                         ? "This trade source has already been used this turn."
                         : "Open the trade window"
         );
+        ruinButton.setVisible(hasHex && hex.getBuilding() != null);
         ruinButton.setEnabled(hasHex && hex.getBuilding() != null);
+        wallSection.setVisible(!walls.isEmpty());
+        ruinWallButton.setVisible(!walls.isEmpty());
+        ruinWallButton.setEnabled(
+                selectedWall != null
+                        && selectedUnit instanceof Builder
+                        && selectedUnit.getPosition() != null
+                        && (selectedUnit.getPosition().equals(
+                                selectedWall.getCoordinate1()
+                        ) || selectedUnit.getPosition().equals(
+                                selectedWall.getCoordinate2()
+                        ))
+        );
         stationButton.setEnabled(
                 hasHex
                         && hex.getBuilding() instanceof ProductionBuilding
@@ -524,7 +643,6 @@ final class HexActionPanel extends JPanel {
                                         && unit.isOwnedByPlayer()
                         )
         );
-        Unit selectedUnit = viewState.getSelectedUnit();
         directAttackButton.setEnabled(
                 selectedUnit instanceof MilitaryUnit militaryUnit
                         && militaryUnit.isOwnedByPlayer()
@@ -571,7 +689,12 @@ final class HexActionPanel extends JPanel {
                             ViewTextFormatter.formatResources(
                                     hex.getAvailableResources()
                             )
-                    );
+                    )
+                    .append('\n')
+                    .append("Walls: ")
+                    .append(ViewTextFormatter.formatWalls(
+                            viewModel.getWalls(selectedHex)
+                    ));
         } else {
             text.append("Undiscovered terrain  •  Resources hidden");
         }
@@ -612,6 +735,10 @@ final class HexActionPanel extends JPanel {
         return buildMenuButton;
     }
 
+    JButton getBuildWallButton() {
+        return buildWallButton;
+    }
+
     JButton getTradeButton() {
         return tradeButton;
     }
@@ -622,6 +749,10 @@ final class HexActionPanel extends JPanel {
 
     JButton getRuinButton() {
         return ruinButton;
+    }
+
+    JButton getRuinWallButton() {
+        return ruinWallButton;
     }
 
     JButton getStationButton() {
@@ -646,5 +777,9 @@ final class HexActionPanel extends JPanel {
 
     BuildingType getSelectedBuildingType() {
         return (BuildingType) buildingCombo.getSelectedItem();
+    }
+
+    Wall getSelectedWall() {
+        return (Wall) selectedWallCombo.getSelectedItem();
     }
 }

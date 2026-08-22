@@ -5,6 +5,7 @@ import model.game.townhall.TownHall;
 import model.game.hex.Hex;
 import model.game.hex.HexCoordinate;
 import model.game.hex.Resource;
+import model.game.hex.Wall;
 import model.game.season.SeasonName;
 import model.game.registry.BuildingRegistry;
 import model.game.townhall.Technology;
@@ -16,6 +17,7 @@ import model.game.unit.Unit;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 final class GameEngineViewModel implements GameViewModel {
 
@@ -50,6 +52,19 @@ final class GameEngineViewModel implements GameViewModel {
     @Override
     public Hex getHex(HexCoordinate coordinate) {
         return engine.getHexGrid().get(coordinate);
+    }
+
+    @Override
+    public List<Wall> getWalls(HexCoordinate coordinate) {
+        if (coordinate == null) {
+            return List.of();
+        }
+        return engine.getHexGrid().getWallLayer().getWalls(coordinate);
+    }
+
+    @Override
+    public Set<Wall> getAllWalls() {
+        return engine.getHexGrid().getWallLayer().getAllWalls();
     }
 
     @Override

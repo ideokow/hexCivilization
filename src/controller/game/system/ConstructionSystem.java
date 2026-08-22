@@ -89,18 +89,21 @@ public class ConstructionSystem {
     check building (wall) possibility
      */
     private BuildResult canBuild(Player player, Unit unit, HexCoordinate a, HexCoordinate b) {
-        if (unit == null || a == null || b == null) {
+        if (player == null || unit == null || a == null || b == null) {
             return BuildResult.NULL_ARGUMENTS;
         }
         if (!(unit instanceof Builder)) {
             return BuildResult.NOT_A_BUILDER;
+        }
+        if (!grid.contains(a) || !grid.contains(b) || !a.isNeighbor(b)) {
+            return BuildResult.NULL_ARGUMENTS;
         }
 
         if (unit.getPosition() == null ||
                 !(unit.getPosition().equals(a) || unit.getPosition().equals(b))) {
             return BuildResult.BUILDER_NOT_ON_HEX;
         }
-        if (!grid.isDiscovered(a) || !grid.isDiscovered(a)) {
+        if (!grid.isDiscovered(a) || !grid.isDiscovered(b)) {
             return BuildResult.HEX_NOT_DISCOVERED;
         }
         if (!player.ownsTerritory(a) || !player.ownsTerritory(b)) {
@@ -296,8 +299,9 @@ public class ConstructionSystem {
             return RuinStatus.WALL_RUINED_ALREADY;
         }
 
-        if (!(unit.getPosition().equals(wall.getCoordinate1())
-                && unit.getPosition().equals(wall.getCoordinate2()))) {
+        if (unit.getPosition() == null
+                || !(unit.getPosition().equals(wall.getCoordinate1())
+                || unit.getPosition().equals(wall.getCoordinate2()))) {
             return RuinStatus.BUILDER_IS_NOT_HERE;
         }
         if (!(unit instanceof Builder)) {

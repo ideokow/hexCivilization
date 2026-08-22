@@ -5,6 +5,7 @@ import model.game.hex.HexCoordinate;
 import model.game.hex.Hex;
 import model.game.hex.HexGrid;
 import model.game.hex.Resource;
+import model.game.hex.Wall;
 import model.game.building.MilitaryStable;
 import model.game.building.Bazaar;
 import model.game.building.TribeCamp;
@@ -16,6 +17,7 @@ import model.game.townhall.Technology;
 import model.game.tribe.mission.Mission;
 import view.game.TradeDialog;
 import model.game.unit.Unit;
+import model.game.unit.Builder;
 import model.game.unit.UnitType;
 import model.game.unit.military.MilitaryUnit;
 import view.game.GameView;
@@ -34,6 +36,8 @@ public class GameController {
     private final Set<Unit> unitsWithRoutes = new HashSet<>();
     private boolean waitingForRouteDestination;
     private Unit routingUnit;
+    private boolean waitingForWallEndpoint;
+    private HexCoordinate wallBuildOrigin;
     private boolean waitingForCombatTarget;
     private HexCoordinate combatAttackCoordinate;
     private boolean waitingForDirectAttackTarget;
@@ -54,7 +58,9 @@ public class GameController {
         view.setHexClickHandler(this::handleHexClick);
         view.getEndTurnButton().addActionListener(e -> handleEndTurn());
         view.getConfirmBuildButton().addActionListener(e -> handleBuild());
+        view.getBuildWallButton().addActionListener(e -> handleBuildWall());
         view.getRuinButton().addActionListener(e -> handleRuin());
+        view.getRuinWallButton().addActionListener(e -> handleRuinWall());
         view.getTradeButton().addActionListener(e -> handleStructureTrade());
         view.getLevelUpButton().addActionListener(e -> handleLevelUp());
         view.getAcquireTechnologyButton().addActionListener(e -> handleAcquireTechnology());
@@ -98,6 +104,11 @@ public class GameController {
             return;
         }
 
+        if (waitingForWallEndpoint) {
+            finishWallBuildSelection(coordinate);
+            return;
+        }
+
         // set selected hex in memory (for other functions)
         view.setSelectedHex(coordinate);
 
@@ -129,6 +140,8 @@ public class GameController {
         waitingForDirectAttackTarget = false;
         directAttackUnit = null;
         directAttackOrigin = null;
+        waitingForWallEndpoint = false;
+        wallBuildOrigin = null;
         view.setAlert("");
     }
 
@@ -409,6 +422,50 @@ public class GameController {
         view.refresh();
     }
 
+    private void handleBuildWall() {
+        exitSelectionMode();
+
+        HexCoordinate origin = view.getSelectedHex();
+        Unit unit = view.getSelectedUnit();
+
+        if (origin == null || !(unit instanceof Builder)) {
+            view.showToast("Select a Builder on a hex first.");
+            return;
+        }
+
+        wallBuildOrigin = origin;
+        waitingForWallEndpoint = true;
+        waitingForRouteDestination = false;
+        routingUnit = null;
+        view.setStatus("Select an adjacent hex to build the wall.");
+        view.setAlert("Choose wall endpoint");
+    }
+
+    private void finishWallBuildSelection(HexCoordinate endpoint) {
+        HexCoordinate origin = wallBuildOrigin;
+        Unit unit = view.getSelectedUnit();
+
+        if (origin == null || endpoint == null) {
+            exitSelectionMode();
+            return;
+        }
+
+        if (origin.equals(endpoint)) {
+            exitSelectionMode();
+            view.refresh();
+            return;
+        }
+
+        if (!origin.isNeighbor(endpoint)) {
+            view.showToast("The wall endpoint must be adjacent to the selected hex.");
+            return;
+        }
+
+        exitSelectionMode();
+        triggers.build(unit, origin, endpoint);
+        view.refresh();
+    }
+
     private void handleRuin() {
         exitSelectionMode();
 
@@ -431,6 +488,30 @@ public class GameController {
         }
 
         triggers.ruin(view.getSelectedUnit(), hex.getBuilding());
+        view.refresh();
+    }
+
+    private void handleRuinWall() {
+        exitSelectionMode();
+
+        Wall wall = view.getSelectedWall();
+        if (wall == null) {
+            return;
+        }
+
+        int choice = JOptionPane.showConfirmDialog(
+                view,
+                "Are you sure you want to ruin this wall?",
+                "Confirm Wall Ruin",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE
+        );
+
+        if (choice != JOptionPane.YES_OPTION) {
+            return;
+        }
+
+        triggers.ruin(view.getSelectedUnit(), wall);
         view.refresh();
     }
 

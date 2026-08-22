@@ -6,6 +6,7 @@ import model.game.townhall.TownHall;
 import model.game.hex.Hex;
 import model.game.hex.HexCoordinate;
 import model.game.hex.Resource;
+import model.game.hex.Wall;
 import model.game.unit.Unit;
 import model.game.unit.UnitType;
 
@@ -61,6 +62,9 @@ final class HexMapPanel extends JPanel {
     private static final Color TRIBE_SWORDSMAN_COLOR = new Color(191, 75, 83);
     private static final Color TRIBE_ARCHER_COLOR = new Color(176, 77, 139);
     private static final Color TRIBE_CAVALRY_COLOR = new Color(164, 82, 52);
+    private static final Color WALL_SHADOW = new Color(24, 18, 13, 220);
+    private static final Color WALL_COLOR = new Color(192, 129, 61);
+    private static final Color WALL_HIGHLIGHT = new Color(246, 196, 101);
 
     private static final BasicStroke HEX_STROKE = new BasicStroke(1.0f);
     private static final BasicStroke TERRITORY_STROKE = new BasicStroke(2.2f);
@@ -516,6 +520,7 @@ final class HexMapPanel extends JPanel {
             List<Hex> visibleHexes = getVisibleHexes();
 
             drawHexes(graphics2D, visibleHexes);
+            drawWalls(graphics2D);
             drawUnits(graphics2D, visibleHexes);
             drawMovingUnit(graphics2D);
             drawDisasterAnimation(graphics2D);
@@ -631,6 +636,93 @@ final class HexMapPanel extends JPanel {
         if (coordinate.equals(viewState.getSelectedHex())) {
             drawSelectionBorder(graphics2D, coordinate);
         }
+    }
+
+    private void drawWalls(Graphics2D graphics2D) {
+        for (Wall wall : viewModel.getAllWalls()) {
+            if (!viewModel.isDiscovered(wall.getCoordinate1())
+                    || !viewModel.isDiscovered(wall.getCoordinate2())) {
+                continue;
+            }
+
+            drawWall(graphics2D, wall);
+        }
+    }
+
+    private void drawWall(Graphics2D graphics2D, Wall wall) {
+        HexCoordinate first = wall.getCoordinate1();
+        HexCoordinate second = wall.getCoordinate2();
+        int deltaQ = second.getQ() - first.getQ();
+        int deltaR = second.getR() - first.getR();
+        int[] edge = wallEdge(deltaQ, deltaR);
+
+        if (edge == null) {
+            return;
+        }
+
+        Point2D.Double center = centerOf(first);
+        double hexSize = currentHexSize();
+        Point2D.Double start = hexVertex(center, hexSize, edge[0]);
+        Point2D.Double end = hexVertex(center, hexSize, edge[1]);
+        float width = (float) Math.max(2.0, hexSize * 0.10);
+
+        graphics2D.setStroke(new BasicStroke(
+                width + 3.0f,
+                BasicStroke.CAP_ROUND,
+                BasicStroke.JOIN_ROUND
+        ));
+        graphics2D.setColor(WALL_SHADOW);
+        drawLine(graphics2D, start, end);
+
+        graphics2D.setStroke(new BasicStroke(
+                width,
+                BasicStroke.CAP_ROUND,
+                BasicStroke.JOIN_ROUND
+        ));
+        graphics2D.setColor(WALL_COLOR);
+        drawLine(graphics2D, start, end);
+
+        graphics2D.setStroke(new BasicStroke(
+                Math.max(1.0f, width * 0.32f),
+                BasicStroke.CAP_ROUND,
+                BasicStroke.JOIN_ROUND
+        ));
+        graphics2D.setColor(WALL_HIGHLIGHT);
+        drawLine(graphics2D, start, end);
+    }
+
+    private int[] wallEdge(int deltaQ, int deltaR) {
+        if (deltaQ == 1 && deltaR == 0) return new int[]{0, 1};
+        if (deltaQ == 0 && deltaR == 1) return new int[]{1, 2};
+        if (deltaQ == -1 && deltaR == 1) return new int[]{2, 3};
+        if (deltaQ == -1 && deltaR == 0) return new int[]{3, 4};
+        if (deltaQ == 0 && deltaR == -1) return new int[]{4, 5};
+        if (deltaQ == 1 && deltaR == -1) return new int[]{5, 0};
+        return null;
+    }
+
+    private Point2D.Double hexVertex(
+            Point2D.Double center,
+            double hexSize,
+            int vertexIndex
+    ) {
+        return new Point2D.Double(
+                center.x + hexSize * HEX_COSINES[vertexIndex],
+                center.y + hexSize * HEX_SINES[vertexIndex]
+        );
+    }
+
+    private void drawLine(
+            Graphics2D graphics2D,
+            Point2D.Double start,
+            Point2D.Double end
+    ) {
+        graphics2D.drawLine(
+                (int) Math.round(start.x),
+                (int) Math.round(start.y),
+                (int) Math.round(end.x),
+                (int) Math.round(end.y)
+        );
     }
 
     private void drawTerritoryBorder(
