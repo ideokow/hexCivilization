@@ -4,6 +4,7 @@ import controller.game.system.MovementSystem;
 import model.game.hex.Hex;
 import model.game.hex.HexCoordinate;
 import model.game.hex.HexGrid;
+import model.game.hex.WallLayer;
 import model.game.season.SeasonName;
 
 import java.util.*;
@@ -65,6 +66,8 @@ public class Route {
             return; // no valid path
         }
 
+        WallLayer wallLayer = hexGrid.getWallLayer();
+
         // gScore: cheapest known cost from origin to a coordinate
         Map<HexCoordinate, Integer> gScore = new HashMap<>();
         // cameFrom: to reconstruct the path
@@ -101,6 +104,9 @@ public class Route {
                 if (!MovementSystem.canEnter(neighborHex, canSail)) {
                     continue; // mountain ranges and forbidden seas are impassable
                 }
+                if (isBlockedByWall(wallLayer, currentCoord, neighbor)) {
+                    continue;
+                }
 
                 int enterCost = MovementSystem.enterCost(neighborHex, season);
                 int tentativeG = currentG + enterCost;
@@ -113,6 +119,12 @@ public class Route {
                 }
             }
         }
+    }
+
+    private boolean isBlockedByWall(WallLayer wallLayer,
+                                    HexCoordinate from,
+                                    HexCoordinate to) {
+        return wallLayer != null && wallLayer.isThereWall(from, to);
     }
 
     private int heuristic(HexCoordinate from) {
