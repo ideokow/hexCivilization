@@ -91,11 +91,11 @@ public class DisasterSpawner {
                 if (hex.getBuilding().getType().equals(BuildingType.TOWN_HALL)) {
                     damage = Math.max(0, Math.min(hex.getBuilding().getHp()-1, EARTH_QUAKE_DAMAGE_ON_BUILDING));
                 }
-                hex.getBuilding().increaseHp(-damage);
+                hex.getBuilding().addHp(-damage);
             }
 
             for (Unit unit : new ArrayList<>(hex.getUnits())) {
-                unit.increaseHp(-EARTH_QUAKE_DAMAGE_ON_UNIT);
+                unit.addHp(-EARTH_QUAKE_DAMAGE_ON_UNIT);
             }
         }
     }
@@ -149,11 +149,11 @@ public class DisasterSpawner {
                 if (hex.getBuilding().getType().equals(BuildingType.TOWN_HALL)) {
                     damage = Math.max(0, Math.min(hex.getBuilding().getHp()-1, FLOOD_DAMAGE_ON_BUILDING));
                 }
-                hex.getBuilding().increaseHp(-damage);
+                hex.getBuilding().addHp(-damage);
             }
 
             for (Unit unit : new ArrayList<>(hex.getUnits())) {
-                unit.increaseHp(-FLOOD_DAMAGE_ON_UNIT);
+                unit.addHp(-FLOOD_DAMAGE_ON_UNIT);
                 unit.zeroAP();
             }
         }
@@ -207,7 +207,7 @@ public class DisasterSpawner {
 
     private void effectBearAttack(Hex hex) {
         for (Unit unit : new ArrayList<>(hex.getUnits())) {
-            if (unit.isOwnedByPlayer()) unit.increaseHp(-BEAR_DAMAGE_ON_UNIT);
+            if (unit.isOwnedByPlayer()) unit.addHp(-BEAR_DAMAGE_ON_UNIT);
         }
     }
 

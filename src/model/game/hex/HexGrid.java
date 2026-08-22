@@ -9,6 +9,7 @@ public class HexGrid {
 
     private final Map<HexCoordinate, Hex> hexes;
     private final Set<HexCoordinate> discovered;
+    private final WallLayer wallLayer;
 
     public HexGrid(Collection<Hex> allHexes) {
         this.hexes = new HashMap<>();
@@ -16,6 +17,7 @@ public class HexGrid {
         for (Hex hex : allHexes) {
             hexes.put(hex.getCoordinate(), hex);
         }
+        wallLayer = new WallLayer();
     }
 
     // --- basic access ---
@@ -128,5 +130,11 @@ public class HexGrid {
         int dq = hex1.getQ() - hex2.getQ();
         int dr = hex1.getR() - hex2.getR();
         return (Math.abs(dq) + Math.abs(dr) + Math.abs(dq + dr)) / 2;
+    }
+
+    // --- wall ---
+
+    public WallLayer getWallLayer() {
+        return wallLayer;
     }
 }

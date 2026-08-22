@@ -136,7 +136,7 @@ public class H2HCombat {
         for (int i = 0; i < hits; i++) {
             MilitaryUnit target = pickTarget(units);
             if (target == null) return; // done!
-            target.increaseHp(-attack);
+            target.addHp(-attack);
 
             // log die for mission req check
             if (target.getHp() == 0 && target.getOwnerTribe() != null) {

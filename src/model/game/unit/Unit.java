@@ -78,7 +78,7 @@ public abstract class Unit {
         return BASE_HP;
     }
 
-    public void increaseHp(int amount) {
+    public void addHp(int amount) {
         hp = Math.max(0, Math.min(getHpCap(), hp + amount));
         if (hp == 0) die();
     }

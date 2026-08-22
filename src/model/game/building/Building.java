@@ -2,7 +2,6 @@ package model.game.building;
 
 import model.game.hex.HexCoordinate;
 import model.game.hex.Resource;
-import model.game.player.Player;
 import model.game.registry.BuildingRegistry;
 import model.game.townhall.TownHall;
 
@@ -27,7 +26,6 @@ public abstract class Building {
 
     private int hp;
     private final static int MAXIMUM_HP_AMOUNT = 150;
-    private final static int MINIMUM_HP_AMOUNT = 0;
 
     protected Building(BuildingType type, boolean ownedByPlayer, HexCoordinate position) {
         buildingID = "building-id-" + buildingN;
@@ -60,8 +58,8 @@ public abstract class Building {
         return hp;
     }
 
-    public void increaseHp(int amount) {
-        hp = Math.max(MINIMUM_HP_AMOUNT, Math.min(MAXIMUM_HP_AMOUNT, hp + amount));
+    public void addHp(int amount) {
+        hp = Math.max(0, Math.min(MAXIMUM_HP_AMOUNT, hp + amount));
         if (hp == 0) ruin();
     }
 

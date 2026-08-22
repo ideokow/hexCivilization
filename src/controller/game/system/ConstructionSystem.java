@@ -1,10 +1,7 @@
 package controller.game.system;
 
 import model.game.building.*;
-import model.game.hex.Hex;
-import model.game.hex.HexCoordinate;
-import model.game.hex.HexGrid;
-import model.game.hex.Resource;
+import model.game.hex.*;
 import model.game.player.Player;
 import model.game.registry.BuildingRegistry;
 import model.game.townhall.Technology;
@@ -31,7 +28,7 @@ public class ConstructionSystem {
      */
     private BuildResult canBuild(Player player, Unit unit, BuildingType type, HexCoordinate coordinate) {
         if (player == null || type == null || coordinate == null) {
-            return BuildResult.UNIT_NOT_ON_MAP;
+            return BuildResult.NULL_ARGUMENTS;
         }
         if (type == BuildingType.TOWN_HALL) {
             return BuildResult.CANT_BUILD_TOWN_HALL;
@@ -89,6 +86,45 @@ public class ConstructionSystem {
     }
 
     /*
+    check building (wall) possibility
+     */
+    private BuildResult canBuild(Player player, Unit unit, HexCoordinate a, HexCoordinate b) {
+        if (unit == null || a == null || b == null) {
+            return BuildResult.NULL_ARGUMENTS;
+        }
+        if (!(unit instanceof Builder)) {
+            return BuildResult.NOT_A_BUILDER;
+        }
+
+        if (unit.getPosition() == null ||
+                !(unit.getPosition().equals(a) || unit.getPosition().equals(b))) {
+            return BuildResult.BUILDER_NOT_ON_HEX;
+        }
+        if (!grid.isDiscovered(a) || !grid.isDiscovered(a)) {
+            return BuildResult.HEX_NOT_DISCOVERED;
+        }
+        if (!player.ownsTerritory(a) || !player.ownsTerritory(b)) {
+            return BuildResult.OUTSIDE_TERRITORY;
+        }
+
+        if (grid.getWallLayer().isThereWall(a, b)) {
+            return BuildResult.EDGE_HAS_WALL;
+        }
+
+        if (!townHall.canAfford(Wall.COST)) {
+            return BuildResult.NOT_ENOUGH_RESOURCES;
+        }
+        if (unit.getCurrentAP() < Wall.COST_AP) {
+            return BuildResult.NOT_ENOUGH_AP;
+        }
+        if (!((Builder) unit).hasCharges()) {
+            return BuildResult.NOT_ENOUGH_CHARGE;
+        }
+
+        return BuildResult.SUCCESS;
+    }
+
+    /*
     check user's technology is ok for a specific building type
      */
     private boolean upgradeCheck(BuildingType buildingType) {
@@ -136,6 +172,30 @@ public class ConstructionSystem {
         BuildingRegistry.getInstance().addBuilding(building);
         if (type == BuildingType.VILLAGE || type == BuildingType.TOWN) {
             BuildingRegistry.getInstance().refreshUnitCap(townHall);
+        }
+
+        townHall.getHappiness().addHappiness(-1);
+        return BuildResult.SUCCESS;
+    }
+
+    /*
+    build walls!
+     */
+    public BuildResult build(Player player, Unit unit, HexCoordinate a, HexCoordinate b) {
+        BuildResult result = canBuild(player, unit, a, b);
+        if (result != BuildResult.SUCCESS) {
+            return result;
+        }
+
+        grid.getWallLayer().addWall(new Wall(a, b));
+        townHall.spendResources(Wall.COST);
+
+        Builder builder = (Builder) unit;
+        builder.spendAP(Wall.COST_AP);
+        builder.consumeCharge();
+
+        if (!builder.hasCharges()) {
+            builder.die();
         }
 
         townHall.getHappiness().addHappiness(-1);
@@ -228,6 +288,31 @@ public class ConstructionSystem {
         return RuinStatus.SUCCESS;
     }
 
+    private RuinStatus canRuin(Unit unit, Wall wall) {
+        if (unit == null || wall == null) {
+            return RuinStatus.NULL_ERR;
+        }
+        if (wall.isRuined()) {
+            return RuinStatus.WALL_RUINED_ALREADY;
+        }
+
+        if (!(unit.getPosition().equals(wall.getCoordinate1())
+                && unit.getPosition().equals(wall.getCoordinate2()))) {
+            return RuinStatus.BUILDER_IS_NOT_HERE;
+        }
+        if (!(unit instanceof Builder)) {
+            return RuinStatus.NOT_A_BUILDER;
+        }
+        if (unit.getCurrentAP() < Wall.COST_AP) {
+            return RuinStatus.LOW_AP;
+        }
+        if (!((Builder) unit).hasCharges()) {
+            return RuinStatus.NOT_ENOUGH_CHARGE;
+        }
+
+        return RuinStatus.SUCCESS;
+    }
+
     public RuinStatus ruin(Unit unit, Building building) {
         RuinStatus ruinStatus = canRuin(unit, building);
         if (!ruinStatus.equals(RuinStatus.SUCCESS)) return ruinStatus;
@@ -244,6 +329,23 @@ public class ConstructionSystem {
         if (building.getType() == BuildingType.VILLAGE || building.getType() == BuildingType.TOWN) {
             BuildingRegistry.getInstance().refreshUnitCap(townHall);
         }
+
+        return RuinStatus.SUCCESS;
+    }
+
+    public RuinStatus ruin(Unit unit, Wall wall) {
+        RuinStatus ruinStatus = canRuin(unit, wall);
+        if (!ruinStatus.equals(RuinStatus.SUCCESS)) return ruinStatus;
+
+        Builder builder = (Builder) unit;
+        builder.spendAP(Wall.COST_AP);
+        builder.consumeCharge();
+
+        if (!builder.hasCharges()) {
+            builder.die();
+        }
+
+        grid.getWallLayer().removeWall(wall);
 
         return RuinStatus.SUCCESS;
     }

@@ -12,6 +12,7 @@ import model.game.building.TradingPost;
 import model.game.hex.Hex;
 import model.game.hex.HexCoordinate;
 import model.game.hex.Resource;
+import model.game.hex.Wall;
 import model.game.townhall.Level;
 import model.game.townhall.Technology;
 import model.game.townhall.TechnologyAcquireStatus;
@@ -93,6 +94,26 @@ final class GameTriggers {
             StationResult stationResult = ((ProductionBuilding) building).stationWorker((Worker) unit);
             gameController.toastAlert(stationResult.getMessage());
         }
+    }
+
+    /*
+    Building and Ruining wall
+     */
+    void build(
+            Unit unit,
+            HexCoordinate a,
+            HexCoordinate b
+    ) {
+        BuildResult buildResult = engine.getConstructionSystem().build(
+                engine.getPlayer(),
+                unit, a, b
+        );
+        gameController.toastAlert(buildResult.getMessage());
+    }
+
+    void ruin(Unit unit, Wall wall) {
+        RuinStatus ruinStatus = engine.getConstructionSystem().ruin(unit, wall);
+        gameController.toastAlert(ruinStatus.getMessage());
     }
 
     /*

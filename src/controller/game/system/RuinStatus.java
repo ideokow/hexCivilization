@@ -3,6 +3,7 @@ package controller.game.system;
 public enum RuinStatus {
     SUCCESS("Building ruined successfully!"),
     BUILDING_RUINED_ALREADY("Building is ruined already!"),
+    WALL_RUINED_ALREADY("Wall is ruined already!"),
     NOT_A_BUILDER("Selected unit is not a builder!"),
     LOW_AP("Builder does not have enough AP!"),
     NULL_ERR("Error: Building is not in the map."),
