@@ -70,26 +70,16 @@ public abstract class Unit {
 
     // --- HP things ---
 
+    public void setHp(int hp) {
+        this.hp = hp;
+    }
+
     public int getHp() {
         return hp;
     }
 
     public int getHpCap() {
         return BASE_HP;
-    }
-
-    public void addHp(int amount) {
-        hp = Math.max(0, Math.min(getHpCap(), hp + amount));
-        if (hp == 0) die();
-    }
-
-    public void die() {
-        GameEngine.getInstance().getUnitMap()
-                .killUnit(
-                        GameEngine.getInstance().getHexGrid(),
-                        GameEngine.getInstance().getTownHall(),
-                        this
-                );
     }
 
     // --- AP things ---

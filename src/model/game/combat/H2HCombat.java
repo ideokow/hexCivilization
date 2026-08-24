@@ -1,5 +1,6 @@
 package model.game.combat;
 
+import controller.game.UnitMap;
 import model.game.hex.Hex;
 import model.game.hex.HexGrid;
 import model.game.unit.Unit;
@@ -111,7 +112,7 @@ public class H2HCombat {
         compares = diceCompare;
     }
 
-    public void impact() {
+    public void impact(UnitMap unitMap) {
         if (!inProgress || compares == null) return;
 
         int attackerHits = 0;
@@ -125,18 +126,18 @@ public class H2HCombat {
         int attackersAttack = getAttackValue(getAttackMilitaryUnits());
         int defendersAttack = getAttackValue(getDefenceMilitaryUnits());
 
-        applyHits(getAttackMilitaryUnits (), defenderHits, defendersAttack);
-        applyHits(getDefenceMilitaryUnits(), attackerHits, attackersAttack);
+        applyHits(unitMap, getAttackMilitaryUnits (), defenderHits, defendersAttack);
+        applyHits(unitMap, getDefenceMilitaryUnits(), attackerHits, attackersAttack);
 
         inProgress = false;
         isDone = true;
     }
 
-    private void applyHits(List<MilitaryUnit> units, int hits, int attack) {
+    private void applyHits(UnitMap unitMap, List<MilitaryUnit> units, int hits, int attack) {
         for (int i = 0; i < hits; i++) {
             MilitaryUnit target = pickTarget(units);
             if (target == null) return; // done!
-            target.addHp(-attack);
+            unitMap.changeHp(target, -attack);
 
             // log die for mission req check
             if (target.getHp() == 0 && target.getOwnerTribe() != null) {

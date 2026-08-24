@@ -1,6 +1,7 @@
 package model.game.unit;
 
 import controller.game.GameEngine;
+import controller.game.UnitMap;
 import model.game.townhall.TownHall;
 import model.game.hex.Hex;
 import model.game.hex.HexCoordinate;
@@ -22,21 +23,18 @@ public class BorderExpander extends Unit {
     /*
     this function adds in range hexes to territory
      */
-    public void expand(HexGrid hexGrid, TownHall townHall, Player player) {
+    public void expand(HexGrid hexGrid, Player player, UnitMap unitMap) {
         List<Hex> hexesInRange = hexGrid.hexesInRange(getPosition(), getType().getVisibilityRadius());
         for (Hex hex : hexesInRange) {
             if (!player.ownsTerritory(hex.getCoordinate()) && hexGrid.isDiscovered(hex.getCoordinate())) {
                 player.addTerritory(hex.getCoordinate());
             }
         }
-        consume(hexGrid, townHall);
+        consume(unitMap);
     }
 
-    private void consume(HexGrid hexGrid, TownHall townHall) {
-        GameEngine.getInstance().getUnitMap().removeUnit(this);
-        Hex positionHex = hexGrid.get(getPosition());
-        positionHex.removeUnit(this);
-        townHall.decreaseUnitNumber();
+    private void consume(UnitMap unitMap) {
+        unitMap.killUnit(this);
     }
 
     @Override

@@ -16,10 +16,18 @@ import java.util.Map;
 
 public class BuildingMap {
 
+    private final HexGrid hexGrid;
+    private TownHall townHall;
+
     private final Map<String, Building> map;
 
-    public BuildingMap() {
+    public BuildingMap(HexGrid hexGrid) {
+        this.hexGrid = hexGrid;
         map = new HashMap<>();
+    }
+
+    public void setTownHall(TownHall townHall) {
+        this.townHall = townHall;
     }
 
     public Map<String, Building> getMap() {
@@ -30,7 +38,7 @@ public class BuildingMap {
         map.put(building.getBuildingID(), building);
     }
 
-    public UpKeepStatus payUpKeeps(TownHall townHall, HexGrid hexGrid) {
+    public UpKeepStatus payUpKeeps() {
         List<Building> finishedBuildings = new ArrayList<>();
         boolean flag=true;
 
@@ -46,7 +54,7 @@ public class BuildingMap {
 
         // remove ruined buildings
         for (Building building : finishedBuildings) {
-            ruinBuilding(building, hexGrid);
+            ruinBuilding(building);
         }
 
         // return status
@@ -59,7 +67,12 @@ public class BuildingMap {
         }
     }
 
-    public void ruinBuilding(Building building, HexGrid hexGrid) {
+    public void changeHp(Building building, int amount) {
+        building.setHp(Math.max(0, Math.min(Building.MAXIMUM_HP_AMOUNT, building.getHp() + amount)));
+        if (building.getHp() == 0) ruinBuilding(building);
+    }
+
+    public void ruinBuilding(Building building) {
         // remove from hex data
         hexGrid.get(building.getPosition()).setBuilding(null);
 
@@ -78,18 +91,18 @@ public class BuildingMap {
         map.remove(building.getBuildingID());
     }
 
-    public Map<Resource, Integer> generateResources(TownHall townHall, SeasonName season) {
+    public Map<Resource, Integer> generateResources(SeasonName season) {
         Map<Resource, Integer> generatedResources = new HashMap<>();
-        generatedResources.put(Resource.STONE, getGenerateResource(Resource.STONE, townHall, season));
-        generatedResources.put(Resource.IRON,  getGenerateResource(Resource.IRON,  townHall, season));
-        generatedResources.put(Resource.FOOD,  getGenerateResource(Resource.FOOD,  townHall, season));
-        generatedResources.put(Resource.WOOD,  getGenerateResource(Resource.WOOD,  townHall, season));
+        generatedResources.put(Resource.STONE, getGenerateResource(Resource.STONE, season));
+        generatedResources.put(Resource.IRON,  getGenerateResource(Resource.IRON,  season));
+        generatedResources.put(Resource.FOOD,  getGenerateResource(Resource.FOOD,  season));
+        generatedResources.put(Resource.WOOD,  getGenerateResource(Resource.WOOD,  season));
 
         townHall.addResources(generatedResources);
         return generatedResources;
     }
 
-    public int getGenerateResource(Resource resource, TownHall townHall, SeasonName season) {
+    public int getGenerateResource(Resource resource, SeasonName season) {
         int seasonBonus = 0;
         if (resource.equals(Resource.FOOD)) {
             if (season.equals(SeasonName.SPRING)) seasonBonus =  1;
@@ -119,12 +132,12 @@ public class BuildingMap {
         return amount;
     }
 
-    public int getNetResource(Resource resource, TownHall townHall, SeasonName season) {
-        int amount = getGenerateResource(resource, townHall, season);
+    public int getNetResource(Resource resource, UnitMap unitMap, SeasonName season) {
+        int amount = getGenerateResource(resource, season);
 
         // unit foods
         if (resource == Resource.FOOD) {
-            amount -= GameEngine.getInstance().getUnitMap().getMap().size();
+            amount -= unitMap.getMap().size();
         }
         // upkeep
         for (Building building : map.values()) {
@@ -134,7 +147,7 @@ public class BuildingMap {
         return amount;
     }
 
-    public void refreshUnitCap(TownHall townHall) {
+    public void refreshUnitCap() {
         int towns = 0;
         int villages = 0;
 

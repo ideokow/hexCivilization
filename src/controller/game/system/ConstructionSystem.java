@@ -1,6 +1,8 @@
 package controller.game.system;
 
 import controller.game.BuildingMap;
+import controller.game.GameEngine;
+import controller.game.UnitMap;
 import model.game.building.*;
 import model.game.hex.*;
 import model.game.player.Player;
@@ -11,7 +13,11 @@ import model.game.unit.Unit;
 
 public class ConstructionSystem {
 
-    public ConstructionSystem() {}
+    private final GameEngine engine;
+
+    public ConstructionSystem(GameEngine engine) {
+        this.engine = engine;
+    }
 
     // --- functions for building things ---
 
@@ -19,13 +25,14 @@ public class ConstructionSystem {
     check building possibility
      */
     private BuildResult canBuild(
-            HexGrid grid,
-            TownHall townHall,
-            Player player,
             Unit unit,
             BuildingType type,
             HexCoordinate coordinate
     ) {
+        Player player = engine.getPlayer();
+        TownHall townHall = engine.getTownHall();
+        HexGrid grid = engine.getHexGrid();
+
         if (player == null || type == null || coordinate == null) {
             return BuildResult.NULL_ARGUMENTS;
         }
@@ -77,7 +84,7 @@ public class ConstructionSystem {
             return BuildResult.NO_WATER_FOR_DOCK;
         }
 
-        if (!checkLevelRequirements(townHall, type)) {
+        if (!checkLevelRequirements(type)) {
             return BuildResult.LEVEL_REQUIREMENT;
         }
 
@@ -88,13 +95,14 @@ public class ConstructionSystem {
     check building (wall) possibility
      */
     private BuildResult canBuild(
-            HexGrid grid,
-            TownHall townHall,
-            Player player,
             Unit unit,
             HexCoordinate a,
             HexCoordinate b
     ) {
+        Player player = engine.getPlayer();
+        TownHall townHall = engine.getTownHall();
+        HexGrid grid = engine.getHexGrid();
+
         if (player == null || unit == null || a == null || b == null) {
             return BuildResult.NULL_ARGUMENTS;
         }
@@ -158,16 +166,13 @@ public class ConstructionSystem {
     /*
     build buildings!
      */
-    public BuildResult build(
-            HexGrid grid,
-            TownHall townHall,
-            BuildingMap buildingMap,
-            Player player,
-            Unit unit,
-            BuildingType type,
-            HexCoordinate coordinate
-    ) {
-        BuildResult result = canBuild(grid, townHall, player, unit, type, coordinate);
+    public BuildResult build(Unit unit, BuildingType type, HexCoordinate coordinate) {
+        TownHall townHall = engine.getTownHall();
+        HexGrid grid = engine.getHexGrid();
+        BuildingMap buildingMap = engine.getBuildingMap();
+        UnitMap unitMap = engine.getUnitMap();
+
+        BuildResult result = canBuild(unit, type, coordinate);
         if (result != BuildResult.SUCCESS) {
             return result;
         }
@@ -183,12 +188,12 @@ public class ConstructionSystem {
         builder.consumeCharge();
 
         if (!builder.hasCharges()) {
-            builder.die();
+            unitMap.killUnit(builder);
         }
 
         buildingMap.addBuilding(building);
         if (type == BuildingType.VILLAGE || type == BuildingType.TOWN) {
-            buildingMap.refreshUnitCap(townHall);
+            buildingMap.refreshUnitCap();
         }
 
         townHall.getHappiness().addHappiness(-1);
@@ -199,14 +204,15 @@ public class ConstructionSystem {
     build walls!
      */
     public BuildResult build(
-            HexGrid grid,
-            TownHall townHall,
-            Player player,
             Unit unit,
             HexCoordinate a,
             HexCoordinate b
     ) {
-        BuildResult result = canBuild(grid, townHall, player, unit, a, b);
+        TownHall townHall = engine.getTownHall();
+        HexGrid grid = engine.getHexGrid();
+        UnitMap unitMap = engine.getUnitMap();
+
+        BuildResult result = canBuild(unit, a, b);
         if (result != BuildResult.SUCCESS) {
             return result;
         }
@@ -219,7 +225,7 @@ public class ConstructionSystem {
         builder.consumeCharge();
 
         if (!builder.hasCharges()) {
-            builder.die();
+            unitMap.killUnit(builder);
         }
 
         townHall.getHappiness().addHappiness(-1);
@@ -270,7 +276,8 @@ public class ConstructionSystem {
         };
     }
 
-    private boolean checkLevelRequirements(TownHall townHall, BuildingType buildingType) {
+    private boolean checkLevelRequirements(BuildingType buildingType) {
+        TownHall townHall = engine.getTownHall();
         if (buildingType == BuildingType.DOCK
                 || buildingType == BuildingType.BAZAAR) {
             return townHall.getLevel().getLevelN() >= 2;
@@ -338,7 +345,12 @@ public class ConstructionSystem {
         return RuinStatus.SUCCESS;
     }
 
-    public RuinStatus ruin(TownHall townHall, HexGrid hexGrid, BuildingMap buildingMap, Unit unit, Building building) {
+    public RuinStatus ruin(Unit unit, Building building) {
+        TownHall townHall = engine.getTownHall();
+        BuildingMap buildingMap = engine.getBuildingMap();
+        HexGrid hexGrid = engine.getHexGrid();
+        UnitMap unitMap = engine.getUnitMap();
+
         RuinStatus ruinStatus = canRuin(unit, building);
         if (!ruinStatus.equals(RuinStatus.SUCCESS)) return ruinStatus;
 
@@ -347,18 +359,21 @@ public class ConstructionSystem {
         builder.consumeCharge();
 
         if (!builder.hasCharges()) {
-            builder.die();
+            unitMap.killUnit(builder);
         }
 
-        buildingMap.ruinBuilding(building, hexGrid);
+        buildingMap.ruinBuilding(building);
         if (building.getType() == BuildingType.VILLAGE || building.getType() == BuildingType.TOWN) {
-            buildingMap.refreshUnitCap(townHall);
+            buildingMap.refreshUnitCap();
         }
 
         return RuinStatus.SUCCESS;
     }
 
-    public RuinStatus ruin(HexGrid grid, Unit unit, Wall wall) {
+    public RuinStatus ruin(Unit unit, Wall wall) {
+        HexGrid grid = engine.getHexGrid();
+        UnitMap unitMap = engine.getUnitMap();
+
         RuinStatus ruinStatus = canRuin(unit, wall);
         if (!ruinStatus.equals(RuinStatus.SUCCESS)) return ruinStatus;
 
@@ -367,7 +382,7 @@ public class ConstructionSystem {
         builder.consumeCharge();
 
         if (!builder.hasCharges()) {
-            builder.die();
+            unitMap.killUnit(builder);
         }
 
         grid.getWallLayer().removeWall(wall);

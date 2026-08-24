@@ -5,7 +5,6 @@ import model.game.hex.HexGrid;
 import model.game.townhall.TownHall;
 import model.game.unit.Unit;
 import model.game.unit.UnitType;
-import model.game.unit.military.MilitaryUnit;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,12 +13,20 @@ import java.util.Map;
 
 public class UnitMap {
 
+    private final HexGrid hexGrid;
+    private TownHall townHall;
+
     private final Map<String, Unit> map;
     private final List<String> militaryIDs;
 
-    public UnitMap() {
+    public UnitMap(HexGrid hexGrid) {
+        this.hexGrid = hexGrid;
         map = new HashMap<>();
         militaryIDs = new ArrayList<>();
+    }
+
+    public void setTownHall(TownHall townHall) {
+        this.townHall = townHall;
     }
 
     public Map<String, Unit> getMap() {
@@ -39,20 +46,23 @@ public class UnitMap {
         }
     }
 
-    public void removeUnit(Unit unit) {
+    public int getMilitaryUnitsNumber() {
+        return militaryIDs.size();
+    }
+
+    // damage and die
+
+    public void changeHp(Unit unit, int amount) {
+        unit.setHp(Math.max(0, Math.min(unit.getHpCap(), unit.getHp() + amount)));
+        if (unit.getHp() == 0) killUnit(unit);
+    }
+
+    public void killUnit(Unit unit) {
         map.remove(unit.getUnitID());
+        hexGrid.get(unit.getPosition()).removeUnit(unit);
+        townHall.decreaseUnitNumber();
 
         // remove if unit is military
         militaryIDs.remove(unit.getUnitID());
-    }
-
-    public void killUnit(HexGrid hexGrid, TownHall townHall, Unit unit) {
-        removeUnit(unit);
-        hexGrid.get(unit.getPosition()).removeUnit(unit);
-        townHall.decreaseUnitNumber();
-    }
-
-    public int getMilitaryUnitsNumber() {
-        return militaryIDs.size();
     }
 }

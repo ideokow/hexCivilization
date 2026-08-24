@@ -1,5 +1,6 @@
 package controller.game.combat;
 
+import controller.game.UnitMap;
 import model.game.combat.CombatStatus;
 import model.game.combat.H2HCombat;
 import model.game.hex.Hex;
@@ -24,6 +25,8 @@ public final class CombatController {
     private static final int COMPARE_STEP_MS = 550;
     private static final int AFTER_COMPARE_MS = 700;
 
+    private final UnitMap unitMap;
+
     private final H2HCombat combat;
     private final CombatPanel view;
     private final CombatFrame frame;
@@ -32,7 +35,8 @@ public final class CombatController {
 
     private boolean finished;
 
-    private CombatController(H2HCombat combat, Runnable onFinished) {
+    private CombatController(UnitMap unitMap, H2HCombat combat, Runnable onFinished) {
+        this.unitMap = unitMap;
         this.combat = combat;
         this.onFinished = onFinished == null ? () -> {} : onFinished;
         this.view = new CombatPanel(
@@ -47,6 +51,7 @@ public final class CombatController {
             Hex attackHex,
             Hex defenceHex,
             boolean targetTribe,
+            UnitMap unitMap,
             Runnable onFinished
     ) {
         SwingUtilities.invokeLater(() -> {
@@ -67,6 +72,7 @@ public final class CombatController {
             }
 
             CombatController controller = new CombatController(
+                    unitMap,
                     combat,
                     onFinished
             );
@@ -211,7 +217,7 @@ public final class CombatController {
             );
 
             combat.compare();
-            combat.impact();
+            combat.impact(unitMap);
 
             logLosses(
                     "Attacker",

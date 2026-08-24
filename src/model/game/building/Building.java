@@ -25,7 +25,7 @@ public abstract class Building {
     private int unpaidUpkeepTurns;
 
     private int hp;
-    private final static int MAXIMUM_HP_AMOUNT = 150;
+    public final static int MAXIMUM_HP_AMOUNT = 150;
 
     protected Building(BuildingType type, boolean ownedByPlayer, HexCoordinate position) {
         buildingID = "building-id-" + buildingN;
@@ -58,9 +58,8 @@ public abstract class Building {
         return hp;
     }
 
-    public void addHp(int amount) {
-        hp = Math.max(0, Math.min(MAXIMUM_HP_AMOUNT, hp + amount));
-        if (hp == 0) ruin();
+    public void setHp(int hp) {
+        this.hp = hp;
     }
 
     // --- upkeep system ---
@@ -103,10 +102,6 @@ public abstract class Building {
 
     public boolean isRuined() {
         return state == BuildingState.RUINED;
-    }
-
-    public void ruin() {
-        GameEngine.getInstance().getBuildingMap().ruinBuilding(this, GameEngine.getInstance().getHexGrid());
     }
 
     // ---------

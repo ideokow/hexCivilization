@@ -122,7 +122,7 @@ final class GameEngineViewModel implements GameViewModel {
     public int getNetResource(Resource resource) {
         return engine.getBuildingMap().getNetResource(
                 resource,
-                engine.getTownHall(),
+                engine.getUnitMap(),
                 engine.getSeason()
         );
     }

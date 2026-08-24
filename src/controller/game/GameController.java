@@ -207,7 +207,7 @@ public class GameController {
 
         Unit targetUnit = findHostileUnit(targetHex);
         if (targetUnit != null) {
-            attacker.attack(targetUnit);
+            attacker.attack(engine.getUnitMap(), targetUnit);
             view.setStatus("Direct attack resolved.");
             view.refresh();
             return;
@@ -215,7 +215,7 @@ public class GameController {
 
         if (targetHex.getBuilding() != null
                 && !targetHex.getBuilding().isOwnedByPlayer()) {
-            attacker.attack(targetHex.getBuilding());
+            attacker.attack(engine.getBuildingMap(), targetHex.getBuilding());
             view.setStatus("Direct attack resolved.");
             view.refresh();
             return;
@@ -284,6 +284,7 @@ public class GameController {
                 attackHex,
                 defenceHex,
                 targetTribe,
+                engine.getUnitMap(),
                 () -> finishCombat(defenceCoordinate)
         );
     }

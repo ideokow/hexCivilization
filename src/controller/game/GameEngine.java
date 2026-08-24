@@ -42,7 +42,7 @@ public class GameEngine {
     private List<HexCoordinate> tradingPosts;
 
     // essential systems
-    private final ConstructionSystem constructionSystem = new ConstructionSystem();
+    private final ConstructionSystem constructionSystem = new ConstructionSystem(this);
     private final OperationQueue     operationQueue     = new OperationQueue();
     private final TradeSystem        tradeSystem        = new TradeSystem();
     private final DisasterSpawner    disasterSpawner    = new DisasterSpawner();
@@ -69,13 +69,16 @@ public class GameEngine {
         loadMap();
 
         // load object maps
-        buildingMap = new BuildingMap();
-        unitMap = new UnitMap();
+        buildingMap = new BuildingMap(hexGrid);
+        unitMap = new UnitMap(hexGrid);
 
         // initialize town hall
         townHall = new TownHall(hexGrid, unitMap);
         hexGrid.get(zero).setBuilding(townHall);
         buildingMap.addBuilding(townHall);
+
+        buildingMap.setTownHall(townHall);
+        unitMap.setTownHall(townHall);
 
         try {
             MapLoader mapLoader = new MapLoader();
@@ -125,10 +128,10 @@ public class GameEngine {
         unitMap.renewUnitAPs(townHall.getHappiness().getEra());
 
         // generate resources
-        Map<Resource, Integer> generatedResources = buildingMap.generateResources(townHall, getSeason());
+        Map<Resource, Integer> generatedResources = buildingMap.generateResources(getSeason());
 
         // pay upkeep
-        UpKeepStatus upkeepStatus = buildingMap.payUpKeeps(townHall, hexGrid);
+        UpKeepStatus upkeepStatus = buildingMap.payUpKeeps();
 
         // move in-way units
         routingSystem.moveUnits(hexGrid, inQueueRoutes, gameController, getSeason(), canSail());
@@ -156,7 +159,7 @@ public class GameEngine {
         tribes.forEach(tribe -> tribe.tick(turnNumber, movementSystem, hexGrid));
 
         // spawn disaster
-        disasterSpawner.tick(hexGrid, getSeason());
+        disasterSpawner.tick(hexGrid, unitMap, buildingMap, getSeason());
     }
 
     // Getters

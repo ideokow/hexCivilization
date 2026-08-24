@@ -38,7 +38,7 @@ public class DisasterSpawner {
         return rnd.nextDouble() < EACH_TURN_PROBABILITY;
     }
 
-    public void tick(HexGrid hexGrid, SeasonName season) {
+    public void tick(HexGrid hexGrid, UnitMap unitMap, BuildingMap buildingMap, SeasonName season) {
         if (!isDisaster()) return;
 
         List<Disaster> disasters = new ArrayList<>();
@@ -53,20 +53,20 @@ public class DisasterSpawner {
 
         // make disaster!
         switch (chosenDisaster) {
-            case EARTH_QUAKE -> earthQuake(hexGrid);
-            case FLOOD       -> flood(hexGrid);
-            case BEAR_ATTACK -> bearAttack(hexGrid);
+            case EARTH_QUAKE -> earthQuake(hexGrid, unitMap, buildingMap);
+            case FLOOD       -> flood     (hexGrid, unitMap, buildingMap);
+            case BEAR_ATTACK -> bearAttack(hexGrid, unitMap);
         }
     }
 
     // --- earthquake ---
 
-    private void earthQuake(HexGrid hexGrid) {
+    private void earthQuake(HexGrid hexGrid, UnitMap unitMap, BuildingMap buildingMap) {
         HexCoordinate center = selectEarthquakeHex(hexGrid);
         if (center == null) return;
 
         List<Hex> hexes = hexGrid.hexesInRange(center, 2);
-        effectEarthQuake(hexes);
+        effectEarthQuake(hexes, unitMap, buildingMap);
 
         gameController.toastAlert(Disaster.EARTH_QUAKE.getMessage());
         gameController.animateDisaster(
@@ -75,7 +75,7 @@ public class DisasterSpawner {
         );
     }
 
-    private void effectEarthQuake(List<Hex> hexes) {
+    private void effectEarthQuake(List<Hex> hexes, UnitMap unitMap, BuildingMap buildingMap) {
         for (Hex hex : new ArrayList<>(hexes)) {
             if (!hex.getTerrain().isLand()) {
                 hexes.remove(hex);
@@ -88,11 +88,11 @@ public class DisasterSpawner {
                 if (hex.getBuilding().getType().equals(BuildingType.TOWN_HALL)) {
                     damage = Math.max(0, Math.min(hex.getBuilding().getHp()-1, EARTH_QUAKE_DAMAGE_ON_BUILDING));
                 }
-                hex.getBuilding().addHp(-damage);
+                buildingMap.changeHp(hex.getBuilding(), -damage);
             }
 
             for (Unit unit : new ArrayList<>(hex.getUnits())) {
-                unit.addHp(-EARTH_QUAKE_DAMAGE_ON_UNIT);
+                unitMap.changeHp(unit, -EARTH_QUAKE_DAMAGE_ON_UNIT);
             }
         }
     }
@@ -118,12 +118,12 @@ public class DisasterSpawner {
 
     // --- flood ---
 
-    private void flood(HexGrid hexGrid) {
+    private void flood(HexGrid hexGrid, UnitMap unitMap, BuildingMap buildingMap) {
         HexCoordinate center = selectFloodHex(hexGrid);
         if (center == null) return;
 
         List<Hex> hexes = hexGrid.hexesInRange(center, 1);
-        effectFlood(hexes);
+        effectFlood(hexes, unitMap, buildingMap);
 
         gameController.toastAlert(Disaster.FLOOD.getMessage());
         gameController.animateDisaster(
@@ -132,7 +132,7 @@ public class DisasterSpawner {
         );
     }
 
-    private void effectFlood(List<Hex> hexes) {
+    private void effectFlood(List<Hex> hexes, UnitMap unitMap, BuildingMap buildingMap) {
         for (Hex hex : new ArrayList<>(hexes)) {
             if (hex.getTerrain().equals(TerrainType.MOUNTAIN)
                     || hex.getTerrain().equals(TerrainType.MOUNTAIN_RANGE)
@@ -146,11 +146,11 @@ public class DisasterSpawner {
                 if (hex.getBuilding().getType().equals(BuildingType.TOWN_HALL)) {
                     damage = Math.max(0, Math.min(hex.getBuilding().getHp()-1, FLOOD_DAMAGE_ON_BUILDING));
                 }
-                hex.getBuilding().addHp(-damage);
+                buildingMap.changeHp(hex.getBuilding(), -damage);
             }
 
             for (Unit unit : new ArrayList<>(hex.getUnits())) {
-                unit.addHp(-FLOOD_DAMAGE_ON_UNIT);
+                unitMap.changeHp(unit, -FLOOD_DAMAGE_ON_UNIT);
                 unit.zeroAP();
             }
         }
@@ -189,11 +189,11 @@ public class DisasterSpawner {
 
     // --- bear attack ---
 
-    private void bearAttack(HexGrid hexGrid) {
+    private void bearAttack(HexGrid hexGrid, UnitMap unitMap) {
         HexCoordinate attackHex = selectBearAttackHex(hexGrid);
         if (attackHex == null) return;
 
-        effectBearAttack(hexGrid.get(attackHex));
+        effectBearAttack(hexGrid.get(attackHex), unitMap);
 
         gameController.toastAlert(Disaster.BEAR_ATTACK.getMessage());
         gameController.animateDisaster(
@@ -202,9 +202,9 @@ public class DisasterSpawner {
         );
     }
 
-    private void effectBearAttack(Hex hex) {
+    private void effectBearAttack(Hex hex, UnitMap unitMap) {
         for (Unit unit : new ArrayList<>(hex.getUnits())) {
-            if (unit.isOwnedByPlayer()) unit.addHp(-BEAR_DAMAGE_ON_UNIT);
+            if (unit.isOwnedByPlayer()) unitMap.changeHp(unit, -BEAR_DAMAGE_ON_UNIT);
         }
     }
 

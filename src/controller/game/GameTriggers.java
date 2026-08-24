@@ -58,10 +58,6 @@ final class GameTriggers {
             HexCoordinate hexCoordinate
     ) {
         BuildResult buildResult = engine.getConstructionSystem().build(
-                engine.getHexGrid(),
-                engine.getTownHall(),
-                engine.getBuildingMap(),
-                engine.getPlayer(),
                 unit,
                 buildingType,
                 hexCoordinate
@@ -70,7 +66,7 @@ final class GameTriggers {
     }
 
     void ruin(Unit unit, Building building) {
-        RuinStatus ruinStatus = engine.getConstructionSystem().ruin(engine.getTownHall(), engine.getHexGrid(), engine.getBuildingMap(), unit, building);
+        RuinStatus ruinStatus = engine.getConstructionSystem().ruin(unit, building);
         gameController.toastAlert(ruinStatus.getMessage());
     }
 
@@ -107,17 +103,12 @@ final class GameTriggers {
             HexCoordinate a,
             HexCoordinate b
     ) {
-        BuildResult buildResult = engine.getConstructionSystem().build(
-                engine.getHexGrid(),
-                engine.getTownHall(),
-                engine.getPlayer(),
-                unit, a, b
-        );
+        BuildResult buildResult = engine.getConstructionSystem().build(unit, a, b);
         gameController.toastAlert(buildResult.getMessage());
     }
 
     void ruin(Unit unit, Wall wall) {
-        RuinStatus ruinStatus = engine.getConstructionSystem().ruin(engine.getHexGrid(), unit, wall);
+        RuinStatus ruinStatus = engine.getConstructionSystem().ruin(unit, wall);
         gameController.toastAlert(ruinStatus.getMessage());
     }
 
@@ -223,8 +214,8 @@ final class GameTriggers {
         else {
             ((BorderExpander) unit).expand(
                     engine.getHexGrid(),
-                    engine.getTownHall(),
-                    engine.getPlayer()
+                    engine.getPlayer(),
+                    engine.getUnitMap()
             );
         }
     }

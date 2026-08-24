@@ -1,5 +1,7 @@
 package model.game.unit.military;
 
+import controller.game.BuildingMap;
+import controller.game.UnitMap;
 import model.game.building.Building;
 import model.game.hex.HexCoordinate;
 import model.game.hex.HexGrid;
@@ -20,17 +22,17 @@ public abstract class MilitaryUnit extends Unit {
 
     private final MilitaryType militaryType;
 
-    public void attack(Unit unit) {
+    public void attack(UnitMap unitMap, Unit unit) {
         if (unit == null || unit.equals(this) || !canAttack()) return;
 
-        unit.addHp(-getMilitaryType().getAttackValue());
+        unitMap.changeHp(unit, -getMilitaryType().getAttackValue());
         spendAP(getMilitaryType().getAttackAP());
     }
 
-    public void attack(Building building) {
+    public void attack(BuildingMap buildingMap, Building building) {
         if (building == null || !canAttack()) return;
 
-        building.addHp(-getMilitaryType().getAttackValue());
+        buildingMap.changeHp(building, -getMilitaryType().getAttackValue());
         spendAP(getMilitaryType().getAttackAP());
     }
 

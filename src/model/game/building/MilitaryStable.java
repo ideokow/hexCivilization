@@ -38,7 +38,7 @@ public class MilitaryStable extends Building {
         unit.resetAP(townHall.getHappiness().getEra());
 
         // add to registry
-        GameEngine.getInstance().getUnitMap().addUnit(unit);
+        unitMap.addUnit(unit);
 
         // military cap reach impact on public contest
         if (unitMap.getMilitaryUnitsNumber() == townHall.getMilitaryUnitCap()) {
