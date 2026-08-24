@@ -8,7 +8,6 @@ import model.game.happiness.Happiness;
 import model.game.hex.HexCoordinate;
 import model.game.hex.HexGrid;
 import model.game.hex.Resource;
-import model.game.registry.MilitaryRegistry;
 import model.game.townhall.opration.GenerationStatus;
 import model.game.unit.*;
 import model.game.unit.military.Archer;
@@ -299,7 +298,7 @@ public class TownHall extends Building {
 
     public void generateUnit(UnitMap unitMap, UnitType unitType) {
 
-        if (!canGenerateUnit(unitType).equals(GenerationStatus.SUCCESS)) return;
+        if (!canGenerateUnit(unitType, unitMap).equals(GenerationStatus.SUCCESS)) return;
 
         // make unit
         Unit unit;
@@ -332,7 +331,7 @@ public class TownHall extends Building {
         unitMap.addUnit(unit);
 
         // military cap reach impact on public contest
-        if (MilitaryRegistry.getInstance().getMilitaryUnitsNumber() == getMilitaryUnitCap()) {
+        if (unitMap.getMilitaryUnitsNumber() == getMilitaryUnitCap()) {
             happiness.addHappiness(-1);
         }
 
@@ -341,7 +340,7 @@ public class TownHall extends Building {
         unitNumber++;
     }
 
-    public GenerationStatus canGenerateUnit(UnitType unitType) {
+    public GenerationStatus canGenerateUnit(UnitType unitType, UnitMap unitMap) {
         if (unitNumber >= unitCap)
             return GenerationStatus.UNIT_CAP_REACHED;
         if (!canAfford(unitType.getCost()))
@@ -350,7 +349,7 @@ public class TownHall extends Building {
             return GenerationStatus.NOT_ENOUGH_LEVEL;
         if (unitType.equals(UnitType.CAVALRY))
             return GenerationStatus.CANT_BUILD_CAVALRY;
-        if (MilitaryRegistry.getInstance().getMilitaryUnitsNumber() >= getMilitaryUnitCap()) {
+        if (unitMap.getMilitaryUnitsNumber() >= getMilitaryUnitCap()) {
             return GenerationStatus.MILITARY_UNIT_CAP_REACHED;
         }
         return GenerationStatus.SUCCESS;

@@ -203,6 +203,7 @@ final class GameTriggers {
 
         TownHallOperation operation = new GenerateCavalryOperation(
                 engine.getTownHall(),
+                engine.getUnitMap(),
                 engine.getOperationQueue(),
                 militaryStable
         );

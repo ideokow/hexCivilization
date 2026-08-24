@@ -40,7 +40,7 @@ public class GenerateUnitOperation extends TownHallOperation {
 
     @Override
     protected OperationCheckResult canOperate() {
-        GenerationStatus status = townHall.canGenerateUnit(unitType);
+        GenerationStatus status = townHall.canGenerateUnit(unitType, unitMap);
         if (status.equals(GenerationStatus.SUCCESS)) {
             return OperationCheckResult.possible();
         }

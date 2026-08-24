@@ -4,7 +4,6 @@ import controller.game.GameEngine;
 import model.game.building.BuildingType;
 import model.game.building.TribeCamp;
 import model.game.hex.Hex;
-import model.game.registry.MilitaryRegistry;
 import model.game.tribe.Tribe;
 import model.game.unit.military.Swordsman;
 
@@ -20,7 +19,7 @@ public class FighterMission extends Mission {
     public void payReward() {
         getTribe().increaseRelation(20);
         for (int i = 0; i<3; i++) {
-            if (MilitaryRegistry.getInstance().getMilitaryUnitsNumber() == getTribe().getRelatedTownHall().getMilitaryUnitCap()) {
+            if (GameEngine.getInstance().getUnitMap().getMilitaryUnitsNumber() == getTribe().getRelatedTownHall().getMilitaryUnitCap()) {
                 break; // intentionally don't decrease happiness
             }
             Swordsman newOne = new Swordsman(getTribe().getLocation());
