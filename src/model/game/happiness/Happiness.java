@@ -1,6 +1,6 @@
 package model.game.happiness;
 
-import controller.game.BuildingMap;
+import controller.game.map.BuildingMap;
 import model.game.building.Building;
 import model.game.building.BuildingType;
 import model.game.hex.HexGrid;

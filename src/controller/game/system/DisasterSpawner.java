@@ -1,5 +1,8 @@
-package controller.game;
+package controller.game.system;
 
+import controller.game.map.BuildingMap;
+import controller.game.GameController;
+import controller.game.map.UnitMap;
 import model.game.building.BuildingType;
 import model.game.hex.Hex;
 import model.game.hex.HexCoordinate;
@@ -30,7 +33,7 @@ public class DisasterSpawner {
 
     public DisasterSpawner() {}
 
-    void setGameController(GameController gameController) {
+    public void setGameController(GameController gameController) {
         this.gameController = gameController;
     }
 

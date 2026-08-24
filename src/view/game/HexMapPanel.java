@@ -1,6 +1,6 @@
 package view.game;
 
-import controller.game.Disaster;
+import controller.game.system.Disaster;
 import model.game.happiness.Era;
 import model.game.townhall.TownHall;
 import model.game.hex.Hex;

@@ -1,6 +1,6 @@
 package controller.game.combat;
 
-import controller.game.UnitMap;
+import controller.game.map.UnitMap;
 import model.game.combat.CombatStatus;
 import model.game.combat.H2HCombat;
 import model.game.hex.Hex;

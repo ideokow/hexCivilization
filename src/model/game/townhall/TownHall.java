@@ -1,6 +1,6 @@
 package model.game.townhall;
 
-import controller.game.UnitMap;
+import controller.game.map.UnitMap;
 import model.game.building.Building;
 import model.game.building.BuildingType;
 import model.game.building.PopulationType;

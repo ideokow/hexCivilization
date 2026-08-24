@@ -1,8 +1,8 @@
 package controller.game.system;
 
-import controller.game.BuildingMap;
+import controller.game.map.BuildingMap;
 import controller.game.GameEngine;
-import controller.game.UnitMap;
+import controller.game.map.UnitMap;
 import model.game.building.*;
 import model.game.hex.*;
 import model.game.player.Player;

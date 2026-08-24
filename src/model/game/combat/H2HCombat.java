@@ -1,6 +1,6 @@
 package model.game.combat;
 
-import controller.game.UnitMap;
+import controller.game.map.UnitMap;
 import model.game.hex.Hex;
 import model.game.hex.HexGrid;
 import model.game.unit.Unit;

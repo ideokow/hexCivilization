@@ -1,7 +1,6 @@
 package model.game.building;
 
-import controller.game.GameEngine;
-import controller.game.UnitMap;
+import controller.game.map.UnitMap;
 import model.game.hex.HexCoordinate;
 import model.game.townhall.TownHall;
 import model.game.townhall.opration.GenerationStatus;

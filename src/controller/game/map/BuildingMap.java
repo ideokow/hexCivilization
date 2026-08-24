@@ -1,4 +1,4 @@
-package controller.game;
+package controller.game.map;
 
 import model.game.building.Building;
 import model.game.building.BuildingType;

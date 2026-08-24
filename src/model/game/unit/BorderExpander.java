@@ -1,8 +1,6 @@
 package model.game.unit;
 
-import controller.game.GameEngine;
-import controller.game.UnitMap;
-import model.game.townhall.TownHall;
+import controller.game.map.UnitMap;
 import model.game.hex.Hex;
 import model.game.hex.HexCoordinate;
 import model.game.hex.HexGrid;

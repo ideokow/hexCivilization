@@ -1,6 +1,8 @@
 package controller.game;
 
 import controller.game.combat.CombatController;
+import controller.game.map.UpKeepStatus;
+import controller.game.system.Disaster;
 import model.game.hex.HexCoordinate;
 import model.game.hex.Hex;
 import model.game.hex.HexGrid;

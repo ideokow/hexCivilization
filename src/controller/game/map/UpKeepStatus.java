@@ -1,4 +1,4 @@
-package controller.game;
+package controller.game.map;
 
 public enum UpKeepStatus {
     SUCCESS,

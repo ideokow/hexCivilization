@@ -1,6 +1,6 @@
 package model.game.townhall.opration;
 
-import controller.game.UnitMap;
+import controller.game.map.UnitMap;
 import model.game.townhall.TownHall;
 import model.game.unit.UnitType;
 

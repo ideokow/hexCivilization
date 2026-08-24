@@ -1,4 +1,4 @@
-package controller.game;
+package controller.game.load;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;

@@ -1,4 +1,4 @@
-package controller.game;
+package controller.game.map;
 
 import model.game.happiness.Era;
 import model.game.hex.HexGrid;

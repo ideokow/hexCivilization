@@ -1,7 +1,7 @@
 package model.game.unit.military;
 
-import controller.game.BuildingMap;
-import controller.game.UnitMap;
+import controller.game.map.BuildingMap;
+import controller.game.map.UnitMap;
 import model.game.building.Building;
 import model.game.hex.HexCoordinate;
 import model.game.hex.HexGrid;

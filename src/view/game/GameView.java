@@ -1,6 +1,6 @@
 package view.game;
 
-import controller.game.Disaster;
+import controller.game.system.Disaster;
 import controller.game.GameEngine;
 import model.game.building.BuildingType;
 import model.game.hex.HexCoordinate;

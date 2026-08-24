@@ -1,5 +1,9 @@
 package controller.game;
 
+import controller.game.load.MapLoader;
+import controller.game.map.BuildingMap;
+import controller.game.map.UnitMap;
+import controller.game.map.UpKeepStatus;
 import controller.game.system.*;
 import model.game.building.Building;
 import model.game.hex.HexCoordinate;
@@ -34,14 +38,18 @@ public class GameEngine {
         return instance;
     }
 
+    // parameter
     private final Player player;
-
     private HexGrid hexGrid;
     private final TownHall townHall;
     private List<Tribe> tribes;
     private List<HexCoordinate> tradingPosts;
 
-    // essential systems
+    // state
+    private final Map<Route, Unit> inQueueRoutes;
+    private int turnNumber;
+
+    // essential system
     private final ConstructionSystem constructionSystem = new ConstructionSystem(this);
     private final OperationQueue     operationQueue     = new OperationQueue();
     private final TradeSystem        tradeSystem        = new TradeSystem();
@@ -50,13 +58,12 @@ public class GameEngine {
     private final MovementSystem     movementSystem     = new MovementSystem();
     private final RoutingSystem      routingSystem      = new RoutingSystem(movementSystem);
 
-    private GameController gameController;
-
+    // map
     private final BuildingMap buildingMap;
-    private final UnitMap     unitMap;
+    private final UnitMap unitMap;
 
-    private final Map<Route, Unit> inQueueRoutes;
-    private int turnNumber;
+    // controller
+    private GameController gameController;
 
     private GameEngine() {
 
