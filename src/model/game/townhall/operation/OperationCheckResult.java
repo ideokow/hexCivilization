@@ -1,4 +1,4 @@
-package model.game.townhall.opration;
+package model.game.townhall.operation;
 
 // Immutable result carrying its own contextual message
 public final class OperationCheckResult {

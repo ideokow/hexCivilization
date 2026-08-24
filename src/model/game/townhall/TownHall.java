@@ -8,7 +8,7 @@ import model.game.happiness.Happiness;
 import model.game.hex.HexCoordinate;
 import model.game.hex.HexGrid;
 import model.game.hex.Resource;
-import model.game.townhall.opration.GenerationStatus;
+import model.game.townhall.operation.GenerationStatus;
 import model.game.unit.*;
 import model.game.unit.military.Archer;
 import model.game.unit.military.Swordsman;

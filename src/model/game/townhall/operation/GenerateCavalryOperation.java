@@ -1,46 +1,43 @@
-package model.game.townhall.opration;
+package model.game.townhall.operation;
 
 import controller.game.map.UnitMap;
+import model.game.building.MilitaryStable;
 import model.game.townhall.TownHall;
 import model.game.unit.UnitType;
 
-public class GenerateUnitOperation extends TownHallOperation {
+public class GenerateCavalryOperation extends TownHallOperation {
 
     public static final int UNIT_GENERATION_TURN_COST = 3;
 
     private final TownHall townHall;
     private final UnitMap unitMap;
-    private final UnitType unitType;
+    private final MilitaryStable militaryStable;
 
-    public GenerateUnitOperation(TownHall townHall, UnitMap unitMap, UnitType unitType, OperationQueue queue) {
+    public GenerateCavalryOperation(TownHall townHall, UnitMap unitMap, OperationQueue queue, MilitaryStable militaryStable) {
         super(TownHallOperationType.GENERATE_UNIT, UNIT_GENERATION_TURN_COST, queue);
         this.townHall = townHall;
         this.unitMap = unitMap;
-        this.unitType = unitType;
-    }
-
-    public UnitType getUnitType() {
-        return unitType;
+        this.militaryStable = militaryStable;
     }
 
     @Override
     protected void onReserve() {
-        townHall.spendResources(unitType.getCost());
+        townHall.spendResources(UnitType.CAVALRY.getCost());
     }
 
     @Override
     protected void onComplete() {
-        townHall.generateUnit(unitMap, unitType);
+        militaryStable.generateUnit(townHall, unitMap);
     }
 
     @Override
     protected void onCancel() {
-        townHall.addResources(unitType.getCost());
+        townHall.addResources(UnitType.CAVALRY.getCost());
     }
 
     @Override
     protected OperationCheckResult canOperate() {
-        GenerationStatus status = townHall.canGenerateUnit(unitType, unitMap);
+        GenerationStatus status = militaryStable.canGenerateUnit(townHall, unitMap);
         if (status.equals(GenerationStatus.SUCCESS)) {
             return OperationCheckResult.possible();
         }

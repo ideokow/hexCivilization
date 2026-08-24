@@ -1,4 +1,4 @@
-package model.game.townhall.opration;
+package model.game.townhall.operation;
 
 import model.game.townhall.Level;
 import model.game.townhall.TownHall;

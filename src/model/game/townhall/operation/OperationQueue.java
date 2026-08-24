@@ -1,6 +1,4 @@
-package model.game.townhall.opration;
-
-import model.game.townhall.TownHall;
+package model.game.townhall.operation;
 
 public class OperationQueue {
 

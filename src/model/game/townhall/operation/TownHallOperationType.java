@@ -1,4 +1,4 @@
-package model.game.townhall.opration;
+package model.game.townhall.operation;
 
 public enum TownHallOperationType {
     GENERATE_UNIT,

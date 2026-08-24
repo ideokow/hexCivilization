@@ -2,10 +2,10 @@ package view.game;
 
 import model.game.townhall.Level;
 import model.game.townhall.Technology;
-import model.game.townhall.opration.AcquireTechnologyOperation;
-import model.game.townhall.opration.GenerateUnitOperation;
-import model.game.townhall.opration.LevelUpOperation;
-import model.game.townhall.opration.TownHallOperation;
+import model.game.townhall.operation.AcquireTechnologyOperation;
+import model.game.townhall.operation.GenerateUnitOperation;
+import model.game.townhall.operation.LevelUpOperation;
+import model.game.townhall.operation.TownHallOperation;
 import model.game.unit.UnitType;
 
 import javax.swing.*;

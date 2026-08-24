@@ -1,4 +1,4 @@
-package model.game.townhall.opration;
+package model.game.townhall.operation;
 
 public enum GenerationStatus {
     UNIT_CAP_REACHED

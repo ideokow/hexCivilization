@@ -8,7 +8,7 @@ import model.game.hex.Resource;
 import model.game.hex.Wall;
 import model.game.season.SeasonName;
 import model.game.townhall.Technology;
-import model.game.townhall.opration.TownHallOperation;
+import model.game.townhall.operation.TownHallOperation;
 import model.game.building.TribeCamp;
 import model.game.tribe.Tribe;
 import model.game.unit.Unit;

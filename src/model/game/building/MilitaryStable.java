@@ -3,7 +3,7 @@ package model.game.building;
 import controller.game.map.UnitMap;
 import model.game.hex.HexCoordinate;
 import model.game.townhall.TownHall;
-import model.game.townhall.opration.GenerationStatus;
+import model.game.townhall.operation.GenerationStatus;
 import model.game.unit.*;
 import model.game.unit.military.Cavalry;
 
