@@ -26,12 +26,9 @@ public class DisasterSpawner {
     private static final int FLOOD_DAMAGE_ON_UNIT           = 20;
     private static final int BEAR_DAMAGE_ON_UNIT            = 20;
 
-    private final HexGrid hexGrid;
     private GameController gameController;
 
-    public DisasterSpawner(HexGrid hexGrid) {
-        this.hexGrid = hexGrid;
-    }
+    public DisasterSpawner() {}
 
     void setGameController(GameController gameController) {
         this.gameController = gameController;
@@ -41,7 +38,7 @@ public class DisasterSpawner {
         return rnd.nextDouble() < EACH_TURN_PROBABILITY;
     }
 
-    public void tick(SeasonName season) {
+    public void tick(HexGrid hexGrid, SeasonName season) {
         if (!isDisaster()) return;
 
         List<Disaster> disasters = new ArrayList<>();
@@ -56,16 +53,16 @@ public class DisasterSpawner {
 
         // make disaster!
         switch (chosenDisaster) {
-            case EARTH_QUAKE -> earthQuake();
-            case FLOOD       -> flood();
-            case BEAR_ATTACK -> bearAttack();
+            case EARTH_QUAKE -> earthQuake(hexGrid);
+            case FLOOD       -> flood(hexGrid);
+            case BEAR_ATTACK -> bearAttack(hexGrid);
         }
     }
 
     // --- earthquake ---
 
-    private void earthQuake() {
-        HexCoordinate center = selectEarthquakeHex();
+    private void earthQuake(HexGrid hexGrid) {
+        HexCoordinate center = selectEarthquakeHex(hexGrid);
         if (center == null) return;
 
         List<Hex> hexes = hexGrid.hexesInRange(center, 2);
@@ -100,7 +97,7 @@ public class DisasterSpawner {
         }
     }
 
-    private HexCoordinate selectEarthquakeHex() {
+    private HexCoordinate selectEarthquakeHex(HexGrid hexGrid) {
         List<HexCoordinate> discoveredArea = hexGrid.getDiscovered();
         List<HexCoordinate> toDelete = new ArrayList<>();
 
@@ -121,8 +118,8 @@ public class DisasterSpawner {
 
     // --- flood ---
 
-    private void flood() {
-        HexCoordinate center = selectFloodHex();
+    private void flood(HexGrid hexGrid) {
+        HexCoordinate center = selectFloodHex(hexGrid);
         if (center == null) return;
 
         List<Hex> hexes = hexGrid.hexesInRange(center, 1);
@@ -159,12 +156,12 @@ public class DisasterSpawner {
         }
     }
 
-    private HexCoordinate selectFloodHex() {
+    private HexCoordinate selectFloodHex(HexGrid hexGrid) {
         List<HexCoordinate> discoveredArea = hexGrid.getDiscovered();
         List<HexCoordinate> toDelete = new ArrayList<>();
 
         for (HexCoordinate coordinate : discoveredArea) {
-            if (!hasWaterInNeighbor(coordinate)
+            if (!hasWaterInNeighbor(hexGrid, coordinate)
                     || !hexGrid.get(coordinate).getTerrain().isLand()
                     || hexGrid.get(coordinate).getTerrain().equals(TerrainType.MOUNTAIN)
                     || hexGrid.get(coordinate).getTerrain().equals(TerrainType.MOUNTAIN_RANGE)
@@ -182,7 +179,7 @@ public class DisasterSpawner {
         return discoveredArea.get(index);
     }
 
-    private boolean hasWaterInNeighbor(HexCoordinate select) {
+    private boolean hasWaterInNeighbor(HexGrid hexGrid, HexCoordinate select) {
         List<Hex> neighbors = hexGrid.hexesInRange(select, 1);
         for (Hex hex : neighbors) {
             if (!hex.getTerrain().isLand()) return true;
@@ -192,8 +189,8 @@ public class DisasterSpawner {
 
     // --- bear attack ---
 
-    private void bearAttack() {
-        HexCoordinate attackHex = selectBearAttackHex();
+    private void bearAttack(HexGrid hexGrid) {
+        HexCoordinate attackHex = selectBearAttackHex(hexGrid);
         if (attackHex == null) return;
 
         effectBearAttack(hexGrid.get(attackHex));
@@ -211,13 +208,13 @@ public class DisasterSpawner {
         }
     }
 
-    private HexCoordinate selectBearAttackHex() {
+    private HexCoordinate selectBearAttackHex(HexGrid hexGrid) {
         List<HexCoordinate> discoveredArea = hexGrid.getDiscovered();
         List<HexCoordinate> toDelete = new ArrayList<>();
 
         for (HexCoordinate coordinate : discoveredArea) {
             if (!hexGrid.get(coordinate).getTerrain().isLand()
-                    || !hasOwnedUnit(coordinate)
+                    || !hasOwnedUnit(hexGrid, coordinate)
                     || hexGrid.get(coordinate).getTerrain().equals(TerrainType.TOWN_HALL)
             ) toDelete.add(coordinate);
         }
@@ -233,7 +230,7 @@ public class DisasterSpawner {
         return discoveredArea.get(index);
     }
 
-    private boolean hasOwnedUnit(HexCoordinate select) {
+    private boolean hasOwnedUnit(HexGrid hexGrid, HexCoordinate select) {
         for (Unit unit : hexGrid.get(select).getUnits()) {
             if (unit.isOwnedByPlayer()) return true;
         }

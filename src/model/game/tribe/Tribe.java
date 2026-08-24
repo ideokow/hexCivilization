@@ -109,7 +109,7 @@ public class Tribe {
             case OK       -> {
                 offerThings(0.4);
                 setSuspicious(false);
-                moveBackDefenders(movementSystem);
+                moveBackDefenders(movementSystem, grid);
             }
             case NOT_GOOD -> {
                 generateDefender(grid);
@@ -167,7 +167,7 @@ public class Tribe {
 
         for (MilitaryUnit unit : tribeUnits) {
             if (unit.getPosition().equals(location)) {
-                movementSystem.move(unit, target.getCoordinate());
+                movementSystem.move(grid, unit, target.getCoordinate());
                 return;
             }
         }
@@ -175,10 +175,10 @@ public class Tribe {
         if (DEBUG_VERBOSE) System.out.println("[INFO]: defender move triggered");
     }
 
-    private void moveBackDefenders(MovementSystem movementSystem) {
+    private void moveBackDefenders(MovementSystem movementSystem, HexGrid grid) {
         for (MilitaryUnit unit : tribeUnits) {
             if (!unit.getPosition().equals(location)) {
-                movementSystem.move(unit, location);
+                movementSystem.move(grid, unit, location);
                 return;
             }
         }

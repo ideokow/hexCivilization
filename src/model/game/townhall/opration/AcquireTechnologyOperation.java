@@ -2,13 +2,16 @@ package model.game.townhall.opration;
 
 import model.game.townhall.Technology;
 import model.game.townhall.TechnologyAcquireStatus;
+import model.game.townhall.TownHall;
 
 public class AcquireTechnologyOperation extends TownHallOperation {
 
+    private final TownHall townHall;
     private final Technology technology;
 
-    public AcquireTechnologyOperation(Technology technology, OperationQueue queue) {
+    public AcquireTechnologyOperation(TownHall townHall, Technology technology, OperationQueue queue) {
         super(TownHallOperationType.ACQUIRE_TECHNOLOGY, technology.getTurnsCost(), queue);
+        this.townHall = townHall;
         this.technology = technology;
     }
 
@@ -19,17 +22,17 @@ public class AcquireTechnologyOperation extends TownHallOperation {
     @Override
     protected void onReserve() {
         if (!canOperate().isPossible()) return;
-        getQueue().getTownHall().spendResources(technology.getAcquireCost());
+        townHall.spendResources(technology.getAcquireCost());
     }
 
     @Override
     protected void onComplete() {
-        TechnologyAcquireStatus canAcquire = getQueue().getTownHall().getTechnologies().canAcquire(technology);
+        TechnologyAcquireStatus canAcquire = townHall.getTechnologies().canAcquire(technology);
         if (
             canAcquire.equals(TechnologyAcquireStatus.SUCCESS) ||
             canAcquire.equals(TechnologyAcquireStatus.NOT_ENOUGH_RESOURCE)
         ) {
-            getQueue().getTownHall().getTechnologies().acquire(technology);
+            townHall.getTechnologies().acquire(technology);
             return;
         }
         onCancel();
@@ -38,12 +41,12 @@ public class AcquireTechnologyOperation extends TownHallOperation {
     @Override
     protected void onCancel() {
         if (!isCancelled()) return;
-        getQueue().getTownHall().addResources(technology.getAcquireCost());
+        townHall.addResources(technology.getAcquireCost());
     }
 
     @Override
     protected OperationCheckResult canOperate() {
-        TechnologyAcquireStatus canAcquire = getQueue().getTownHall().getTechnologies().canAcquire(technology);
+        TechnologyAcquireStatus canAcquire = townHall.getTechnologies().canAcquire(technology);
         if (canAcquire.equals(TechnologyAcquireStatus.SUCCESS)) {
             return OperationCheckResult.possible();
         }

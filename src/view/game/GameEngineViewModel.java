@@ -7,7 +7,6 @@ import model.game.hex.HexCoordinate;
 import model.game.hex.Resource;
 import model.game.hex.Wall;
 import model.game.season.SeasonName;
-import model.game.registry.BuildingRegistry;
 import model.game.townhall.Technology;
 import model.game.townhall.opration.TownHallOperation;
 import model.game.building.TribeCamp;
@@ -22,11 +21,9 @@ import java.util.Set;
 final class GameEngineViewModel implements GameViewModel {
 
     private final GameEngine engine;
-    private final BuildingRegistry buildingRegistry;
 
     GameEngineViewModel(GameEngine engine) {
         this.engine = Objects.requireNonNull(engine);
-        this.buildingRegistry = BuildingRegistry.getInstance();
     }
 
     @Override
@@ -123,7 +120,7 @@ final class GameEngineViewModel implements GameViewModel {
 
     @Override
     public int getNetResource(Resource resource) {
-        return buildingRegistry.getNetResource(
+        return engine.getBuildingMap().getNetResource(
                 resource,
                 engine.getTownHall(),
                 engine.getSeason()

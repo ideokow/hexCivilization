@@ -7,33 +7,25 @@ import model.game.player.Player;
 import model.game.townhall.TownHall;
 import model.game.tribe.Tribe;
 
-import java.util.Objects;
-
 public class TradeSystem {
-
-    private final TownHall townHall;
-    private final Player player;
 
     private int currentTurn = 1;
     private int lastBazaarTradeTurn = -1;
     private int lastTradingPostTradeTurn = -1;
 
-    public TradeSystem(TownHall townHall, Player player) {
-        this.townHall = Objects.requireNonNull(townHall, "townHall");
-        this.player = player;
-    }
-
-    public TradeSystem(TownHall townHall) {
-        this(townHall, null);
-    }
+    public TradeSystem() {}
 
     public TradeResult tradeAtBazaar(
+            TownHall townHall,
+            Player player,
             Bazaar bazaar,
             Resource soldResource,
             Resource receivedResource,
             TradeLevel level
     ) {
         return tradeAtBazaar(
+                townHall,
+                player,
                 bazaar,
                 soldResource,
                 receivedResource,
@@ -43,6 +35,8 @@ public class TradeSystem {
     }
 
     public TradeResult tradeAtBazaar(
+            TownHall townHall,
+            Player player,
             Bazaar bazaar,
             Resource soldResource,
             Resource receivedResource,
@@ -70,6 +64,7 @@ public class TradeSystem {
         }
 
         TradeResult result = executeTrade(
+                townHall,
                 soldResource,
                 receivedResource,
                 new BazaarTradeStrategy(level),
@@ -82,12 +77,16 @@ public class TradeSystem {
     }
 
     public TradeResult tradeAtTradingPost(
+            TownHall townHall,
+            Player player,
             TradingPost tradingPost,
             Resource soldResource,
             Resource receivedResource,
             int amount
     ) {
         return tradeAtTradingPost(
+                townHall,
+                player,
                 tradingPost,
                 soldResource,
                 receivedResource,
@@ -97,6 +96,8 @@ public class TradeSystem {
     }
 
     public TradeResult tradeAtTradingPost(
+            TownHall townHall,
+            Player player,
             TradingPost tradingPost,
             Resource soldResource,
             Resource receivedResource,
@@ -121,6 +122,7 @@ public class TradeSystem {
         }
 
         TradeResult result = executeTrade(
+                townHall,
                 soldResource,
                 receivedResource,
                 new TradingPostTradeStrategy(),
@@ -133,12 +135,14 @@ public class TradeSystem {
     }
 
     public TradeResult tradeWithTribe(
+            TownHall townHall,
             Tribe tribe,
             Resource soldResource,
             Resource receivedResource,
             int amount
     ) {
         return tradeWithTribe(
+                townHall,
                 tribe,
                 soldResource,
                 receivedResource,
@@ -148,6 +152,7 @@ public class TradeSystem {
     }
 
     public TradeResult tradeWithTribe(
+            TownHall townHall,
             Tribe tribe,
             Resource soldResource,
             Resource receivedResource,
@@ -175,6 +180,7 @@ public class TradeSystem {
         }
 
         TradeResult result = executeTrade(
+                townHall,
                 soldResource,
                 receivedResource,
                 new TribeTradeStrategy(tribe),
@@ -211,6 +217,7 @@ public class TradeSystem {
     }
 
     private TradeResult executeTrade(
+            TownHall townHall,
             Resource soldResource,
             Resource receivedResource,
             TradeStrategy strategy,

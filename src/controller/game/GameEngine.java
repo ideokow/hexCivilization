@@ -6,7 +6,6 @@ import model.game.hex.HexCoordinate;
 import model.game.hex.HexGrid;
 import model.game.hex.Resource;
 import model.game.player.Player;
-import model.game.registry.BuildingRegistry;
 import model.game.registry.UnitRegistry;
 import model.game.registry.UpKeepStatus;
 import model.game.route.Route;
@@ -44,14 +43,18 @@ public class GameEngine {
     private List<Tribe> tribes;
     private List<HexCoordinate> tradingPosts;
 
-    private final ConstructionSystem constructionSystem;
-    private final RoutingSystem routingSystem;
-    private final StarvationSystem starvationSystem;
-    private final OperationQueue operationQueue;
-    private final TradeSystem tradeSystem;
-    private final MovementSystem movementSystem;
+    // essential systems
+    private final ConstructionSystem constructionSystem = new ConstructionSystem();
+    private final OperationQueue     operationQueue     = new OperationQueue();
+    private final TradeSystem        tradeSystem        = new TradeSystem();
+    private final DisasterSpawner    disasterSpawner    = new DisasterSpawner();
+    private final StarvationSystem   starvationSystem   = new StarvationSystem();
+    private final MovementSystem     movementSystem     = new MovementSystem();
+    private final RoutingSystem      routingSystem      = new RoutingSystem(movementSystem);
+
     private GameController gameController;
-    private final DisasterSpawner disasterSpawner;
+
+    private final BuildingMap buildingMap;
 
     private final Map<Route, Unit> inQueueRoutes;
     private int turnNumber;
@@ -66,19 +69,13 @@ public class GameEngine {
         // initialize map
         loadMap();
 
+        // load object maps
+        buildingMap = new BuildingMap();
+
         // initialize town hall
         townHall = new TownHall(hexGrid);
         hexGrid.get(zero).setBuilding(townHall);
-        BuildingRegistry.getInstance().addBuilding(townHall);
-
-        // essential systems
-        constructionSystem = new ConstructionSystem(hexGrid, townHall);
-        operationQueue = new OperationQueue(townHall);
-        tradeSystem = new TradeSystem(townHall, player);
-        movementSystem = new MovementSystem(hexGrid);
-        routingSystem = new RoutingSystem(movementSystem);
-        starvationSystem = new StarvationSystem(townHall);
-        disasterSpawner = new DisasterSpawner(hexGrid);
+        buildingMap.addBuilding(townHall);
 
         try {
             MapLoader mapLoader = new MapLoader();
@@ -128,22 +125,22 @@ public class GameEngine {
         UnitRegistry.getInstance().renewUnitAPs(townHall.getHappiness().getEra());
 
         // generate resources
-        Map<Resource, Integer> generatedResources = BuildingRegistry.getInstance().generateResources(townHall, getSeason());
+        Map<Resource, Integer> generatedResources = buildingMap.generateResources(townHall, getSeason());
 
         // pay upkeep
-        UpKeepStatus upkeepStatus = BuildingRegistry.getInstance().payUpKeeps(townHall);
+        UpKeepStatus upkeepStatus = buildingMap.payUpKeeps(townHall, hexGrid);
 
         // move in-way units
-        routingSystem.moveUnits(inQueueRoutes, gameController, getSeason(), canSail());
+        routingSystem.moveUnits(hexGrid, inQueueRoutes, gameController, getSeason(), canSail());
 
         // feed units
-        boolean feedStatus = starvationSystem.feedUnits();
+        boolean feedStatus = starvationSystem.feedUnits(townHall);
 
         // tell ui each turn detail
         gameController.turnAlert(generatedResources, upkeepStatus, feedStatus);
 
         // check starvation
-        boolean starvation = starvationSystem.checkStarvationStatus();
+        boolean starvation = starvationSystem.checkStarvationStatus(townHall, buildingMap);
         gameController.starvationAlert(starvation);
 
         // operation queue
@@ -151,7 +148,7 @@ public class GameEngine {
 
         // --- happiness ---
         // check is there monuments
-        townHall.getHappiness().checkMonuments();
+        townHall.getHappiness().checkMonuments(buildingMap);
         // check is there military in TownHall
         townHall.getHappiness().checkTownHallMilitary(townHall, hexGrid);
 
@@ -159,7 +156,7 @@ public class GameEngine {
         tribes.forEach(tribe -> tribe.tick(turnNumber, movementSystem, hexGrid));
 
         // spawn disaster
-        disasterSpawner.tick(getSeason());
+        disasterSpawner.tick(hexGrid, getSeason());
     }
 
     // Getters
@@ -193,7 +190,7 @@ public class GameEngine {
     }
 
     public Map<String, Building> getBuildings() {
-        return new HashMap<>(BuildingRegistry.getInstance().getBuildingMap());
+        return buildingMap.getMap();
     }
 
     public boolean isThereRoute(Unit unit) {
@@ -229,5 +226,9 @@ public class GameEngine {
         if (unit != null) {
             inQueueRoutes.entrySet().removeIf(entry -> entry.getValue().equals(unit));
         }
+    }
+
+    public BuildingMap getBuildingMap() {
+        return buildingMap;
     }
 }

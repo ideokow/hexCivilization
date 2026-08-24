@@ -4,12 +4,9 @@ import model.game.townhall.TownHall;
 
 public class OperationQueue {
 
-    private final TownHall townHall;
     private TownHallOperation inQueueOperation;
 
-    public OperationQueue(TownHall townHall) {
-        this.townHall = townHall;
-    }
+    public OperationQueue() {}
 
     public OperationCheckResult reserveOperation(TownHallOperation townHallOperation) {
         if (inQueueOperation != null) return OperationCheckResult.impossible("Theres another operation in queue!");
@@ -35,10 +32,6 @@ public class OperationQueue {
             }
             inQueueOperation = null;
         }
-    }
-
-    public TownHall getTownHall() {
-        return townHall;
     }
 
     public TownHallOperation getInQueueOperation() {

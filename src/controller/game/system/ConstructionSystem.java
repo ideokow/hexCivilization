@@ -1,32 +1,31 @@
 package controller.game.system;
 
+import controller.game.BuildingMap;
 import model.game.building.*;
 import model.game.hex.*;
 import model.game.player.Player;
-import model.game.registry.BuildingRegistry;
 import model.game.townhall.Technology;
 import model.game.townhall.TownHall;
 import model.game.unit.Builder;
 import model.game.unit.Unit;
 
-import java.util.Objects;
-
 public class ConstructionSystem {
 
-    private final HexGrid grid;
-    private final TownHall townHall;
-
-    public ConstructionSystem(HexGrid grid, TownHall townHall) {
-        this.grid = Objects.requireNonNull(grid, "grid is null!");
-        this.townHall = Objects.requireNonNull(townHall, "town hall is null");
-    }
+    public ConstructionSystem() {}
 
     // --- functions for building things ---
 
     /*
     check building possibility
      */
-    private BuildResult canBuild(Player player, Unit unit, BuildingType type, HexCoordinate coordinate) {
+    private BuildResult canBuild(
+            HexGrid grid,
+            TownHall townHall,
+            Player player,
+            Unit unit,
+            BuildingType type,
+            HexCoordinate coordinate
+    ) {
         if (player == null || type == null || coordinate == null) {
             return BuildResult.NULL_ARGUMENTS;
         }
@@ -41,7 +40,7 @@ public class ConstructionSystem {
         }
 
         // upgrade tech
-        if (!upgradeCheck(type)) {
+        if (!upgradeCheck(townHall, type)) {
             return BuildResult.UPGRADE_REQUIRED;
         }
 
@@ -78,7 +77,7 @@ public class ConstructionSystem {
             return BuildResult.NO_WATER_FOR_DOCK;
         }
 
-        if (!checkLevelRequirements(type)) {
+        if (!checkLevelRequirements(townHall, type)) {
             return BuildResult.LEVEL_REQUIREMENT;
         }
 
@@ -88,7 +87,14 @@ public class ConstructionSystem {
     /*
     check building (wall) possibility
      */
-    private BuildResult canBuild(Player player, Unit unit, HexCoordinate a, HexCoordinate b) {
+    private BuildResult canBuild(
+            HexGrid grid,
+            TownHall townHall,
+            Player player,
+            Unit unit,
+            HexCoordinate a,
+            HexCoordinate b
+    ) {
         if (player == null || unit == null || a == null || b == null) {
             return BuildResult.NULL_ARGUMENTS;
         }
@@ -130,7 +136,7 @@ public class ConstructionSystem {
     /*
     check user's technology is ok for a specific building type
      */
-    private boolean upgradeCheck(BuildingType buildingType) {
+    private boolean upgradeCheck(TownHall townHall, BuildingType buildingType) {
         if (buildingType == BuildingType.STONE_MINE && !townHall.getTechnologies().isAcquired(Technology.STONE)) {
             return false;
         }
@@ -152,8 +158,16 @@ public class ConstructionSystem {
     /*
     build buildings!
      */
-    public BuildResult build(Player player, Unit unit, BuildingType type, HexCoordinate coordinate) {
-        BuildResult result = canBuild(player, unit, type, coordinate);
+    public BuildResult build(
+            HexGrid grid,
+            TownHall townHall,
+            BuildingMap buildingMap,
+            Player player,
+            Unit unit,
+            BuildingType type,
+            HexCoordinate coordinate
+    ) {
+        BuildResult result = canBuild(grid, townHall, player, unit, type, coordinate);
         if (result != BuildResult.SUCCESS) {
             return result;
         }
@@ -172,9 +186,9 @@ public class ConstructionSystem {
             builder.die();
         }
 
-        BuildingRegistry.getInstance().addBuilding(building);
+        buildingMap.addBuilding(building);
         if (type == BuildingType.VILLAGE || type == BuildingType.TOWN) {
-            BuildingRegistry.getInstance().refreshUnitCap(townHall);
+            buildingMap.refreshUnitCap(townHall);
         }
 
         townHall.getHappiness().addHappiness(-1);
@@ -184,8 +198,15 @@ public class ConstructionSystem {
     /*
     build walls!
      */
-    public BuildResult build(Player player, Unit unit, HexCoordinate a, HexCoordinate b) {
-        BuildResult result = canBuild(player, unit, a, b);
+    public BuildResult build(
+            HexGrid grid,
+            TownHall townHall,
+            Player player,
+            Unit unit,
+            HexCoordinate a,
+            HexCoordinate b
+    ) {
+        BuildResult result = canBuild(grid, townHall, player, unit, a, b);
         if (result != BuildResult.SUCCESS) {
             return result;
         }
@@ -249,7 +270,7 @@ public class ConstructionSystem {
         };
     }
 
-    private boolean checkLevelRequirements(BuildingType buildingType) {
+    private boolean checkLevelRequirements(TownHall townHall, BuildingType buildingType) {
         if (buildingType == BuildingType.DOCK
                 || buildingType == BuildingType.BAZAAR) {
             return townHall.getLevel().getLevelN() >= 2;
@@ -317,7 +338,7 @@ public class ConstructionSystem {
         return RuinStatus.SUCCESS;
     }
 
-    public RuinStatus ruin(Unit unit, Building building) {
+    public RuinStatus ruin(TownHall townHall, HexGrid hexGrid, BuildingMap buildingMap, Unit unit, Building building) {
         RuinStatus ruinStatus = canRuin(unit, building);
         if (!ruinStatus.equals(RuinStatus.SUCCESS)) return ruinStatus;
 
@@ -329,15 +350,15 @@ public class ConstructionSystem {
             builder.die();
         }
 
-        BuildingRegistry.getInstance().ruinBuilding(building);
+        buildingMap.ruinBuilding(building, hexGrid);
         if (building.getType() == BuildingType.VILLAGE || building.getType() == BuildingType.TOWN) {
-            BuildingRegistry.getInstance().refreshUnitCap(townHall);
+            buildingMap.refreshUnitCap(townHall);
         }
 
         return RuinStatus.SUCCESS;
     }
 
-    public RuinStatus ruin(Unit unit, Wall wall) {
+    public RuinStatus ruin(HexGrid grid, Unit unit, Wall wall) {
         RuinStatus ruinStatus = canRuin(unit, wall);
         if (!ruinStatus.equals(RuinStatus.SUCCESS)) return ruinStatus;
 

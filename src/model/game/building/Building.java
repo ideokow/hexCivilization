@@ -1,8 +1,8 @@
 package model.game.building;
 
+import controller.game.GameEngine;
 import model.game.hex.HexCoordinate;
 import model.game.hex.Resource;
-import model.game.registry.BuildingRegistry;
 import model.game.townhall.TownHall;
 
 import java.util.Map;
@@ -106,7 +106,7 @@ public abstract class Building {
     }
 
     public void ruin() {
-        BuildingRegistry.getInstance().ruinBuilding(this);
+        GameEngine.getInstance().getBuildingMap().ruinBuilding(this, GameEngine.getInstance().getHexGrid());
     }
 
     // ---------

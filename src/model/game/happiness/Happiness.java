@@ -1,9 +1,9 @@
 package model.game.happiness;
 
+import controller.game.BuildingMap;
 import model.game.building.Building;
 import model.game.building.BuildingType;
 import model.game.hex.HexGrid;
-import model.game.registry.BuildingRegistry;
 import model.game.townhall.TownHall;
 import model.game.unit.Unit;
 import model.game.unit.UnitType;
@@ -23,8 +23,8 @@ public class Happiness {
         value += amount;
     }
 
-    public void checkMonuments() {
-        Collection<Building> allBuildings = BuildingRegistry.getInstance().getBuildingMap().values();
+    public void checkMonuments(BuildingMap buildingMap) {
+        Collection<Building> allBuildings = buildingMap.getMap().values();
         for (Building building: allBuildings) {
             if (building.getType().equals(BuildingType.MONUMENT)) {
                 addHappiness(2);

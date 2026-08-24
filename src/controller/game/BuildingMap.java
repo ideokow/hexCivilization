@@ -1,8 +1,12 @@
-package model.game.registry;
+package controller.game;
 
-import controller.game.GameEngine;
-import model.game.building.*;
+import model.game.building.Building;
+import model.game.building.BuildingType;
+import model.game.building.ProductionBuilding;
+import model.game.hex.HexGrid;
 import model.game.hex.Resource;
+import model.game.registry.UnitRegistry;
+import model.game.registry.UpKeepStatus;
 import model.game.season.SeasonName;
 import model.game.townhall.TownHall;
 import model.game.unit.Worker;
@@ -12,35 +16,28 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class BuildingRegistry {
+public class BuildingMap {
 
-    private static BuildingRegistry instance;
-    public static BuildingRegistry getInstance() {
-        if (instance == null) instance = new BuildingRegistry();
-        return instance;
+    private final Map<String, Building> map;
+
+    public BuildingMap() {
+        map = new HashMap<>();
     }
 
-    private final Map<String, Building> buildingMap;
-
-    public BuildingRegistry() {
-        buildingMap = new HashMap<>();
-    }
-
-    public Map<String, Building> getBuildingMap() {
-        return buildingMap;
+    public Map<String, Building> getMap() {
+        return new HashMap<>(map);
     }
 
     public void addBuilding(Building building) {
-        buildingMap.put(building.getBuildingID(), building);
+        map.put(building.getBuildingID(), building);
     }
 
-    public UpKeepStatus payUpKeeps(TownHall townHall) {
-
+    public UpKeepStatus payUpKeeps(TownHall townHall, HexGrid hexGrid) {
         List<Building> finishedBuildings = new ArrayList<>();
         boolean flag=true;
 
         // iterate over building map and pay upkeep
-        for (Building building : buildingMap.values()) {
+        for (Building building : map.values()) {
             if (!building.payUpkeep(townHall)) {
                 flag = false;
                 if (building.isRuined()) {
@@ -51,7 +48,7 @@ public class BuildingRegistry {
 
         // remove ruined buildings
         for (Building building : finishedBuildings) {
-            ruinBuilding(building);
+            ruinBuilding(building, hexGrid);
         }
 
         // return status
@@ -64,10 +61,9 @@ public class BuildingRegistry {
         }
     }
 
-    public void ruinBuilding(Building building) {
+    public void ruinBuilding(Building building, HexGrid hexGrid) {
         // remove from hex data
-        GameEngine.getInstance().getHexGrid()
-                .get(building.getPosition()).setBuilding(null);
+        hexGrid.get(building.getPosition()).setBuilding(null);
 
         // remove isWorking units
         if (building instanceof ProductionBuilding){
@@ -81,7 +77,7 @@ public class BuildingRegistry {
         building.setStateRuined();
 
         // remove from registry
-        buildingMap.remove(building.getBuildingID());
+        map.remove(building.getBuildingID());
     }
 
     public Map<Resource, Integer> generateResources(TownHall townHall, SeasonName season) {
@@ -104,7 +100,7 @@ public class BuildingRegistry {
 
         int amount = 0;
 
-        for (Building building : buildingMap.values()) {
+        for (Building building : map.values()) {
             if (!building.isRuined() && building instanceof ProductionBuilding) {
                 // production type
                 Resource productionResource = ((ProductionBuilding) building).getProductionBuildingType().getProduceResource();
@@ -133,7 +129,7 @@ public class BuildingRegistry {
             amount -= UnitRegistry.getInstance().getUnitMap().size();
         }
         // upkeep
-        for (Building building : buildingMap.values()) {
+        for (Building building : map.values()) {
             amount -= building.getType().getUpkeepCost().getOrDefault(resource, 0);
         }
 
@@ -144,7 +140,7 @@ public class BuildingRegistry {
         int towns = 0;
         int villages = 0;
 
-        for (Building building : buildingMap.values()) {
+        for (Building building : map.values()) {
             if (building.getType() == BuildingType.TOWN) towns++;
             else if (building.getType() == BuildingType.VILLAGE) villages++;
         }

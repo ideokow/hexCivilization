@@ -1,8 +1,8 @@
 package model.game.unit.military;
 
-import controller.game.GameEngine;
 import model.game.building.Building;
 import model.game.hex.HexCoordinate;
+import model.game.hex.HexGrid;
 import model.game.hex.Wall;
 import model.game.tribe.Tribe;
 import model.game.unit.Unit;
@@ -34,11 +34,10 @@ public abstract class MilitaryUnit extends Unit {
         spendAP(getMilitaryType().getAttackAP());
     }
 
-    public void attack(Wall wall) {
+    public void attack(HexGrid hexGrid, Wall wall) {
         if (wall == null || !canAttack()) return;
 
-        GameEngine.getInstance().getHexGrid().getWallLayer()
-                .addHp(wall, -getMilitaryType().getAttackValue());
+        hexGrid.getWallLayer().addHp(wall, -getMilitaryType().getAttackValue());
         spendAP(getMilitaryType().getAttackAP());
     }
 

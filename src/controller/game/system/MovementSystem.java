@@ -14,11 +14,7 @@ import java.util.Objects;
 
 public class MovementSystem {
 
-    private final HexGrid grid;
-
-    public MovementSystem(HexGrid grid) {
-        this.grid = Objects.requireNonNull(grid, "grid");
-    }
+    public MovementSystem() {}
 
     /*
     cost of entering a hex: terrain cost, reduced on roads,
@@ -48,11 +44,11 @@ public class MovementSystem {
         return terrain != TerrainType.SEA || canSail;
     }
 
-    public MoveResult canMove(Unit unit, HexCoordinate targetCoordinate) {
-        return canMove(unit, targetCoordinate, null, false);
+    public MoveResult canMove(HexGrid hexGrid, Unit unit, HexCoordinate targetCoordinate) {
+        return canMove(hexGrid, unit, targetCoordinate, null, false);
     }
 
-    public MoveResult canMove(Unit unit, HexCoordinate targetCoordinate, SeasonName season, boolean canSail) {
+    public MoveResult canMove(HexGrid grid, Unit unit, HexCoordinate targetCoordinate, SeasonName season, boolean canSail) {
         if (unit == null || targetCoordinate == null) {
             return MoveResult.UNIT_NOT_ON_MAP;
         }
@@ -82,12 +78,12 @@ public class MovementSystem {
         return MoveResult.SUCCESS;
     }
 
-    public MoveResult move(Unit unit, HexCoordinate targetCoordinate) {
-        return move(unit, targetCoordinate, null, false);
+    public MoveResult move(HexGrid hexGrid, Unit unit, HexCoordinate targetCoordinate) {
+        return move(hexGrid, unit, targetCoordinate, null, false);
     }
 
-    public MoveResult move(Unit unit, HexCoordinate targetCoordinate, SeasonName season, boolean canSail) {
-        MoveResult result = canMove(unit, targetCoordinate, season, canSail);
+    public MoveResult move(HexGrid grid, Unit unit, HexCoordinate targetCoordinate, SeasonName season, boolean canSail) {
+        MoveResult result = canMove(grid, unit, targetCoordinate, season, canSail);
         if (result != MoveResult.SUCCESS) {
             return result;
         }

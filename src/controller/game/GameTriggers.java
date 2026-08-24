@@ -58,6 +58,9 @@ final class GameTriggers {
             HexCoordinate hexCoordinate
     ) {
         BuildResult buildResult = engine.getConstructionSystem().build(
+                engine.getHexGrid(),
+                engine.getTownHall(),
+                engine.getBuildingMap(),
                 engine.getPlayer(),
                 unit,
                 buildingType,
@@ -67,7 +70,7 @@ final class GameTriggers {
     }
 
     void ruin(Unit unit, Building building) {
-        RuinStatus ruinStatus = engine.getConstructionSystem().ruin(unit, building);
+        RuinStatus ruinStatus = engine.getConstructionSystem().ruin(engine.getTownHall(), engine.getHexGrid(), engine.getBuildingMap(), unit, building);
         gameController.toastAlert(ruinStatus.getMessage());
     }
 
@@ -105,6 +108,8 @@ final class GameTriggers {
             HexCoordinate b
     ) {
         BuildResult buildResult = engine.getConstructionSystem().build(
+                engine.getHexGrid(),
+                engine.getTownHall(),
                 engine.getPlayer(),
                 unit, a, b
         );
@@ -112,7 +117,7 @@ final class GameTriggers {
     }
 
     void ruin(Unit unit, Wall wall) {
-        RuinStatus ruinStatus = engine.getConstructionSystem().ruin(unit, wall);
+        RuinStatus ruinStatus = engine.getConstructionSystem().ruin(engine.getHexGrid(), unit, wall);
         gameController.toastAlert(ruinStatus.getMessage());
     }
 
@@ -151,6 +156,7 @@ final class GameTriggers {
 
     void acquireTechnology(Technology technology) {
         TownHallOperation operation = new AcquireTechnologyOperation(
+                engine.getTownHall(),
                 technology,
                 engine.getOperationQueue()
         );
@@ -163,6 +169,7 @@ final class GameTriggers {
 
     void generateUnit(UnitType unitType) {
         TownHallOperation operation = new GenerateUnitOperation(
+                engine.getTownHall(),
                 unitType,
                 engine.getOperationQueue()
         );
@@ -174,7 +181,7 @@ final class GameTriggers {
     }
 
     void levelUp(Level level) {
-        TownHallOperation operation = new LevelUpOperation(level, engine.getOperationQueue());
+        TownHallOperation operation = new LevelUpOperation(engine.getTownHall(), level, engine.getOperationQueue());
         OperationCheckResult result = engine.getOperationQueue().reserveOperation(operation);
         String message = result.getStatus().equals(OperationStatus.POSSIBLE)
                 ? "Level Up process started."
@@ -194,6 +201,7 @@ final class GameTriggers {
         }
 
         TownHallOperation operation = new GenerateCavalryOperation(
+                engine.getTownHall(),
                 engine.getOperationQueue(),
                 militaryStable
         );
@@ -346,6 +354,8 @@ final class GameTriggers {
             TradeLevel level
     ) {
         showTradeResult(engine.getTradeSystem().tradeAtBazaar(
+                engine.getTownHall(),
+                engine.getPlayer(),
                 bazaar,
                 soldResource,
                 receivedResource,
@@ -360,6 +370,8 @@ final class GameTriggers {
             int amount
     ) {
         showTradeResult(engine.getTradeSystem().tradeAtTradingPost(
+                engine.getTownHall(),
+                engine.getPlayer(),
                 tradingPost,
                 soldResource,
                 receivedResource,
@@ -374,6 +386,7 @@ final class GameTriggers {
             int amount
     ) {
         showTradeResult(engine.getTradeSystem().tradeWithTribe(
+                engine.getTownHall(),
                 tribe,
                 soldResource,
                 receivedResource,
