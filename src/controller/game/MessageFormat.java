@@ -1,7 +1,6 @@
 package controller.game;
 
 import model.game.hex.Resource;
-import model.game.registry.UpKeepStatus;
 
 import java.util.ArrayList;
 import java.util.List;

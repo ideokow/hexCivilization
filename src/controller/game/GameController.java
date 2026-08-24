@@ -11,7 +11,6 @@ import model.game.building.Bazaar;
 import model.game.building.TribeCamp;
 import model.game.building.TradingPost;
 import model.game.tribe.Tribe;
-import model.game.registry.UpKeepStatus;
 import model.game.townhall.Level;
 import model.game.townhall.Technology;
 import model.game.tribe.mission.Mission;

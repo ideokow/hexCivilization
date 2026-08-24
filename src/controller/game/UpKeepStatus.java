@@ -1,4 +1,4 @@
-package model.game.registry;
+package controller.game;
 
 public enum UpKeepStatus {
     SUCCESS,

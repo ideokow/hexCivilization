@@ -1,8 +1,8 @@
 package model.game.building;
 
+import controller.game.GameEngine;
 import model.game.hex.HexCoordinate;
 import model.game.registry.MilitaryRegistry;
-import model.game.registry.UnitRegistry;
 import model.game.townhall.TownHall;
 import model.game.townhall.opration.GenerationStatus;
 import model.game.unit.*;
@@ -38,7 +38,7 @@ public class MilitaryStable extends Building {
         unit.resetAP(townHall.getHappiness().getEra());
 
         // add to registry
-        UnitRegistry.getInstance().addUnit(unit);
+        GameEngine.getInstance().getUnitMap().addUnit(unit);
 
         // military cap reach impact on public contest
         if (MilitaryRegistry.getInstance().getMilitaryUnitsNumber() == townHall.getMilitaryUnitCap()) {

@@ -1,8 +1,8 @@
 package model.game.unit;
 
+import controller.game.GameEngine;
 import model.game.happiness.Era;
 import model.game.hex.HexCoordinate;
-import model.game.registry.UnitRegistry;
 import model.game.tribe.Tribe;
 
 /*
@@ -84,7 +84,12 @@ public abstract class Unit {
     }
 
     public void die() {
-        UnitRegistry.getInstance().killUnit(this);
+        GameEngine.getInstance().getUnitMap()
+                .killUnit(
+                        GameEngine.getInstance().getHexGrid(),
+                        GameEngine.getInstance().getTownHall(),
+                        this
+                );
     }
 
     // --- AP things ---

@@ -1,11 +1,11 @@
 package model.game.unit;
 
+import controller.game.GameEngine;
 import model.game.townhall.TownHall;
 import model.game.hex.Hex;
 import model.game.hex.HexCoordinate;
 import model.game.hex.HexGrid;
 import model.game.player.Player;
-import model.game.registry.UnitRegistry;
 import model.game.tribe.Tribe;
 
 import java.util.List;
@@ -33,7 +33,7 @@ public class BorderExpander extends Unit {
     }
 
     private void consume(HexGrid hexGrid, TownHall townHall) {
-        UnitRegistry.getInstance().removeUnit(this);
+        GameEngine.getInstance().getUnitMap().removeUnit(this);
         Hex positionHex = hexGrid.get(getPosition());
         positionHex.removeUnit(this);
         townHall.decreaseUnitNumber();

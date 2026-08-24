@@ -1,5 +1,6 @@
 package model.game.townhall.opration;
 
+import controller.game.UnitMap;
 import model.game.townhall.TownHall;
 import model.game.unit.UnitType;
 
@@ -8,11 +9,13 @@ public class GenerateUnitOperation extends TownHallOperation {
     public static final int UNIT_GENERATION_TURN_COST = 3;
 
     private final TownHall townHall;
+    private final UnitMap unitMap;
     private final UnitType unitType;
 
-    public GenerateUnitOperation(TownHall townHall, UnitType unitType, OperationQueue queue) {
+    public GenerateUnitOperation(TownHall townHall, UnitMap unitMap, UnitType unitType, OperationQueue queue) {
         super(TownHallOperationType.GENERATE_UNIT, UNIT_GENERATION_TURN_COST, queue);
         this.townHall = townHall;
+        this.unitMap = unitMap;
         this.unitType = unitType;
     }
 
@@ -27,7 +30,7 @@ public class GenerateUnitOperation extends TownHallOperation {
 
     @Override
     protected void onComplete() {
-        townHall.generateUnit(unitType);
+        townHall.generateUnit(unitMap, unitType);
     }
 
     @Override

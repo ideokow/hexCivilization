@@ -5,8 +5,6 @@ import model.game.building.BuildingType;
 import model.game.building.ProductionBuilding;
 import model.game.hex.HexGrid;
 import model.game.hex.Resource;
-import model.game.registry.UnitRegistry;
-import model.game.registry.UpKeepStatus;
 import model.game.season.SeasonName;
 import model.game.townhall.TownHall;
 import model.game.unit.Worker;
@@ -126,7 +124,7 @@ public class BuildingMap {
 
         // unit foods
         if (resource == Resource.FOOD) {
-            amount -= UnitRegistry.getInstance().getUnitMap().size();
+            amount -= GameEngine.getInstance().getUnitMap().getMap().size();
         }
         // upkeep
         for (Building building : map.values()) {

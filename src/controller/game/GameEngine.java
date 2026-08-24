@@ -6,8 +6,6 @@ import model.game.hex.HexCoordinate;
 import model.game.hex.HexGrid;
 import model.game.hex.Resource;
 import model.game.player.Player;
-import model.game.registry.UnitRegistry;
-import model.game.registry.UpKeepStatus;
 import model.game.route.Route;
 import model.game.season.Season;
 import model.game.season.SeasonName;
@@ -55,6 +53,7 @@ public class GameEngine {
     private GameController gameController;
 
     private final BuildingMap buildingMap;
+    private final UnitMap     unitMap;
 
     private final Map<Route, Unit> inQueueRoutes;
     private int turnNumber;
@@ -71,9 +70,10 @@ public class GameEngine {
 
         // load object maps
         buildingMap = new BuildingMap();
+        unitMap = new UnitMap();
 
         // initialize town hall
-        townHall = new TownHall(hexGrid);
+        townHall = new TownHall(hexGrid, unitMap);
         hexGrid.get(zero).setBuilding(townHall);
         buildingMap.addBuilding(townHall);
 
@@ -122,7 +122,7 @@ public class GameEngine {
         tradeSystem.setCurrentTurn(turnNumber);
 
         // renew AP
-        UnitRegistry.getInstance().renewUnitAPs(townHall.getHappiness().getEra());
+        unitMap.renewUnitAPs(townHall.getHappiness().getEra());
 
         // generate resources
         Map<Resource, Integer> generatedResources = buildingMap.generateResources(townHall, getSeason());
@@ -134,13 +134,13 @@ public class GameEngine {
         routingSystem.moveUnits(hexGrid, inQueueRoutes, gameController, getSeason(), canSail());
 
         // feed units
-        boolean feedStatus = starvationSystem.feedUnits(townHall);
+        boolean feedStatus = starvationSystem.feedUnits(townHall, unitMap);
 
         // tell ui each turn detail
         gameController.turnAlert(generatedResources, upkeepStatus, feedStatus);
 
         // check starvation
-        boolean starvation = starvationSystem.checkStarvationStatus(townHall, buildingMap);
+        boolean starvation = starvationSystem.checkStarvationStatus(townHall, buildingMap, unitMap);
         gameController.starvationAlert(starvation);
 
         // operation queue
@@ -186,7 +186,7 @@ public class GameEngine {
     }
 
     public Map<String, Unit> getUnits() {
-        return UnitRegistry.getInstance().getUnitMap();
+        return unitMap.getMap();
     }
 
     public Map<String, Building> getBuildings() {
@@ -230,5 +230,9 @@ public class GameEngine {
 
     public BuildingMap getBuildingMap() {
         return buildingMap;
+    }
+
+    public UnitMap getUnitMap() {
+        return unitMap;
     }
 }

@@ -1,10 +1,10 @@
 package model.game.tribe.mission;
 
+import controller.game.GameEngine;
 import model.game.building.BuildingType;
 import model.game.building.TribeCamp;
 import model.game.hex.Hex;
 import model.game.registry.MilitaryRegistry;
-import model.game.registry.UnitRegistry;
 import model.game.tribe.Tribe;
 import model.game.unit.military.Swordsman;
 
@@ -25,7 +25,7 @@ public class FighterMission extends Mission {
             }
             Swordsman newOne = new Swordsman(getTribe().getLocation());
             newOne.resetAP(getTribe().getRelatedTownHall().getHappiness().getEra());
-            UnitRegistry.getInstance().addUnit(newOne);
+            GameEngine.getInstance().getUnitMap().addUnit(newOne);
         }
     }
 

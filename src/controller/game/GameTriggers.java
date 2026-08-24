@@ -170,6 +170,7 @@ final class GameTriggers {
     void generateUnit(UnitType unitType) {
         TownHallOperation operation = new GenerateUnitOperation(
                 engine.getTownHall(),
+                engine.getUnitMap(),
                 unitType,
                 engine.getOperationQueue()
         );

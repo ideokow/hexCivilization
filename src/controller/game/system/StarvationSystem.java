@@ -1,11 +1,12 @@
 package controller.game.system;
 
 import controller.game.BuildingMap;
+import controller.game.GameEngine;
+import controller.game.UnitMap;
 import model.game.building.Building;
 import model.game.building.ProductionBuilding;
 import model.game.townhall.TownHall;
 import model.game.hex.Resource;
-import model.game.registry.UnitRegistry;
 import model.game.unit.Unit;
 
 import java.util.ArrayList;
@@ -19,14 +20,14 @@ public class StarvationSystem {
 
     public StarvationSystem() {}
 
-    public boolean feedUnits(TownHall townHall) {
+    public boolean feedUnits(TownHall townHall, UnitMap unitMap) {
         // define cost
         Map<Resource, Integer> cost = new HashMap<>();
         cost.put(Resource.FOOD, 0);
 
         // feed
         boolean flag = true;
-        for (Unit unit : UnitRegistry.getInstance().getUnitMap().values()) {
+        for (Unit unit : unitMap.getMap().values()) {
             if (flag) {
                 cost.put(Resource.FOOD, cost.get(Resource.FOOD) + eachTurnFood);
                 if (!townHall.canAfford(cost)) {
@@ -42,16 +43,16 @@ public class StarvationSystem {
         return flag;
     }
 
-    public boolean checkStarvationStatus(TownHall townHall, BuildingMap buildingMap) {
+    public boolean checkStarvationStatus(TownHall townHall, BuildingMap buildingMap, UnitMap unitMap) {
         // define each cost
         Map<Resource, Integer> cost = new HashMap<>();
         cost.put(Resource.FOOD, eachTurnFood);
         // check
-        return (getFoodRequirement() > getFoodGenerationAmount(townHall, buildingMap) && !townHall.canAfford(cost));
+        return (getFoodRequirement(unitMap) > getFoodGenerationAmount(townHall, buildingMap) && !townHall.canAfford(cost));
     }
 
-    private int getFoodRequirement() {
-        return UnitRegistry.getInstance().getUnitMap().size() * eachTurnFood;
+    private int getFoodRequirement(UnitMap unitMap) {
+        return unitMap.getMap().size() * eachTurnFood;
     }
 
     private int getFoodGenerationAmount(TownHall townHall, BuildingMap buildingMap) {

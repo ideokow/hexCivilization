@@ -1,5 +1,6 @@
 package model.game.townhall;
 
+import controller.game.UnitMap;
 import model.game.building.Building;
 import model.game.building.BuildingType;
 import model.game.building.PopulationType;
@@ -8,7 +9,6 @@ import model.game.hex.HexCoordinate;
 import model.game.hex.HexGrid;
 import model.game.hex.Resource;
 import model.game.registry.MilitaryRegistry;
-import model.game.registry.UnitRegistry;
 import model.game.townhall.opration.GenerationStatus;
 import model.game.unit.*;
 import model.game.unit.military.Archer;
@@ -36,7 +36,7 @@ public class TownHall extends Building {
 
     private boolean dockBuildingBonus = false;
 
-    public TownHall(HexGrid grid) {
+    public TownHall(HexGrid grid, UnitMap unitMap) {
 
         super(BuildingType.TOWN_HALL, true, new HexCoordinate(0, 0));
         this.grid = grid;
@@ -51,7 +51,7 @@ public class TownHall extends Building {
         level = Level.LEVEL_1;
         technologies = new Technologies(this);
 
-        generateInitialUnits();
+        generateInitialUnits(unitMap);
     }
 
     // --- Getters ---
@@ -289,15 +289,15 @@ public class TownHall extends Building {
 
     // --- unit generation ---
 
-    private void generateInitialUnits() {
-        generateUnit(UnitType.BUILDER);
-        generateUnit(UnitType.BUILDER);
-        generateUnit(UnitType.WORKER);
-        generateUnit(UnitType.WORKER);
-        generateUnit(UnitType.EXPLORER);
+    private void generateInitialUnits(UnitMap unitMap) {
+        generateUnit(unitMap, UnitType.BUILDER);
+        generateUnit(unitMap, UnitType.BUILDER);
+        generateUnit(unitMap, UnitType.WORKER);
+        generateUnit(unitMap, UnitType.WORKER);
+        generateUnit(unitMap, UnitType.EXPLORER);
     }
 
-    public void generateUnit(UnitType unitType) {
+    public void generateUnit(UnitMap unitMap, UnitType unitType) {
 
         if (!canGenerateUnit(unitType).equals(GenerationStatus.SUCCESS)) return;
 
@@ -329,7 +329,7 @@ public class TownHall extends Building {
         unit.resetAP(happiness.getEra());
 
         // add to registry
-        UnitRegistry.getInstance().addUnit(unit);
+        unitMap.addUnit(unit);
 
         // military cap reach impact on public contest
         if (MilitaryRegistry.getInstance().getMilitaryUnitsNumber() == getMilitaryUnitCap()) {
