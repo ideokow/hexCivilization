@@ -38,12 +38,12 @@ final class GameEngineViewModel implements GameViewModel {
 
     @Override
     public Collection<Unit> getUnits() {
-        return engine.getUnits().values();
+        return engine.getUnitMap().getMap().values();
     }
 
     @Override
     public boolean containsUnit(Unit unit) {
-        return unit != null && engine.getUnits().containsValue(unit);
+        return unit != null && engine.getUnitMap().getMap().containsValue(unit);
     }
 
     @Override

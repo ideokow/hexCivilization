@@ -134,8 +134,13 @@ final class GameTriggers {
                 engine.canSail()
         );
         if (route != null) {
-            engine.queueRoute(route, unit);
+            queueRoute(route, unit);
         }
+    }
+
+    void queueRoute(Route route, Unit unit) {
+        engine.getInQueueRoutes().entrySet().removeIf(entry -> entry.getValue().equals(unit));
+        engine.getInQueueRoutes().put(route, unit);
     }
 
     /*

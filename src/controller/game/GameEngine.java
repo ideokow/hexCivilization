@@ -1,12 +1,8 @@
 package controller.game;
 
-import controller.game.load.MapLoader;
-import controller.game.map.BuildingMap;
-import controller.game.map.UnitMap;
-import controller.game.map.UpKeepStatus;
+import controller.game.load.GameLoader;
+import controller.game.map.*;
 import controller.game.system.*;
-import model.game.building.Building;
-import model.game.hex.HexCoordinate;
 import model.game.hex.HexGrid;
 import model.game.hex.Resource;
 import model.game.player.Player;
@@ -21,8 +17,6 @@ import model.game.trade.TradeSystem;
 import model.game.tribe.Tribe;
 import model.game.unit.Unit;
 
-import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -40,14 +34,17 @@ public class GameEngine {
 
     // parameter
     private final Player player;
-    private HexGrid hexGrid;
+    private final HexGrid hexGrid;
     private final TownHall townHall;
-    private List<Tribe> tribes;
-    private List<HexCoordinate> tradingPosts;
+    private final List<Tribe> tribes;
 
     // state
     private final Map<Route, Unit> inQueueRoutes;
     private int turnNumber;
+
+    // map
+    private final BuildingMap buildingMap;
+    private final UnitMap unitMap;
 
     // essential system
     private final ConstructionSystem constructionSystem = new ConstructionSystem(this);
@@ -58,54 +55,20 @@ public class GameEngine {
     private final MovementSystem     movementSystem     = new MovementSystem();
     private final RoutingSystem      routingSystem      = new RoutingSystem(movementSystem);
 
-    // map
-    private final BuildingMap buildingMap;
-    private final UnitMap unitMap;
-
     // controller
     private GameController gameController;
 
     private GameEngine() {
-
-        HexCoordinate zero = new HexCoordinate(0, 0);
-
-        // initialize player
-        player = new Player();
-
-        // initialize map
-        loadMap();
-
-        // load object maps
-        buildingMap = new BuildingMap(hexGrid);
-        unitMap = new UnitMap(hexGrid);
-
-        // initialize town hall
-        townHall = new TownHall(hexGrid, unitMap);
-        hexGrid.get(zero).setBuilding(townHall);
-        buildingMap.addBuilding(townHall);
-
-        buildingMap.setTownHall(townHall);
-        unitMap.setTownHall(townHall);
-
-        try {
-            MapLoader mapLoader = new MapLoader();
-
-            // load tribes
-            tribes = mapLoader.loadTribes(MAP_NUMBER, townHall);
-            mapLoader.loadTribesInGrid(hexGrid, tribes);
-
-            // load trading posts
-            tradingPosts = mapLoader.loadTradingPosts(MAP_NUMBER);
-            mapLoader.loadTradingPostsInGrid(hexGrid, tradingPosts);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        inQueueRoutes = new HashMap<>();
-        turnNumber = 1;
-        for (HexCoordinate hexCoordinate : hexGrid.getDiscovered()) {
-            player.addTerritory(hexCoordinate);
-        }
+        GameLoader gameLoader = new GameLoader();
+        gameLoader.loadGame(MAP_NUMBER);
+        hexGrid       = gameLoader.getHexGrid();
+        player        = gameLoader.getPlayer();
+        buildingMap   = gameLoader.getBuildingMap();
+        unitMap       = gameLoader.getUnitMap();
+        townHall      = gameLoader.getTownHall();
+        tribes        = gameLoader.getTribes();
+        inQueueRoutes = gameLoader.getInQueueRoutes();
+        turnNumber    = gameLoader.getTurnNumber();
     }
 
     public void setController(GameController gameController) {
@@ -113,19 +76,7 @@ public class GameEngine {
         disasterSpawner.setGameController(gameController);
     }
 
-    private void loadMap() {
-        try {
-            hexGrid = (new MapLoader()).loadMap(MAP_NUMBER);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        for (HexCoordinate hexCoordinate : hexGrid.getDiscovered()) {
-            player.addTerritory(hexCoordinate);
-        }
-    }
-
-    public void executeTurn() {
+    void executeTurn() {
         if (DEBUG_VERBOSE) System.out.println("Turn > " + turnNumber);
 
         turnNumber++;
@@ -171,10 +122,6 @@ public class GameEngine {
 
     // Getters
 
-    public TownHallOperation getInQueueOperation() {
-        return operationQueue.getInQueueOperation();
-    }
-
     public TradeSystem getTradeSystem() {
         return tradeSystem;
     }
@@ -191,24 +138,28 @@ public class GameEngine {
         return townHall;
     }
 
+    public BuildingMap getBuildingMap() {
+        return buildingMap;
+    }
+
+    public UnitMap getUnitMap() {
+        return unitMap;
+    }
+
     public int getTurnNumber() {
         return turnNumber;
     }
 
-    public Map<String, Unit> getUnits() {
-        return unitMap.getMap();
+    public SeasonName getSeason() {
+        return Season.getSeason(turnNumber);
     }
 
-    public Map<String, Building> getBuildings() {
-        return buildingMap.getMap();
-    }
-
-    public boolean isThereRoute(Unit unit) {
+    boolean isThereRoute(Unit unit) {
         return inQueueRoutes.containsValue(unit);
     }
 
-    public SeasonName getSeason() {
-        return Season.getSeason(turnNumber);
+    public TownHallOperation getInQueueOperation() {
+        return operationQueue.getInQueueOperation();
     }
 
     ConstructionSystem getConstructionSystem() {
@@ -223,26 +174,17 @@ public class GameEngine {
         return operationQueue;
     }
 
+    Map<Route, Unit> getInQueueRoutes() {
+        return inQueueRoutes;
+    }
+
     boolean canSail() {
         return townHall.getTechnologies().isAcquired(Technology.BOAT_SAILING);
     }
 
-    void queueRoute(Route route, Unit unit) {
-        inQueueRoutes.entrySet().removeIf(entry -> entry.getValue().equals(unit));
-        inQueueRoutes.put(route, unit);
-    }
-
-    public void clearRoute(Unit unit) {
+    void clearRoute(Unit unit) {
         if (unit != null) {
             inQueueRoutes.entrySet().removeIf(entry -> entry.getValue().equals(unit));
         }
-    }
-
-    public BuildingMap getBuildingMap() {
-        return buildingMap;
-    }
-
-    public UnitMap getUnitMap() {
-        return unitMap;
     }
 }
