@@ -4,6 +4,7 @@ import controller.game.GameController;
 import controller.game.GameEngine;
 import model.menu.MusicManager;
 import view.game.GameView;
+import view.menu.LoadingFrame;
 import view.menu.MainMenuView;
 
 import javax.swing.*;
@@ -15,11 +16,11 @@ public class MainMenuController {
 
     private final MainMenuView view;
     private final MusicManager musicManager;
+    private final LoadingFrame loadingFrame = new LoadingFrame();
 
     public MainMenuController(MainMenuView view, MusicManager musicManager) {
         this.view = view;
         this.musicManager = musicManager;
-
         attachListeners();
     }
 
@@ -43,13 +44,16 @@ public class MainMenuController {
     }
 
     private void handleStart() {
-        GameEngine gameEngine = GameEngine.getInstance();
-        GameView gameView = new GameView(gameEngine);
-        GameController gameController = new GameController(gameEngine, gameView);
-        gameEngine.setController(gameController);
-
-        view.dispose();
-        gameView.setVisible(true);
+        loadingFrame.showLoading();
+        SwingUtilities.invokeLater(() -> {
+            GameEngine gameEngine = GameEngine.getInstance();
+            GameView gameView = new GameView(gameEngine);
+            GameController gameController = new GameController(gameEngine, gameView);
+            gameEngine.setController(gameController);
+            loadingFrame.closeLoading();
+            view.dispose();
+            gameView.setVisible(true);
+        });
     }
 
     private void handleSettings() {
