@@ -3,5 +3,6 @@ hexCivilization.iml
 out/
 target/
 .vscode/
+save/
 .DS_Store
 phase-1.md
