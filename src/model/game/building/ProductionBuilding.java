@@ -127,7 +127,9 @@ public class ProductionBuilding extends Building {
             }
         }
 
-        return ((int)(((double) (baseRate * workerN)) * coefficient)) + adjacencyBonus;
+        int amount = (int)(((double) (baseRate * workerN)) * coefficient);
+        if (amount != 0) amount += adjacencyBonus;
+        return amount;
     }
 
     private static int neighborFarms(HexGrid hexGrid, HexCoordinate position) {

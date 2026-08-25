@@ -119,7 +119,7 @@ public class BuildingMap implements Serializable {
 
                 if (resource == productionResource){
                     int productionAmount = ((ProductionBuilding) building).getProductionAmount(townHall);
-                    amount += productionAmount + seasonBonus;
+                    if (productionAmount != 0) amount += productionAmount + seasonBonus;
                 }
             }
             else if (!building.isRuined() && building instanceof TownHall) {
