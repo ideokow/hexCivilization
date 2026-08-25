@@ -14,13 +14,14 @@ import model.game.tribe.mission.MissionType;
 import model.game.unit.Unit;
 import model.game.unit.military.*;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
-public class Tribe {
+public class Tribe implements Serializable {
 
     private static final boolean DEBUG_VERBOSE = false;
 

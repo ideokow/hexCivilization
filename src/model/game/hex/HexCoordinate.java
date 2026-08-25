@@ -1,12 +1,13 @@
 package model.game.hex;
 
 import java.util.ArrayList;
+import java.io.Serializable;
 import java.util.List;
 
 /*
  * AXIAL coordination implementation
  */
-public class HexCoordinate {
+public class HexCoordinate implements Serializable {
 
     private static final int[][] DIRECTIONS = {
             { 1,  0}, {-1,  0},

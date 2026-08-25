@@ -5,12 +5,13 @@ import model.game.building.BuildingType;
 import model.game.unit.Unit;
 import model.game.unit.military.MilitaryUnit;
 
+import java.io.Serializable;
 import java.util.*;
 
 /*
 Hexes main model
  */
-public class Hex {
+public class Hex implements Serializable {
 
     private final HexCoordinate coordinate;
     private final TerrainType terrain;

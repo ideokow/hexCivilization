@@ -9,12 +9,13 @@ import model.game.season.SeasonName;
 import model.game.townhall.TownHall;
 import model.game.unit.Worker;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class BuildingMap {
+public class BuildingMap implements Serializable {
 
     private final HexGrid hexGrid;
     private TownHall townHall;

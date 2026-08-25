@@ -13,9 +13,10 @@ import model.game.unit.*;
 import model.game.unit.military.Archer;
 import model.game.unit.military.Swordsman;
 
+import java.io.Serializable;
 import java.util.*;
 
-public class TownHall extends Building {
+public class TownHall extends Building implements Serializable {
 
     public static final int SAFE_GUARD_VALUE = 1;
 

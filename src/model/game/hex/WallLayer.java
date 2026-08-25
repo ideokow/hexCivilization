@@ -1,11 +1,12 @@
 package model.game.hex;
 
 import java.util.ArrayList;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class WallLayer {
+public class WallLayer implements Serializable {
 
     private final Set<Wall> walls = new HashSet<>();
 

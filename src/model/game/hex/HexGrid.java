@@ -1,11 +1,12 @@
 package model.game.hex;
 
 import java.util.*;
+import java.io.Serializable;
 
 /*
 Holds all hexes of the map
  */
-public class HexGrid {
+public class HexGrid implements Serializable {
 
     private final Map<HexCoordinate, Hex> hexes;
     private final Set<HexCoordinate> discovered;

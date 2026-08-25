@@ -1,6 +1,8 @@
 package model.game.townhall.operation;
 
-public abstract class TownHallOperation {
+import java.io.Serializable;
+
+public abstract class TownHallOperation implements Serializable {
 
     private final TownHallOperationType type;
 

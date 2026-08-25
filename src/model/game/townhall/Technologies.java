@@ -1,9 +1,10 @@
 package model.game.townhall;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Technologies {
+public class Technologies implements Serializable {
 
     private final TownHall townHall;
     private final List<Technology> acquiredTechnologies;

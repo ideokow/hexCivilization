@@ -5,10 +5,12 @@ import model.game.happiness.Era;
 import model.game.hex.HexCoordinate;
 import model.game.tribe.Tribe;
 
+import java.io.Serializable;
+
 /*
 Units main model
  */
-public abstract class Unit {
+public abstract class Unit implements Serializable {
 
     private static int unitsN = 0;
 

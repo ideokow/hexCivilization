@@ -2,13 +2,14 @@ package model.game.player;
 
 import model.game.hex.HexCoordinate;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
 /*
 player model stores townHall and territory
  */
-public class Player {
+public class Player implements Serializable {
 
     private final Set<HexCoordinate> territory;
 

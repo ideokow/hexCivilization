@@ -1,10 +1,11 @@
 package model.game.hex;
 
 import java.util.HashMap;
+import java.io.Serializable;
 import java.util.Map;
 import java.util.Objects;
 
-public class Wall {
+public class Wall implements Serializable {
 
     public static final Map<Resource, Integer> COST = Map.of(
             Resource.WOOD, 1,

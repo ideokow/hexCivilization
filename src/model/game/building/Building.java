@@ -5,13 +5,14 @@ import model.game.hex.HexCoordinate;
 import model.game.hex.Resource;
 import model.game.townhall.TownHall;
 
+import java.io.Serializable;
 import java.util.Map;
 import java.util.Objects;
 
 /*
 Buildings main model
  */
-public abstract class Building {
+public abstract class Building implements Serializable {
 
     private static int buildingN = 0;
 

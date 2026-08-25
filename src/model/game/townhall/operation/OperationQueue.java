@@ -1,6 +1,8 @@
 package model.game.townhall.operation;
 
-public class OperationQueue {
+import java.io.Serializable;
+
+public class OperationQueue implements Serializable {
 
     private TownHallOperation inQueueOperation;
 

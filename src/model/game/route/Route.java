@@ -7,9 +7,10 @@ import model.game.hex.HexGrid;
 import model.game.hex.WallLayer;
 import model.game.season.SeasonName;
 
+import java.io.Serializable;
 import java.util.*;
 
-public class Route {
+public class Route implements Serializable {
 
     private static int routesN = 0;
 

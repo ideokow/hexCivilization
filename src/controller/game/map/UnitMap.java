@@ -6,12 +6,13 @@ import model.game.townhall.TownHall;
 import model.game.unit.Unit;
 import model.game.unit.UnitType;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class UnitMap {
+public class UnitMap implements Serializable {
 
     private final HexGrid hexGrid;
     private TownHall townHall;

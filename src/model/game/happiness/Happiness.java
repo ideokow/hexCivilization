@@ -8,10 +8,11 @@ import model.game.townhall.TownHall;
 import model.game.unit.Unit;
 import model.game.unit.UnitType;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
-public class Happiness {
+public class Happiness implements Serializable {
 
     private int value;
 

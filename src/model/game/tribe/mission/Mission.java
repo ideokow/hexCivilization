@@ -4,10 +4,11 @@ import model.game.hex.Resource;
 import model.game.townhall.TownHall;
 import model.game.tribe.Tribe;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class Mission {
+public abstract class Mission implements Serializable {
 
     private final Tribe tribe;
     private final MissionType missionType;
