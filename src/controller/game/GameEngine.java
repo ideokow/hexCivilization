@@ -138,6 +138,10 @@ public class GameEngine {
         return townHall;
     }
 
+    public List<Tribe> getTribes() {
+        return tribes;
+    }
+
     public BuildingMap getBuildingMap() {
         return buildingMap;
     }

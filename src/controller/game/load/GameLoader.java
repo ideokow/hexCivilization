@@ -21,6 +21,8 @@ import java.util.Map;
 
 public class GameLoader implements java.io.Serializable {
 
+    private static final boolean DEBUG_VERBOSE = false;
+
     @Serial
     private static final long serialVersionUID = 1L;
     private static final String SAVE_ADDRESS = "./save/";
@@ -49,30 +51,31 @@ public class GameLoader implements java.io.Serializable {
             Object savedGame = objectInputStream.readObject();
             if (!(savedGame instanceof GameLoader && objectInputStream.read() == -1))
                 return false;
+
+            if (((GameLoader) savedGame).getHexGrid() == null) return false;
+            if (((GameLoader) savedGame).getPlayer() == null) return false;
+            if (((GameLoader) savedGame).getBuildingMap() == null) return false;
+            if (((GameLoader) savedGame).getUnitMap() == null) return false;
+            if (((GameLoader) savedGame).getTownHall() == null) return false;
+            if (((GameLoader) savedGame).getTurnNumber() <= 0) return false;
+
         } catch (IOException | ClassNotFoundException | RuntimeException e) {
             return false;
         }
-
-        if (hexGrid == null) return false;
-        if (player == null) return false;
-        if (buildingMap == null) return false;
-        if (unitMap == null) return false;
-        if (townHall == null) return false;
-        if (tribes == null) return false;
-        if (inQueueRoutes == null) return false;
-        if (turnNumber <= 0) return false;
 
         return true;
     }
 
     public void loadGame(int MAP_NUMBER) {
         if (checkSave()) {
+            if (DEBUG_VERBOSE) System.out.println("it seems theres a save");
             try (ObjectInputStream objectInputStream = new ObjectInputStream(
                     new FileInputStream(getSavePath().toFile()))) {
                 GameLoader savedGame = (GameLoader) objectInputStream.readObject();
                 copyStateFrom(savedGame);
                 return;
             } catch (IOException | ClassNotFoundException | RuntimeException e) {
+                if (DEBUG_VERBOSE) System.out.println("loading save failed");
                 startNewGame(MAP_NUMBER);
                 return;
             }
@@ -122,6 +125,9 @@ public class GameLoader implements java.io.Serializable {
                 Files.move(temporarySavePath, savePath,
                         java.nio.file.StandardCopyOption.REPLACE_EXISTING);
             }
+
+            if (DEBUG_VERBOSE) System.out.println("game saved");
+
         } catch (IOException e) {
             if (temporarySavePath != null) {
                 try {
@@ -150,6 +156,8 @@ public class GameLoader implements java.io.Serializable {
 
     private void startNewGame(int MAP_NUMBER) {
         MapLoader mapLoader = new MapLoader();
+
+        if (DEBUG_VERBOSE) System.out.println("Load new game!");
 
         try {
             hexGrid = mapLoader.loadMap(MAP_NUMBER);

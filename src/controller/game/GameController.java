@@ -1,6 +1,7 @@
 package controller.game;
 
 import controller.game.combat.CombatController;
+import controller.game.load.GameLoader;
 import controller.game.map.UpKeepStatus;
 import controller.game.system.Disaster;
 import model.game.hex.HexCoordinate;
@@ -51,6 +52,21 @@ public class GameController {
         this.triggers = new GameTriggers(engine, this);
         attachListeners();
         view.setRouteControlsRefreshHandler(this::refreshRouteControls);
+        view.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent event) {
+                new GameLoader().saveGame(
+                        engine.getHexGrid(),
+                        engine.getPlayer(),
+                        engine.getBuildingMap(),
+                        engine.getUnitMap(),
+                        engine.getTownHall(),
+                        engine.getTribes(),
+                        engine.getInQueueRoutes(),
+                        engine.getTurnNumber()
+                );
+            }
+        });
         view.refresh();
         refreshRouteControls();
     }
