@@ -7,17 +7,17 @@ import model.game.hex.Resource;
  */
 public enum ProductionType {
     LUMBER_MILL
-            (BuildingType.LUMBER_MILL, Resource.WOOD, Resource.WOOD, 3, 2, 1),
+            (BuildingType.LUMBER_MILL, Resource.WOOD, Resource.WOOD, 3, 4, 1),
     STONE_MINE
-            (BuildingType.STONE_MINE, Resource.STONE, Resource.STONE, 2, 2, 2),
+            (BuildingType.STONE_MINE, Resource.STONE, Resource.STONE, 2, 4, 2),
     IRON_MINE
-            (BuildingType.IRON_MINE, Resource.IRON, Resource.IRON, 2, 1, 2),
+            (BuildingType.IRON_MINE, Resource.IRON, Resource.IRON, 2, 4, 2),
     FARM
-            (BuildingType.FARM, Resource.FOOD, Resource.FOOD, 3, 3, 1),
+            (BuildingType.FARM, Resource.FOOD, Resource.FOOD, 3, 4, 1),
     STABLE
-            (BuildingType.STABLE, Resource.FOOD, Resource.FOOD, 2, 2, 2),
+            (BuildingType.STABLE, Resource.FOOD, Resource.FOOD, 2, 5, 2),
     DOCK
-            (BuildingType.DOCK, Resource.FOOD, null, 3, 1, 1);
+            (BuildingType.DOCK, Resource.FOOD, null, 3, 7, 1);
 
     private final BuildingType buildingType;
     private final Resource produceResource;
